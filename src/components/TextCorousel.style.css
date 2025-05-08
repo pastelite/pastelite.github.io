@@ -1,0 +1,11 @@
+.text-bar-container {
+  width: 100%;
+  text-align: left;
+  position: relative;
+  height: 2em;
+  overflow:hidden;
+}
+
+.text-bar-item {
+  position: absolute;
+}
