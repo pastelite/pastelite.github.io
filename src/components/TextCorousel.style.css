@@ -15,12 +15,22 @@
 
 /*  Background */
 .text-bar-item {
-  color:#fff8;
+  color:#fff2;
   /* font-weight: inherit; */
   transition: color .1s ease-in-out;
+  cursor: default;
 }
 
 .text-bar-item:hover {
-  color:#ffff;
+  color:#fff8;
   /* transform: scale(1.1); */
+}
+
+.text-corousel-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }

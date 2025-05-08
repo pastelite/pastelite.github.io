@@ -48,7 +48,7 @@ function TextCorousel(
   {
     gap = 0,
     speed = 100,
-    fps = 128,
+    fps =144,
     itemGenerator = new DefaultItemGenerator(),
     className,
     style,
@@ -60,7 +60,7 @@ function TextCorousel(
   let [containerWidth, setContainerWidth] = useState(0);
 
   let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([{
-    children: "Hello",
+    children: "",
     width: 0,
   }]);
 
@@ -94,7 +94,7 @@ function TextCorousel(
     let timer: any;
     if (containerWidth > 0) {
       timer = setInterval(() => {
-        setStartPosition((prev) => prev - (speed / fps));
+        setStartPosition((prev) => prev - (Math.abs(speed) / fps));
       }, 1000 / fps);
     }
     return () => {
@@ -139,6 +139,7 @@ function TextCorousel(
               key={i}
               left={leftOffset[i]}
               itemId={i}
+              reverse={speed < 0}
               {...item.props}
             >
               {item.children}
