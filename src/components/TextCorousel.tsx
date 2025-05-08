@@ -8,33 +8,50 @@ import {
 } from "react";
 import "./TextCorousel.style.css";
 
-interface TextCorouselItemData {
+export interface TextCorouselItemData {
   children: React.ReactNode;
   props?: React.HTMLAttributes<HTMLDivElement>;
   width: number;
+}
+
+export interface ItemGenerator {
+  getItem: () => TextCorouselItemData;
 }
 
 interface TextCorouselProps extends React.HTMLAttributes<HTMLDivElement> {
   gap?: number;
   speed?: number;
   fps?: number;
-  itemGenerator?: () => TextCorouselItemData;
+  // itemGenerator?: () => TextCorouselItemData;
+  itemGenerator?: ItemGenerator;
 }
 
 const PositionContext = createContext<any>(null);
 
-function defaultItemGenerator(): TextCorouselItemData {
-  let index = Math.floor(Math.random() * 100);
-  return { children: `Item ${index}`, width: 0 };
+
+
+// function defaultItemGenerator(): TextCorouselItemData {
+//   let index = Math.floor(Math.random() * 100);
+//   return { children: `Item ${index}`, width: 0 };
+// }
+
+class DefaultItemGenerator implements ItemGenerator {
+  getItem() {
+    let index = Math.floor(Math.random() * 100);
+    return { children: `Item ${index}`, width: 0 };
+  }
 }
+
+
 
 function TextCorousel(
   {
     gap = 0,
     speed = 100,
-    fps = 60,
-    itemGenerator = defaultItemGenerator,
+    fps = 128,
+    itemGenerator = new DefaultItemGenerator(),
     className,
+    style,
     ...props
   }: TextCorouselProps,
 ) {
@@ -42,9 +59,10 @@ function TextCorousel(
   let containerRef = useRef<HTMLDivElement>(null);
   let [containerWidth, setContainerWidth] = useState(0);
 
-  let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([
-    itemGenerator(),
-  ]);
+  let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([{
+    children: "Hello",
+    width: 0,
+  }]);
 
   let [startPosition, setStartPosition] = useState(0); // basically what everything should start with
 
@@ -91,7 +109,7 @@ function TextCorousel(
     let lastItemStart = leftOffset[leftOffset.length - 1];
     // add item if necessary
     if (itemWidth < containerWidth) {
-      setPositionStore([...positionStore, itemGenerator()]);
+      setPositionStore([...positionStore, itemGenerator.getItem()]);
     }
     // remove item if necessary
     if (lastItemStart > containerWidth) {
@@ -108,7 +126,14 @@ function TextCorousel(
   return (
     <>
       <PositionContext.Provider value={[positionStore, setPositionStore]}>
-        <div className={`text-bar-container ${className || ""}`} ref={containerRef} {...props}>
+        <div
+          className={`text-bar-container ${className || ""}`}
+          ref={containerRef}
+          style={{
+            ...style,
+          }}
+          {...props}
+        >
           {positionStore.map((item, i) => (
             <TextCorouselItem
               key={i}
@@ -121,20 +146,6 @@ function TextCorousel(
           ))}
         </div>
       </PositionContext.Provider>
-      <button
-        onClick={() => {
-          setPositionStore([...positionStore, itemGenerator()]);
-        }}
-      >
-        Add item
-      </button>
-      <button
-        onClick={() => {
-          setStartPosition(startPosition - speed);
-        }}
-      >
-        Move
-      </button>
     </>
   );
 }
@@ -144,10 +155,11 @@ interface TextCorouselItemProps extends React.HTMLAttributes<HTMLDivElement> {
   // text?: string;
   left?: number;
   children?: React.ReactNode;
+  reverse?: boolean;
 }
 
 function TextCorouselItem(
-  { itemId, children = "Hello", left = 0, style, className, ...props }:
+  { itemId, children = "Hello", left = 0, style, className, reverse=false, ...props }:
     TextCorouselItemProps,
 ) {
   let [_, setStore] = useContext(PositionContext);
@@ -189,7 +201,7 @@ function TextCorouselItem(
     <div
       className={`text-bar-item ${className || ""}`}
       style={{
-        left: `${left}px`,
+        ...(reverse ? { right: `${left}px` } : { left: `${left}px` }),
         ...style,
       }}
       ref={ref}
