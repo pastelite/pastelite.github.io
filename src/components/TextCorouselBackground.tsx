@@ -1,5 +1,6 @@
 import { useEffect, useState, type HTMLAttributes } from "react";
 import TextCorousel, {
+  generateId,
   type ItemGenerator,
   type TextCorouselItemData,
 } from "./TextCorousel";
@@ -79,7 +80,7 @@ class CustomTextCorouselItemGenerator implements ItemGenerator {
       },
       className: this.timerEnd ? "" : "blink-on-start",
     };
-    return { children: text, props, width: 0 };
+    return { children: text, props, width: 0, id: generateId() };
   }
 }
 
@@ -139,6 +140,7 @@ export default function TextCorouselBackground() {
             //   className:
             //     "blink-on-start",
             // },
+            id: "preload",
           }}
         />
       ))}

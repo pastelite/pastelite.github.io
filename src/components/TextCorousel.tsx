@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -7,11 +8,13 @@ import {
   useState,
 } from "react";
 import "./TextCorousel.style.css";
+import { animated, useSpring } from "@react-spring/web";
 
 export interface TextCorouselItemData {
   children: React.ReactNode;
   props?: React.HTMLAttributes<HTMLDivElement>;
   width: number;
+  id: string;
 }
 
 export interface ItemGenerator {
@@ -39,7 +42,7 @@ const PositionContext = createContext<any>(null);
 class DefaultItemGenerator implements ItemGenerator {
   getItem() {
     let index = Math.floor(Math.random() * 100);
-    return { children: `Item ${index}`, width: 0 };
+    return { children: `Item ${index}`, width: 0, id: generateId() };
   }
 }
 
@@ -53,7 +56,7 @@ function TextCorousel(
     itemGenerator = new DefaultItemGenerator(),
     className,
     style,
-    defaultItem = { children: "", width: 0 },
+    defaultItem = { children: "", width: 0, id: "item-0" },
     ...props
   }: TextCorouselProps,
 ) {
@@ -61,20 +64,17 @@ function TextCorousel(
   let containerRef = useRef<HTMLDivElement>(null);
   let [containerWidth, setContainerWidth] = useState(0);
 
-  let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([{
-    children: "",
-    width: 0,
-  }]);
+  let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([defaultItem]);
 
   let [startPosition, setStartPosition] = useState(0); // basically what everything should start with
 
   let leftOffset = useMemo(() => {
-    let acc = [startPosition];
+    let acc = [0];
     for (let i = 1; i < positionStore.length; i++) {
       acc.push(acc[i - 1] + positionStore[i - 1].width + gap);
     }
     return acc;
-  }, [positionStore, startPosition, gap]);
+  }, [positionStore, gap]);
 
   // update size
   useEffect(() => {
@@ -92,23 +92,52 @@ function TextCorousel(
   }, []);
 
   // timer and speed
+  // useEffect(() => {
+  //   let timer: any;
+  //   if (containerWidth > 0) {
+  //     timer = setInterval(() => {
+  //       setStartPosition((prev) => prev - (Math.abs(speed) / fps));
+  //     }, 1000 / fps);
+  //   }
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [containerWidth, speed]);
+  const animationFrameId = useRef<number>(0);
+  const lastTime = useRef<number>(0);
+  
   useEffect(() => {
-    let timer: any;
-    if (containerWidth > 0) {
-      timer = setInterval(() => {
-        setStartPosition((prev) => prev - (Math.abs(speed) / fps));
-      }, 1000 / fps);
-    }
+    if (containerWidth === 0) return;
+
+    const animate = (time: number) => {
+      if (!lastTime.current) {
+        lastTime.current = time;
+      }
+
+      const deltaTime = time - lastTime.current;
+      const distanceToMove = (Math.abs(speed) * deltaTime) / 1000; // speed is in pixels per second
+
+      setStartPosition((prev) => prev - distanceToMove);
+
+      lastTime.current = time;
+      animationFrameId.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameId.current = requestAnimationFrame(animate);
+
     return () => {
-      clearInterval(timer);
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+      lastTime.current = 0; // Reset lastTime on cleanup
     };
   }, [containerWidth, speed]);
 
   // add item if necessary
   useEffect(() => {
     let itemWidth = leftOffset[leftOffset.length - 1] +
-      positionStore[positionStore.length - 1].width + gap;
-    let lastItemStart = leftOffset[leftOffset.length - 1];
+      positionStore[positionStore.length - 1].width + gap + startPosition;
+    let lastItemStart = leftOffset[leftOffset.length - 1] + startPosition;
     // add item if necessary
     if (itemWidth < containerWidth) {
       setPositionStore([...positionStore, itemGenerator.getItem()]);
@@ -119,15 +148,23 @@ function TextCorousel(
     }
     // pop first item if necessary
     // x + y < 0
-    if (leftOffset[0] + positionStore[0].width + gap < 0) {
+    if (leftOffset[0] + startPosition + positionStore[0].width + gap < 0) {
       setPositionStore(positionStore.slice(1));
       setStartPosition(startPosition + positionStore[0].width + gap);
     }
   }, [containerWidth, positionStore, startPosition, gap]);
 
+  const updateItemWidth = useCallback((id: string, width: number) => {
+    setPositionStore((prevStore) =>
+      prevStore.map((item) =>
+        item.id === id && item.width !== width ? { ...item, width } : item
+      )
+    );
+  }, []);
+
   return (
     <>
-      <PositionContext.Provider value={[positionStore, setPositionStore]}>
+      <PositionContext.Provider value={[positionStore, updateItemWidth]}>
         <div
           className={`text-bar-container ${className || ""}`}
           ref={containerRef}
@@ -138,9 +175,9 @@ function TextCorousel(
         >
           {positionStore.map((item, i) => (
             <TextCorouselItem
-              key={i}
-              left={leftOffset[i]}
-              itemId={i}
+              key={item.id}
+              left={leftOffset[i] + startPosition}
+              itemId={item.id}
               reverse={speed < 0}
               {...item.props}
             >
@@ -154,7 +191,7 @@ function TextCorousel(
 }
 
 interface TextCorouselItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  itemId: number;
+  itemId: string;
   // text?: string;
   left?: number;
   children?: React.ReactNode;
@@ -165,32 +202,12 @@ function TextCorouselItem(
   { itemId, children = "Hello", left = 0, style, className, reverse=false, ...props }:
     TextCorouselItemProps,
 ) {
-  let [_, setStore] = useContext(PositionContext);
+  let [_, updateItemWidth] = useContext(PositionContext);
   let ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function updateStore() {
-      setStore((store: any) => {
-        if (!ref.current) return store;
-        const measuredWidth = ref.current.offsetWidth;
-
-        // need to .map() to force update
-        const newStore = store.map((item: any, index: number) => {
-          if (index === itemId) {
-            if (item.width !== measuredWidth) {
-              return { ...item, width: measuredWidth };
-            }
-          }
-          return item;
-        });
-
-        // prevent non-stop updates
-        if (JSON.stringify(store) !== JSON.stringify(newStore)) {
-          return newStore;
-        } else {
-          return store;
-        }
-      });
+      updateItemWidth(itemId, ref.current?.offsetWidth || 0);
     }
 
     updateStore();
@@ -217,3 +234,6 @@ function TextCorouselItem(
 
 export default TextCorousel;
 export { TextCorouselItem };
+
+export const generateId = () => `carousel-item-${Math.random().toString(36).substr(2, 9)}`;
+
