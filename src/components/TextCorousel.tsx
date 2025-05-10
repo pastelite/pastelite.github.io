@@ -24,6 +24,7 @@ interface TextCorouselProps extends React.HTMLAttributes<HTMLDivElement> {
   fps?: number;
   // itemGenerator?: () => TextCorouselItemData;
   itemGenerator?: ItemGenerator;
+  defaultItem?: TextCorouselItemData;
 }
 
 const PositionContext = createContext<any>(null);
@@ -52,6 +53,7 @@ function TextCorousel(
     itemGenerator = new DefaultItemGenerator(),
     className,
     style,
+    defaultItem = { children: "", width: 0 },
     ...props
   }: TextCorouselProps,
 ) {

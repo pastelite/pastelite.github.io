@@ -15,9 +15,11 @@
 
 /*  Background */
 .text-bar-item {
-  color:#fff2;
+  color:#0b0b0b;
   /* font-weight: inherit; */
   transition: color .1s ease-in-out;
+  /* border */
+  text-shadow: -1px -1px 0 rgb(255, 255, 255), 1px -1px 0 rgb(255, 255, 255), -1px 1px 0 rgb(255, 255, 255), 1px 1px 0 #fff;
   cursor: default;
 }
 
@@ -33,4 +35,21 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+  z-index: 0;
+}
+
+@keyframes flickerOn {
+  0%   { text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000; }
+  /* 10%  { text-shadow: none; } */
+  20%  { text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; }
+  30%  { text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000; }
+  50%  { text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; }
+  /* 70%  { text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; } */
+  80%  { text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000; }
+  100% { text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; }
+}
+
+.blink-on-start {
+  /* text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000;  */
+  animation: flickerOn 2s ease-out forwards;
 }

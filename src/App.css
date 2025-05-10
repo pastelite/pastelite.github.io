@@ -41,3 +41,24 @@
 .read-the-docs {
   color: #888;
 }
+
+.title {
+  font-size: 8em;
+  font-style: italic;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  letter-spacing: 0.1em;
+  background: rgba(0, 0, 0, 0);
+  height: 50vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  /* background: linear-gradient(0deg,#0b0b0b00 0%, #0b0b0bff 33%,#0b0b0bff 66%, #0b0b0b00 100%); */
+}
+
+.title > {
+  transform: translateY(-33%);
+}

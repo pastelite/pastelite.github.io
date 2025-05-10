@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type HTMLAttributes } from "react";
 import TextCorousel, {
   type ItemGenerator,
   type TextCorouselItemData,
 } from "./TextCorousel";
+import { randomBetween, randomElement, shuffleArray } from "../utils/random";
 
 const helloLanguages = [
   "Hello", // English
@@ -19,7 +20,7 @@ const helloLanguages = [
   "Ciao", // Italian
   "ສະບາຍດີ", // Lao
 ];
-const fontFamily = [
+export const fontFamily = [
   '"Noto Serif", "Niramit", "Georgia", "Times New Roman", "Yu Mincho", serif',
   '"Open Sans", "Noto Sans Thai", "Arial", "Helvetica", sans-serif',
   '"Roboto Slab", "Chakra Petch", "Courier New", "Fira Code", monospace',
@@ -27,26 +28,19 @@ const fontFamily = [
 ];
 const fontWeight = ["200", "300", "400", "500", "600"];
 
-// let shuffled = unshuffled
-//     .map(value => ({ value, sort: Math.random() }))
-//     .sort((a, b) => a.sort - b.sort)
-//     .map(({ value }) => value)
-
-let shuffler = (array: string[]) =>
-  array.map((value) => ({ value, sort: Math.random() })).sort((a, b) =>
-    a.sort - b.sort
-  ).map(({ value }) => value);
-
-const randomElement = (array: string[]) =>
-  array[Math.floor(Math.random() * array.length)];
-
 class CustomTextCorouselItemGenerator implements ItemGenerator {
   countUntilShuffle: number;
   shuffledLanguages: string[];
+  timer: any;
+  timerEnd: boolean;
 
   constructor() {
     this.countUntilShuffle = helloLanguages.length - 1;
-    this.shuffledLanguages = shuffler(helloLanguages);
+    this.shuffledLanguages = shuffleArray(helloLanguages);
+    this.timerEnd = false;
+    this.timer = setTimeout(() => {
+      this.timerEnd = true;
+    }, 500)
   }
 
   getItem(): TextCorouselItemData {
@@ -55,7 +49,7 @@ class CustomTextCorouselItemGenerator implements ItemGenerator {
     if (this.countUntilShuffle === -1) {
       this.countUntilShuffle = helloLanguages.length - 1;
       let previousShuffledLanguages = this.shuffledLanguages[0];
-      this.shuffledLanguages = shuffler(helloLanguages);
+      this.shuffledLanguages = shuffleArray(helloLanguages);
       if (
         this.shuffledLanguages[helloLanguages.length - 1] ===
           previousShuffledLanguages
@@ -69,13 +63,21 @@ class CustomTextCorouselItemGenerator implements ItemGenerator {
       }
     }
     let text = this.shuffledLanguages[this.countUntilShuffle];
-
-    let props = {
+    let props: HTMLAttributes<HTMLDivElement> = {
       style: {
         fontFamily: randomElement(fontFamily),
         fontSize: "48px",
         fontWeight: randomElement(fontWeight),
+        opacity: randomBetween(0.2, 0.5),
+        animationDelay: randomBetween(0.5, 1.5) + "s",
+        // textShadow: "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff"
+        ...this.timerEnd ? {
+          textShadow: "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff",
+        } : {
+          textShadow: "-1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000",
+        },
       },
+      className: this.timerEnd ? "" : "blink-on-start",
     };
     return { children: text, props, width: 0 };
   }
@@ -93,7 +95,7 @@ export default function TextCorouselBackground() {
       setScreenHeight(window.innerHeight);
     }
 
-    handleResize()
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -112,25 +114,32 @@ export default function TextCorouselBackground() {
         speed: (Math.floor(Math.random() * 100) + 50) *
           (corouselList.length % 2 ? -1 : 1),
       }]);
-      console.log(corouselList)
+      console.log(corouselList);
     }
   }, [screenHeight, corouselList]);
 
   return (
     <div className="text-corousel-background">
-      {
-        corouselList.map((corousel, index) => (
-          <TextCorousel
-            key={index}
-            itemGenerator={new CustomTextCorouselItemGenerator()}
-            gap={10}
-            style={{
-              height: `${corousel.height}px`,
-            }}
-            speed={corousel.speed}
-          />
-        ))
-      }
+      {corouselList.map((corousel, index) => (
+        <TextCorousel
+          key={index}
+          itemGenerator={new CustomTextCorouselItemGenerator()}
+          gap={10}
+          style={{
+            height: `${corousel.height}px`,
+          }}
+          speed={corousel.speed}
+          // this is to preload classes
+          defaultItem={{
+            children: "",
+            width: 0,
+            // props: {
+            //   className:
+            //     "blink-on-start",
+            // },
+          }}
+        />
+      ))}
     </div>
   );
 }
