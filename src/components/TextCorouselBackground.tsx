@@ -86,7 +86,7 @@ class CustomTextCorouselItemGenerator implements ItemGenerator {
 export default function TextCorouselBackground() {
   let [screenHeight, setScreenHeight] = useState(0);
   let [corouselList, setCorouselList] = useState<
-    { "height": number; "speed": number }[]
+    { "height": number; "speed": number, generator: CustomTextCorouselItemGenerator }[]
   >([]);
 
   // screen size
@@ -109,10 +109,12 @@ export default function TextCorouselBackground() {
       0,
     );
     if (corouselHeight < screenHeight) {
+      const newGenerator = new CustomTextCorouselItemGenerator();
       setCorouselList([...corouselList, {
         height: 80,
         speed: (Math.floor(Math.random() * 100) + 50) *
           (corouselList.length % 2 ? -1 : 1),
+        generator: newGenerator
       }]);
       console.log(corouselList);
     }
@@ -123,7 +125,7 @@ export default function TextCorouselBackground() {
       {corouselList.map((corousel, index) => (
         <TextCorousel
           key={index}
-          itemGenerator={new CustomTextCorouselItemGenerator()}
+          itemGenerator={corousel.generator}
           gap={10}
           style={{
             height: `${corousel.height}px`,
