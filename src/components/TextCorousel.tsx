@@ -32,8 +32,6 @@ interface TextCorouselProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const PositionContext = createContext<any>(null);
 
-
-
 // function defaultItemGenerator(): TextCorouselItemData {
 //   let index = Math.floor(Math.random() * 100);
 //   return { children: `Item ${index}`, width: 0 };
@@ -46,13 +44,11 @@ class DefaultItemGenerator implements ItemGenerator {
   }
 }
 
-
-
 function TextCorousel(
   {
     gap = 0,
     speed = 100,
-    fps =144,
+    fps = 144,
     itemGenerator = new DefaultItemGenerator(),
     className,
     style,
@@ -64,7 +60,9 @@ function TextCorousel(
   let containerRef = useRef<HTMLDivElement>(null);
   let [containerWidth, setContainerWidth] = useState(0);
 
-  let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([defaultItem]);
+  let [positionStore, setPositionStore] = useState<TextCorouselItemData[]>([
+    defaultItem,
+  ]);
 
   let [startPosition, setStartPosition] = useState(0); // basically what everything should start with
 
@@ -105,7 +103,7 @@ function TextCorousel(
   // }, [containerWidth, speed]);
   const animationFrameId = useRef<number>(0);
   const lastTime = useRef<number>(0);
-  
+
   useEffect(() => {
     if (containerWidth === 0) return;
 
@@ -116,6 +114,14 @@ function TextCorousel(
 
       const deltaTime = time - lastTime.current;
       const distanceToMove = (Math.abs(speed) * deltaTime) / 1000; // speed is in pixels per second
+      const timeThreshold = 500;
+      if (time - lastTime.current > timeThreshold) {
+        // if it too long, just don't move
+        // this prevent bugs where distanceToMove is too big and everything just disappear
+        lastTime.current = time;
+        animationFrameId.current = requestAnimationFrame(animate);
+        return;
+      }
 
       setStartPosition((prev) => prev - distanceToMove);
 
@@ -135,31 +141,35 @@ function TextCorousel(
 
   // add item if necessary
   useEffect(() => {
+    // add in case of screen turn off. i have no idea why but it's just needed
     let itemWidth = leftOffset[leftOffset.length - 1] +
       positionStore[positionStore.length - 1].width + gap + startPosition;
-    let lastItemStart = leftOffset[leftOffset.length - 1] + startPosition;
+    
     // add item if necessary
     if (itemWidth < containerWidth) {
       setPositionStore([...positionStore, itemGenerator.getItem()]);
     }
-    // remove item if necessary
-    if (lastItemStart > containerWidth) {
-      setPositionStore(positionStore.slice(0, -1));
-    }
+    
     // pop first item if necessary
-    // x + y < 0
     if (leftOffset[0] + startPosition + positionStore[0].width + gap < 0) {
       setPositionStore(positionStore.slice(1));
-      setStartPosition(startPosition + positionStore[0].width + gap);
+      setStartPosition(prevStart => (prevStart + positionStore[0].width + gap));
+      return;
     }
   }, [containerWidth, positionStore, startPosition, gap]);
 
   const updateItemWidth = useCallback((id: string, width: number) => {
-    setPositionStore((prevStore) =>
-      prevStore.map((item) =>
+    setPositionStore((prevStore) => {
+      let newStore = prevStore.map((item) =>
         item.id === id && item.width !== width ? { ...item, width } : item
-      )
-    );
+      );
+
+      if (JSON.stringify(prevStore) !== JSON.stringify(newStore)) {
+        return newStore;
+      } else {
+        return prevStore;
+      }
+    });
   }, []);
 
   return (
@@ -199,8 +209,15 @@ interface TextCorouselItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function TextCorouselItem(
-  { itemId, children = "Hello", left = 0, style, className, reverse=false, ...props }:
-    TextCorouselItemProps,
+  {
+    itemId,
+    children = "Hello",
+    left = 0,
+    style,
+    className,
+    reverse = false,
+    ...props
+  }: TextCorouselItemProps,
 ) {
   let [_, updateItemWidth] = useContext(PositionContext);
   let ref = useRef<HTMLDivElement>(null);
@@ -235,5 +252,5 @@ function TextCorouselItem(
 export default TextCorousel;
 export { TextCorouselItem };
 
-export const generateId = () => `carousel-item-${Math.random().toString(36).substr(2, 9)}`;
-
+export const generateId = () =>
+  `carousel-item-${Math.random().toString(36).substr(2, 9)}`;
