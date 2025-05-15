@@ -70,7 +70,8 @@ class CustomTextCorouselItemGenerator implements ItemGenerator {
         fontSize: "48px",
         fontWeight: randomElement(fontWeight),
         opacity: randomBetween(0.2, 0.5),
-        animationDelay: randomBetween(0.5, 1.5) + "s",
+        animationDelay: randomBetween(0.2, 1.25) + "s",
+        animationDuration: randomBetween(1, 2) + "s",
         // textShadow: "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff"
         ...this.timerEnd ? {
           textShadow: "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff",

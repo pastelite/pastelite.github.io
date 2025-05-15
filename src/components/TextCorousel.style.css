@@ -11,6 +11,8 @@
 .text-bar-item {
   position: absolute;
   white-space: nowrap;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /*  Background */
@@ -21,6 +23,7 @@
   /* border */
   text-shadow: -1px -1px 0 rgb(255, 255, 255), 1px -1px 0 rgb(255, 255, 255), -1px 1px 0 rgb(255, 255, 255), 1px 1px 0 #fff;
   cursor: default;
+  user-select: none;
 }
 
 .text-bar-item:hover {
@@ -51,5 +54,5 @@
 
 .blink-on-start {
   /* text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000;  */
-  animation: flickerOn 2s ease-out forwards;
+  animation: flickerOn 1.5s ease-out forwards;
 }

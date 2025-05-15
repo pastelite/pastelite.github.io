@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import "./TextCorousel.style.css";
-import { animated, useSpring } from "@react-spring/web";
 
 export interface TextCorouselItemData {
   children: React.ReactNode;
