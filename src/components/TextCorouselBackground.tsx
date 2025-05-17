@@ -1,4 +1,4 @@
-import { useEffect, useState, type HTMLAttributes } from "react";
+import { useEffect, useLayoutEffect, useState, type HTMLAttributes } from "react";
 import TextCorousel, {
   generateId,
   type ItemGenerator,
@@ -92,7 +92,7 @@ export default function TextCorouselBackground() {
   >([]);
 
   // screen size
-  useEffect(() => {
+  useLayoutEffect(() => {
     function handleResize() {
       setScreenHeight(window.innerHeight);
     }

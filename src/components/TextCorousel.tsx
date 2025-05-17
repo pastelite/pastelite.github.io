@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -76,7 +77,7 @@ function TextCorousel(
   }, [positionStore, gap]);
 
   // update size
-  useEffect(() => {
+  useLayoutEffect(() => {
     function handleResize() {
       if (containerRef.current) {
         setContainerWidth(containerRef.current.getBoundingClientRect().width);
@@ -240,7 +241,7 @@ function TextCorouselItem(
     return () => {
       window.removeEventListener("resize", updateStore);
     };
-  }, [itemId, updateItemWidth]);
+  }, [itemId, updateItemWidth, positionStore, containerWidth]);
 
   return (
     <div

@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import PasteliteSvg from "../assets/pastelite.svg?react";
 import "./Name.style.css"
 
 export default function Name() {
   const [top, setTop] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function handleResize() {
       let screenHeight = window.innerHeight;
       let titleHeight = (Math.round(screenHeight*0.5/80)-1)*80;
