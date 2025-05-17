@@ -143,13 +143,21 @@ function TextCorousel(
 
   // add item if necessary
   useEffect(() => {
-    // add in case of screen turn off. i have no idea why but it's just needed
     let itemWidth = leftOffset[leftOffset.length - 1] +
       positionStore[positionStore.length - 1].width + gap + startPosition;
 
     // add item if necessary
     if (itemWidth < containerWidth) {
-      setPositionStore([...positionStore, itemGenerator.getItem()]);
+      let currentItemWidth = itemWidth;
+      const avgItemWidth = 150;
+      let newItems = []
+
+      while (currentItemWidth < containerWidth) {
+        currentItemWidth += avgItemWidth;
+        newItems.push(itemGenerator.getItem());
+      }
+
+      setPositionStore((prevStore) => [...prevStore, ...newItems]);
     }
 
     // pop first item if necessary

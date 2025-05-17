@@ -110,7 +110,7 @@ export default function TextCorouselBackground() {
       (acc, curr) => acc + curr.height,
       0,
     );
-    if (corouselHeight < screenHeight) {
+    while (corouselHeight < screenHeight) {
       const newGenerator = new CustomTextCorouselItemGenerator();
       setCorouselList([...corouselList, {
         height: 80,
@@ -119,6 +119,7 @@ export default function TextCorouselBackground() {
         generator: newGenerator
       }]);
       console.log(corouselList);
+      corouselHeight += 80;
     }
   }, [screenHeight, corouselList]);
 
