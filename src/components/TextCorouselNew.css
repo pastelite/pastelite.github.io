@@ -1,22 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans+Thai+Looped:wght@100;200;300;400;500;600;700&family=Niramit:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Thai:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap');
-
-.text-bar-container {
-  width: 100%;
-  text-align: left;
+.corousel-container {
   position: relative;
-  height: 2em;
-  overflow:hidden;
+  overflow: hidden;
+  height: 5em;
 }
 
-.text-bar-item {
+.corousel-flex {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  /* max-width: 100vw; */
+  gap: 10px;
   position: absolute;
-  white-space: nowrap;
-  /* top: 50%; */
-  /* transform: translateY(-50%); */
+  /* left: 0; */
 }
 
-/*  Background */
-.text-bar-item {
+.corousel-flex * {
+  user-select: none;
+  white-space: nowrap;
+}
+
+.corousel-item {
   color:#0b0b0b;
   /* font-weight: inherit; */
   transition: color .1s ease-in-out;
@@ -26,22 +29,9 @@
   user-select: none;
 }
 
-.text-bar-item:hover {
+.corousel-item:hover {
   color:#fff8;
   /* transform: scale(1.1); */
-}
-
-.text-corousel-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  z-index: 0;
-  /* move to js because it's seems like a better idea */
-  transform: scale(calc(1 - (var(--scroll) / var(--screen-height))));
-  transition: transform .1s ease-out;
 }
 
 @keyframes flickerOn {
@@ -58,4 +48,17 @@
 .blink-on-start {
   /* text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000;  */
   animation: flickerOn 1.5s ease-out forwards;
+}
+
+.text-corousel-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  z-index: 0;
+  /* move to js because it's seems like a better idea */
+  transform: scale(calc(1 - (var(--scroll) / var(--screen-height))));
+  transition: transform .1s ease-out;
 }

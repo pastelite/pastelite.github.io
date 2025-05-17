@@ -1,10 +1,6 @@
-import { useEffect, useLayoutEffect, useState, type HTMLAttributes } from "react";
-import TextCorousel, {
-  generateId,
-  type ItemGenerator,
-  type TextCorouselItemData,
-} from "./TextCorousel";
-import { randomBetween, randomElement, shuffleArray } from "../utils/random";
+import type { HTMLAttributes } from "react";
+import type { ItemGenerator, TextCorouselItemData } from "../components/TextCorouselNew";
+import { randomBetween, randomElement, shuffleArray } from "./random";
 
 const helloLanguages = [
   "Hello", // English
@@ -29,7 +25,7 @@ export const fontFamily = [
 ];
 const fontWeight = ["200", "300", "400", "500", "600"];
 
-class CustomTextCorouselItemGenerator implements ItemGenerator {
+export default class CustomTextCorouselItemGenerator implements ItemGenerator {
   countUntilShuffle: number;
   shuffledLanguages: string[];
   timer: any;
@@ -81,71 +77,6 @@ class CustomTextCorouselItemGenerator implements ItemGenerator {
       },
       className: this.timerEnd ? "" : "blink-on-start",
     };
-    return { children: text, props, width: 0, id: generateId() };
+    return { children: text, props };
   }
-}
-
-export default function TextCorouselBackground() {
-  let [screenHeight, setScreenHeight] = useState(0);
-  let [corouselList, setCorouselList] = useState<
-    { "height": number; "speed": number, generator: CustomTextCorouselItemGenerator }[]
-  >([]);
-
-  // screen size
-  useLayoutEffect(() => {
-    function handleResize() {
-      setScreenHeight(window.innerHeight);
-    }
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // initialized corousels
-  useEffect(() => {
-    if (screenHeight === 0) return;
-
-    let corouselHeight = corouselList.reduce(
-      (acc, curr) => acc + curr.height,
-      0,
-    );
-    while (corouselHeight < screenHeight) {
-      const newGenerator = new CustomTextCorouselItemGenerator();
-      setCorouselList([...corouselList, {
-        height: 80,
-        speed: (Math.floor(Math.random() * 100) + 50) *
-          (corouselList.length % 2 ? -1 : 1),
-        generator: newGenerator
-      }]);
-      console.log(corouselList);
-      corouselHeight += 80;
-    }
-  }, [screenHeight, corouselList]);
-
-  return (
-    <div className="text-corousel-background">
-      {corouselList.map((corousel, index) => (
-        <TextCorousel
-          key={index}
-          itemGenerator={corousel.generator}
-          gap={10}
-          style={{
-            height: `${corousel.height}px`,
-          }}
-          speed={corousel.speed}
-          // this is to preload classes
-          defaultItem={{
-            children: "",
-            width: 0,
-            // props: {
-            //   className:
-            //     "blink-on-start",
-            // },
-            id: "preload",
-          }}
-        />
-      ))}
-    </div>
-  );
 }
