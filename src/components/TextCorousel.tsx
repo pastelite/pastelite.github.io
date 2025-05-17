@@ -29,7 +29,9 @@ interface TextCorouselProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultItem?: TextCorouselItemData;
 }
 
-const PositionContext = createContext<any>(null);
+const PositionContext = createContext<
+  [TextCorouselItemData[], Function, number]
+>([[], () => {}, 0]);
 
 // function defaultItemGenerator(): TextCorouselItemData {
 //   let index = Math.floor(Math.random() * 100);
@@ -143,16 +145,18 @@ function TextCorousel(
     // add in case of screen turn off. i have no idea why but it's just needed
     let itemWidth = leftOffset[leftOffset.length - 1] +
       positionStore[positionStore.length - 1].width + gap + startPosition;
-    
+
     // add item if necessary
     if (itemWidth < containerWidth) {
       setPositionStore([...positionStore, itemGenerator.getItem()]);
     }
-    
+
     // pop first item if necessary
     if (leftOffset[0] + startPosition + positionStore[0].width + gap < 0) {
       setPositionStore(positionStore.slice(1));
-      setStartPosition(prevStart => (prevStart + positionStore[0].width + gap));
+      setStartPosition(
+        (prevStart) => (prevStart + positionStore[0].width + gap)
+      );
       return;
     }
   }, [containerWidth, positionStore, startPosition, gap]);
@@ -173,7 +177,9 @@ function TextCorousel(
 
   return (
     <>
-      <PositionContext.Provider value={[positionStore, updateItemWidth]}>
+      <PositionContext.Provider
+        value={[positionStore, updateItemWidth, containerWidth]}
+      >
         <div
           className={`text-bar-container ${className || ""}`}
           ref={containerRef}
@@ -218,8 +224,11 @@ function TextCorouselItem(
     ...props
   }: TextCorouselItemProps,
 ) {
-  let [_, updateItemWidth] = useContext(PositionContext);
+  let [positionStore, updateItemWidth, containerWidth] = useContext(
+    PositionContext,
+  );
   let ref = useRef<HTMLDivElement>(null);
+  let { transform, ...restStyle } = style || {};
 
   useEffect(() => {
     function updateStore() {
@@ -231,14 +240,29 @@ function TextCorouselItem(
     return () => {
       window.removeEventListener("resize", updateStore);
     };
-  });
+  }, [itemId, updateItemWidth]);
 
   return (
     <div
       className={`text-bar-item ${className || ""}`}
       style={{
-        ...(reverse ? { right: `${left}px` } : { left: `${left}px` }),
-        ...style,
+        // ...(reverse ? { right: `${left}px` } : { left: `${left}px` }),
+        // ...style,
+        top: "50%", // center align
+        ...(reverse
+          ? {
+            right: 0,
+            transform: `translateX(${-left}px) translateY(-50%) ${
+              transform || ""
+            }`,
+          }
+          : {
+            left: 0,
+            transform: `translateX(${left}px) translateY(-50%) ${
+              transform || ""
+            }`,
+          }),
+        ...restStyle,
       }}
       ref={ref}
       {...props}

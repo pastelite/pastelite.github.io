@@ -1,13 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState } from "react";
 import "./App.css";
-import useMeasure from "react-use-measure";
-import { ResizeObserver } from "@juggle/resize-observer";
-import TextCorousel from "./components/TextCorousel";
-import TextCorouselBackground, { fontFamily } from "./components/TextCorouselBackground";
-// import pasteliteSvg from "./assets/pastelite.svg";
-import TitleName from "./assets/pastelite.svg?react";
+import TextCorouselBackground from "./components/TextCorouselBackground";
+import Name from "./components/Name";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,37 +10,35 @@ function App() {
     <>
       <TextCorouselBackground />
       {/* <img src={pasteliteSvg}  className="title-name"/> */}
-      <NamedTitle/>
+      <Name />
     </>
   );
 }
 
-function NamedTitle() {
-  // const titleRef = useRef<SvgS>(null);
+// function NamedTitle() {
+//   // const titleRef = useRef<SvgS>(null);
 
-  const [top, setTop] = useState(0);
+//   const [top, setTop] = useState(0);
 
-  useEffect(() => {
-    function handleResize() {
-      let screenHeight = window.innerHeight;
-      let titleHeight = (Math.round(screenHeight*0.5/80)-1)*80;
+//   useEffect(() => {
+//     function handleResize() {
+//       let screenHeight = window.innerHeight;
+//       let titleHeight = (Math.round(screenHeight*0.5/80)-1)*80;
 
-      setTop(titleHeight);
-    }
+//       setTop(titleHeight);
+//     }
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [])
+//     handleResize();
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, [])
 
-  return (
-    <>
-      {/* <img src={pasteliteSvg}  className="title-name" ref={titleRef} style={{top: top}}/> */}
-      <TitleName className="title-name" style={{top: top}}/>
-    </>
-  );
-}
-
-
+//   return (
+//     <>
+//       {/* <img src={pasteliteSvg}  className="title-name" ref={titleRef} style={{top: top}}/> */}
+//       <TitleName className="title-name" style={{top: top}}/>
+//     </>
+//   );
+// }
 
 export default App;

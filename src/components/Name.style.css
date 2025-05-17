@@ -1,0 +1,36 @@
+.title-name {
+  position: fixed;
+  top: 240px;
+  height: 160px;
+  color: white;
+  transform: translateX(-50%) translateY(10%);
+  margin: 0 auto;
+  left: 50%;
+  /* width: auto; */
+  width: min-content;
+  max-width: calc(100vw - 2em);
+  overflow: visible;
+  z-index: 10;
+}
+
+.title-name #text1 {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: dash 1s linear forwards;
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 40;
+    fill: #fff0;
+  }
+  80% {
+    stroke-dashoffset: 0;
+    fill: #fff0;
+  }
+  100% {
+    /* stroke-dashoffset: 0; */
+    fill: #fff;
+    stroke-dashoffset: 0;
+  }
+}
