@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import PasteliteSvg from "../assets/pastelite.svg?react";
 import "./Name.style.css"
+import useAfterScroll from "../hooks/useAfterScroll";
 
 export default function Name() {
   const [top, setTop] = useState(0);

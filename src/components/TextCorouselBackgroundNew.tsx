@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import TextCorouselNew from "./TextCorouselNew";
+import useScrollEffect from "../hooks/useScrollEffect";
 
 export default function TextCorouselBackground() {
   let [screenHeight, setScreenHeight] = useState(0);
@@ -17,6 +18,13 @@ export default function TextCorouselBackground() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // reduce size when scroll
+  useScrollEffect(() => {
+    let scrollTop = window.scrollY;
+    let scale = Math.max(0.5, 1 - scrollTop / window.innerHeight);
+    document.documentElement.style.setProperty("--background-scale", `${scale}`);
+  }, 100)
 
   // initialized corousels
   useEffect(() => {

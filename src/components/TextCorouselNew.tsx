@@ -44,6 +44,7 @@ export default function TextCorouselNew(
     { children: "", id: generateId({ children: "" }) },
   ]);
   let [offset, setOffset] = useState(0);
+  let offsetRef = useRef(0);
 
   // ticker
   const animationFrameId = useRef<number>(0);
@@ -66,7 +67,10 @@ export default function TextCorouselNew(
         return;
       }
 
-      setOffset((prev) => prev - distanceToMove);
+      setOffset((prev)=> {
+        offsetRef.current = prev - distanceToMove;
+        return prev - distanceToMove;
+      })
 
       lastTime.current = time;
       animationFrameId.current = requestAnimationFrame(animate);
@@ -97,11 +101,17 @@ export default function TextCorouselNew(
   useEffect(() => {
     // remove items
     if (-offset > 0 && (-offset >= firstItemWidth.current)) {
-      setItems((prev) => prev.slice(1));
+      
+      offsetRef.current = offset + firstItemWidth.current;
       setOffset(offset + firstItemWidth.current);
-    } else if (-offset < 0 && offset >= firstItemWidth.current) {
       setItems((prev) => prev.slice(1));
+      
+    } else if (-offset < 0 && offset >= firstItemWidth.current) {
+      
+      offsetRef.current = offset - firstItemWidth.current;
       setOffset(offset - firstItemWidth.current);
+      setItems((prev) => prev.slice(1));
+      
     }
   }, [offset]);
 
@@ -111,23 +121,21 @@ export default function TextCorouselNew(
 
     function handleResize() {
       let justInCaseSpace = window.innerWidth; // basically how much space we reserve before adding new items
-      let rect = containerRef.current?.getBoundingClientRect() ||
-        { left: 0, right: 0 };
+      let screenWidth = document.documentElement.clientWidth;
+      let containerWidth = containerRef.current?.offsetWidth || 0;
+
       let spaceToAdd = (speed > 0)
-        ? Math.max(0, window.innerWidth + justInCaseSpace - rect.right) // ] |
-        : Math.max(0, rect.left + justInCaseSpace);
+        ? Math.max(0, screenWidth + justInCaseSpace + (-offsetRef.current) - containerWidth) 
+        : Math.max(0, screenWidth + justInCaseSpace + offsetRef.current - containerWidth);
       let numItemsToAdd = Math.ceil(
         spaceToAdd / assumedItemWidth,
       );
-      if (numItemsToAdd > 0) {
+      // divide 2 to reduce the constant addition
+      if (numItemsToAdd > 0 && spaceToAdd > justInCaseSpace/2) {
         setItems((
           prev,
         ) => [
           ...prev,
-          // ...Array(numItemsToAdd).fill(0).map(() => ({
-          //   id: generateId(item),
-          //   ...itemGenerator.getItem(),
-          // })),
           ...Array(numItemsToAdd).fill(0).map(() => {
             let item = itemGenerator.getItem();
             return {

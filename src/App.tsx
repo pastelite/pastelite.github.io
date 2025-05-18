@@ -10,6 +10,12 @@ function App() {
     <>
       <TextCorouselBackgroundNew />
       <Name />
+      <div style={{height: "100vh"}}>
+
+      </div>
+      <div style={{height: "100vh"}}>
+        <div>Test Page 2</div>
+      </div>
     </>
   );
 }
