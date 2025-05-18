@@ -62,7 +62,7 @@
   overflow: hidden;
   z-index: 0;
   /* move to js because it's seems like a better idea */
-  transform: scale(var(--background-scale)); 
+  /* transform: scale(var(--background-scale));  */
   will-change: transform;
-  transition: transform .1s ease-out;
+  /* transition: transform .1s ease-out; */
 }

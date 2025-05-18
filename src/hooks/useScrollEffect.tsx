@@ -1,24 +1,32 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-export default function(callback: () => void, runEvery: number) {
-  const [count, setCount] = useState(0);
-  const timeout = useRef<number | null>(null);
+export default function useScrollThrottle(callback: () => void, runEvery: number) {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // Call initially
+    callback();
+
     const handleScroll = () => {
-      timeout.current = setTimeout(() => {
+      // only run when timeout is null
+      if (timeoutRef.current === null) {
         callback();
-        setCount(count + 1);
-        timeout.current = null;
-      }, runEvery);
+        // add timeout so no more calculation
+        timeoutRef.current = setTimeout(() => {
+          console.log("running");
+          // callback();
+          timeoutRef.current = null;
+        }, runEvery);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (timeout.current) {
-        clearTimeout(timeout.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
-    }
-  }, [count]);
+    };
+  }, [callback, runEvery]);
 }
