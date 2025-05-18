@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./TextCorouselNew.css";
 import CustomTextCorouselItemGenerator from "../utils/itemGenerator";
+import { useAnimationTicker } from "../hooks/useAnimationTicker";
 
 interface TextCorouselNewProps {
   gap?: number;
@@ -47,44 +48,54 @@ export default function TextCorouselNew(
   let offsetRef = useRef(0);
 
   // ticker
-  const animationFrameId = useRef<number>(0);
-  const lastTime = useRef<number>(0);
+  // const animationFrameId = useRef<number>(0);
+  // const lastTime = useRef<number>(0);
 
-  useEffect(() => {
-    const animate = (time: number) => {
-      if (!lastTime.current) {
-        lastTime.current = time;
-      }
+  useAnimationTicker((deltaTime) => {
+    const distanceToMove = (speed * deltaTime) / 1000;
 
-      const deltaTime = time - lastTime.current;
-      const distanceToMove = (speed * deltaTime) / 1000; // speed is in pixels per second
+    setOffset((prev) => {
+      const nextOffset = prev - distanceToMove;
+      offsetRef.current = nextOffset;
+      return nextOffset;
+    });
+  });
 
-      if (time - lastTime.current > timeThreshold) {
-        // if it too long, just don't move
-        // this prevent bugs where distanceToMove is too big and everything just disappear
-        lastTime.current = time;
-        animationFrameId.current = requestAnimationFrame(animate);
-        return;
-      }
+  // useEffect(() => {
+  //   const animate = (time: number) => {
+  //     if (!lastTime.current) {
+  //       lastTime.current = time;
+  //     }
 
-      setOffset((prev)=> {
-        offsetRef.current = prev - distanceToMove;
-        return prev - distanceToMove;
-      })
+  //     const deltaTime = time - lastTime.current;
+  //     const distanceToMove = (speed * deltaTime) / 1000; // speed is in pixels per second
 
-      lastTime.current = time;
-      animationFrameId.current = requestAnimationFrame(animate);
-    };
+  //     if (time - lastTime.current > timeThreshold) {
+  //       // if it too long, just don't move
+  //       // this prevent bugs where distanceToMove is too big and everything just disappear
+  //       lastTime.current = time;
+  //       animationFrameId.current = requestAnimationFrame(animate);
+  //       return;
+  //     }
 
-    animationFrameId.current = requestAnimationFrame(animate);
+  //     setOffset((prev) => {
+  //       offsetRef.current = prev - distanceToMove;
+  //       return prev - distanceToMove;
+  //     });
 
-    return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-      lastTime.current = 0; // Reset lastTime on cleanup
-    };
-  }, [speed]);
+  //     lastTime.current = time;
+  //     animationFrameId.current = requestAnimationFrame(animate);
+  //   };
+
+  //   animationFrameId.current = requestAnimationFrame(animate);
+
+  //   return () => {
+  //     if (animationFrameId.current) {
+  //       cancelAnimationFrame(animationFrameId.current);
+  //     }
+  //     lastTime.current = 0; // Reset lastTime on cleanup
+  //   };
+  // }, [speed]);
 
   // get first item width
   let firstItemWidth = useRef(0);
@@ -101,17 +112,13 @@ export default function TextCorouselNew(
   useEffect(() => {
     // remove items
     if (-offset > 0 && (-offset >= firstItemWidth.current)) {
-      
       offsetRef.current = offset + firstItemWidth.current;
       setOffset(offset + firstItemWidth.current);
       setItems((prev) => prev.slice(1));
-      
     } else if (-offset < 0 && offset >= firstItemWidth.current) {
-      
       offsetRef.current = offset - firstItemWidth.current;
       setOffset(offset - firstItemWidth.current);
       setItems((prev) => prev.slice(1));
-      
     }
   }, [offset]);
 
@@ -125,13 +132,19 @@ export default function TextCorouselNew(
       let containerWidth = containerRef.current?.offsetWidth || 0;
 
       let spaceToAdd = (speed > 0)
-        ? Math.max(0, screenWidth + justInCaseSpace + (-offsetRef.current) - containerWidth) 
-        : Math.max(0, screenWidth + justInCaseSpace + offsetRef.current - containerWidth);
+        ? Math.max(
+          0,
+          screenWidth + justInCaseSpace + (-offsetRef.current) - containerWidth,
+        )
+        : Math.max(
+          0,
+          screenWidth + justInCaseSpace + offsetRef.current - containerWidth,
+        );
       let numItemsToAdd = Math.ceil(
         spaceToAdd / assumedItemWidth,
       );
       // divide 2 to reduce the constant addition
-      if (numItemsToAdd > 0 && spaceToAdd > justInCaseSpace/2) {
+      if (numItemsToAdd > 0 && spaceToAdd > justInCaseSpace / 2) {
         setItems((
           prev,
         ) => [
@@ -163,7 +176,7 @@ export default function TextCorouselNew(
         }}
         ref={containerRef}
       >
-        {items.map((item, index) => {
+        {items.map((item, _) => {
           let { className, ...props } = item.props || {};
           return (
             <div

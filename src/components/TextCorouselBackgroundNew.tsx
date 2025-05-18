@@ -24,7 +24,7 @@ export default function TextCorouselBackground() {
     let scrollTop = window.scrollY;
     let scale = Math.max(0.5, 1 - scrollTop / window.innerHeight);
     document.documentElement.style.setProperty("--background-scale", `${scale}`);
-  }, 100)
+  }, 1)
 
   // initialized corousels
   useEffect(() => {
