@@ -1,11 +1,8 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import TextCorouselNew from "./TextCorouselNew";
-import { motion, useAnimate, useMotionValue } from "motion/react";
+import { motion, useAnimate, useMotionValue, useTransform } from "motion/react";
 import useThrottleScroll from "../hooks/useThrottleScroll";
-
-function mappingNumber(n: number, min: number, max: number) {
-  return n * (max - min) + min;
-}
+import { mappingNumber } from "../utils/number";
 
 export default function TextCorouselBackground() {
   let [screenHeight, setScreenHeight] = useState(0);
@@ -14,6 +11,9 @@ export default function TextCorouselBackground() {
   >([]);
   // let [scrollTop, setScrollTop] = useState(0);
   let scaleValue = useMotionValue(0);
+  let opacityValue = useMotionValue(0);
+  let blurValue = useMotionValue(0);
+  let blurFilter = useTransform(blurValue, (v) => `blur(${v}px)`);
   let [scope, animate] = useAnimate();
 
   // screen size
@@ -29,8 +29,18 @@ export default function TextCorouselBackground() {
 
   useThrottleScroll(()=>{
     let scale = mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1);
+    let opacity = mappingNumber(1 - window.scrollY / window.innerHeight, 0, 1);
+    let blur = mappingNumber(1 - window.scrollY / window.innerHeight, 5, 0);
 
     animate(scaleValue, scale, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
+    animate(opacityValue, opacity, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
+    animate(blurValue, blur, {
       duration: 0.2,
       ease: "easeOut",
     })
@@ -73,6 +83,8 @@ export default function TextCorouselBackground() {
       className="text-corousel-background"
       style={{
         scale: scaleValue,
+        opacity: opacityValue,
+        filter: blurFilter,
       }}
       ref={scope}
     >
