@@ -2,6 +2,10 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import TextCorouselNew from "./TextCorouselNew";
 import useScrollEffect from "../hooks/useScrollEffect";
 
+function mappingNumber(n: number, min: number, max: number) {
+  return n * (max - min) + min;
+}
+
 export default function TextCorouselBackground() {
   let [screenHeight, setScreenHeight] = useState(0);
   let [corouselList, setCorouselList] = useState<
@@ -22,9 +26,10 @@ export default function TextCorouselBackground() {
   // reduce size when scroll
   useScrollEffect(() => {
     let scrollTop = window.scrollY;
-    let scale = Math.max(0.5, 1 - scrollTop / window.innerHeight);
+    // let scale = Math.max(0.5, 1 - scrollTop / window.innerHeight);
+    let scale = mappingNumber(1 - scrollTop / window.innerHeight, 0.5, 1);
     document.documentElement.style.setProperty("--background-scale", `${scale}`);
-  }, 1)
+  }, 50)
 
   // initialized corousels
   useEffect(() => {

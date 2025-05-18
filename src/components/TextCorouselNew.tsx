@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./TextCorouselNew.css";
 import CustomTextCorouselItemGenerator from "../utils/itemGenerator";
 import { useAnimationTicker } from "../hooks/useAnimationTicker";
+import { motion, useMotionValue } from "motion/react";
 
 interface TextCorouselNewProps {
   gap?: number;
@@ -44,58 +45,58 @@ export default function TextCorouselNew(
   let [items, setItems] = useState<TextCorouselItemData[]>([
     { children: "", id: generateId({ children: "" }) },
   ]);
-  let [offset, setOffset] = useState(0);
+  // let [offset, setOffset] = useState(0);
   let offsetRef = useRef(0);
 
-  // ticker
-  // const animationFrameId = useRef<number>(0);
-  // const lastTime = useRef<number>(0);
+  // const [{ offsetSpring }, api] = useSpring(() => ({
+  //   offsetSpring: 0,
+  //   config: { tension: 120, friction: 40 },
+  // }));
+  const offsetSpring = useMotionValue(0);
 
   useAnimationTicker((deltaTime) => {
     const distanceToMove = (speed * deltaTime) / 1000;
+    const currentOffset = offsetRef.current;
 
-    setOffset((prev) => {
-      const nextOffset = prev - distanceToMove;
-      offsetRef.current = nextOffset;
-      return nextOffset;
-    });
+    // offsetRef.current -= distanceToMove;
+
+    let firstItemWidth = 0;
+    if (containerRef.current) {
+      if (containerRef.current.children.length === 0) return;
+      let firstItem = containerRef.current.children[0] as HTMLDivElement;
+      firstItemWidth = firstItem.offsetWidth + gap;
+    }
+
+    offsetRef.current = currentOffset - distanceToMove;
+
+    if (speed > 0 && -offsetRef.current > firstItemWidth) {
+      offsetRef.current += firstItemWidth;
+      setItems((prev) => prev.slice(1));
+      // api.start({ offsetSpring: offsetRef.current, immediate: true });
+      offsetSpring.set(offsetRef.current);
+    } else if (speed < 0 && offsetRef.current >= firstItemWidth) {
+      offsetRef.current -= firstItemWidth;
+      setItems((prev) => prev.slice(1));
+      offsetSpring.set(offsetRef.current);
+      // api.start({ offsetSpring: offsetRef.current, immediate: true });
+    } else {
+      offsetSpring.set(offsetRef.current);
+      // api.start({ offsetSpring: offsetRef.current, immediate: true });
+    }
+
+    // remove items that are out of the screen
+    // if (-offsetRef.current > 0 && -offsetRef.current > firstItemWidth) {
+    //   offsetRef.current += firstItemWidth;
+    //   api.start({ offsetSpring: offsetRef.current, immediate: true});
+    //   setItems((prev) => prev.slice(1));
+    // } else if (-offsetRef.current < 0 && offsetRef.current >= firstItemWidth) {
+    //   offsetRef.current -= firstItemWidth;
+    //   api.start({ offsetSpring: offsetRef.current, immediate: true});
+    //   setItems((prev) => [...prev, itemGenerator.getItem()]);
+    // } else {
+    //   api.start({ offsetSpring: offsetRef.current});
+    // }
   });
-
-  // useEffect(() => {
-  //   const animate = (time: number) => {
-  //     if (!lastTime.current) {
-  //       lastTime.current = time;
-  //     }
-
-  //     const deltaTime = time - lastTime.current;
-  //     const distanceToMove = (speed * deltaTime) / 1000; // speed is in pixels per second
-
-  //     if (time - lastTime.current > timeThreshold) {
-  //       // if it too long, just don't move
-  //       // this prevent bugs where distanceToMove is too big and everything just disappear
-  //       lastTime.current = time;
-  //       animationFrameId.current = requestAnimationFrame(animate);
-  //       return;
-  //     }
-
-  //     setOffset((prev) => {
-  //       offsetRef.current = prev - distanceToMove;
-  //       return prev - distanceToMove;
-  //     });
-
-  //     lastTime.current = time;
-  //     animationFrameId.current = requestAnimationFrame(animate);
-  //   };
-
-  //   animationFrameId.current = requestAnimationFrame(animate);
-
-  //   return () => {
-  //     if (animationFrameId.current) {
-  //       cancelAnimationFrame(animationFrameId.current);
-  //     }
-  //     lastTime.current = 0; // Reset lastTime on cleanup
-  //   };
-  // }, [speed]);
 
   // get first item width
   let firstItemWidth = useRef(0);
@@ -109,18 +110,18 @@ export default function TextCorouselNew(
 
   // remove items if necessary, this is also to trigger adding new items without
   // having to check the width every offset change
-  useEffect(() => {
-    // remove items
-    if (-offset > 0 && (-offset >= firstItemWidth.current)) {
-      offsetRef.current = offset + firstItemWidth.current;
-      setOffset(offset + firstItemWidth.current);
-      setItems((prev) => prev.slice(1));
-    } else if (-offset < 0 && offset >= firstItemWidth.current) {
-      offsetRef.current = offset - firstItemWidth.current;
-      setOffset(offset - firstItemWidth.current);
-      setItems((prev) => prev.slice(1));
-    }
-  }, [offset]);
+  // useEffect(() => {
+  //   // remove items
+  //   if (-offset > 0 && (-offset >= firstItemWidth.current)) {
+  //     offsetRef.current = offset + firstItemWidth.current;
+  //     setOffset(offset + firstItemWidth.current);
+  //     setItems((prev) => prev.slice(1));
+  //   } else if (-offset < 0 && offset >= firstItemWidth.current) {
+  //     offsetRef.current = offset - firstItemWidth.current;
+  //     setOffset(offset - firstItemWidth.current);
+  //     setItems((prev) => prev.slice(1));
+  //   }
+  // }, [offset]);
 
   // adding item if item/screen width change
   useLayoutEffect(() => {
@@ -167,13 +168,19 @@ export default function TextCorouselNew(
 
   return (
     <div className="corousel-container">
-      <div
+      <motion.div
         className="corousel-flex"
         style={{
-          transform: `translateX(${offset}px)`,
+          // transform: `translateX(${offset}px)`,
+          // transform: `translateX(calc(0px - ${offsetSpring}px))`,
+          x: offsetSpring,
           flexDirection: speed > 0 ? "row" : "row-reverse",
           ...speed > 0 ? { left: 0 } : { right: 0 },
         }}
+        // initial={{ x: 0 }}
+        // animate={{
+        //   x: offsetSpring,
+        // }}
         ref={containerRef}
       >
         {items.map((item, _) => {
@@ -188,7 +195,7 @@ export default function TextCorouselNew(
             </div>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 }
