@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function useScrollThrottle(callback: () => void, runEvery: number) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import TextCorouselNew from "./TextCorouselNew";
-import useScrollEffect from "../hooks/useScrollEffect";
-import { animate, motion, useAnimate, useMotionValue, useSpring } from "motion/react";
+import { motion, useAnimate, useMotionValue } from "motion/react";
 import useThrottleScroll from "../hooks/useThrottleScroll";
 
 function mappingNumber(n: number, min: number, max: number) {
@@ -15,10 +14,6 @@ export default function TextCorouselBackground() {
   >([]);
   // let [scrollTop, setScrollTop] = useState(0);
   let scaleValue = useMotionValue(0);
-  const scaleValueSpring = useSpring(scaleValue, {
-    damping: 20,
-    stiffness: 200,
-  });
   let [scope, animate] = useAnimate();
 
   // screen size
@@ -32,56 +27,14 @@ export default function TextCorouselBackground() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // reduce size when scroll
-  // useEffect(() => {
-  //   // let scrollTop = window.scrollY;
-  //   // let scale = Math.max(0.5, 1 - scrollTop / window.innerHeight);
-  //   // let scale = mappingNumber(1 - scrollTop / window.innerHeight, 0.5, 1);
-  //   // document.documentElement.style.setProperty("--background-scale", `${scale}`);
-  //   const handleScroll = () => {
-  //     // setScrollTop(window.scrollY);
-  //     // scaleValue.set(mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1));
-
-  //     let scale = mappingNumber(
-  //       1 - window.scrollY / window.innerHeight,
-  //       0.5,
-  //       1,
-  //     );
-
-  //     animate(scaleValue, scale, {
-  //       duration: 0.2,
-  //       ease: "easeOut", // You can use any easing function here
-  //     });
-  //   };
-  //   handleScroll();
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
-
   useThrottleScroll(()=>{
     let scale = mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1);
 
     animate(scaleValue, scale, {
       duration: 0.2,
-      ease: "easeOut", // You can use any easing function here
+      ease: "easeOut",
     })
   })
-
-  // useScrollEffect(() => {
-  //   // scaleValue.set(
-  //   //   mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1),
-  //   // );
-  //   let scale = mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1);
-
-  //   // scaleValue.set(scale);
-
-  //   animate(scaleValue, scale, {
-  //     duration: 0.2,
-  //     ease: "easeOut", // You can use any easing function here
-  //   });
-  // }, 50);
 
   // initialized corousels
   useEffect(() => {
@@ -126,22 +79,11 @@ export default function TextCorouselBackground() {
       {corouselList.map((corousel, index) => (
         <TextCorouselNew
           key={index}
-          // itemGenerator={corousel.generator}
           gap={10}
-          // style={{
-          //   height: `${corousel.height}px`,
-          // }}
+          style={{
+            height: `${corousel.height}px`,
+          }}
           speed={corousel.speed}
-          // this is to preload classes
-          // defaultItem={{
-          //   children: "",
-          //   width: 0,
-          //   // props: {
-          //   //   className:
-          //   //     "blink-on-start",
-          //   // },
-          //   id: "preload",
-          // }}
         />
       ))}
     </motion.div>
