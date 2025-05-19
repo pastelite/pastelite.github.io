@@ -15,6 +15,12 @@
   /* background-color: red; */
 }
 
+.title-name-background {
+  opacity: 0;
+  width: 70;
+  height: 70;
+}
+
 .title-name svg {
   /* width: 100%; */
   width: max-content;
