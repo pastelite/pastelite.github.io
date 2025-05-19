@@ -10,7 +10,6 @@
   /* left: 50%; */
   /* width: auto; */
   width: max-content;
-  max-width: calc(100vw - 2em);
   overflow: visible;
   z-index: 10;
   /* background-color: red; */
@@ -19,6 +18,7 @@
 .title-name svg {
   /* width: 100%; */
   width: max-content;
+  max-width: calc(100vw - 2em);
   height: 100%;
   overflow: visible;
 }
@@ -29,10 +29,9 @@
   animation: dash 1s linear forwards;
 }
 
-.title-name::before {
+/* .title-name::before {
   content: "";
   position: absolute;
-  /* left:-10%; */
   left: calc(0.12 / 4 * -1 * var(--name-width));
   top: 0%;
   width: 100%;
@@ -44,9 +43,7 @@
 
 .title-name.to-top::before {
   width: var(--name-height);
-  /* border-radius: 25px; */
-  /* transform: translateX(-50%); */
-}
+} */
 
 @keyframes dash {
   0% {
