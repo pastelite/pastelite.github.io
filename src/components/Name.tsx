@@ -8,12 +8,14 @@ import { animate } from "motion";
 import { useElementSizeCSSVars } from "../hooks/useElementCSSVariable";
 
 // how "p" in the title takes up entire title space
-const pRatio = 0.13;
+const pRatio = 0.12;
+const menuBarWidth = 100;
 
 
 export default function Name() {
   const [top, setTop] = useState(0);
   const [screenWidth, setScreenWidth] = useState(0);
+  const [svgWidth, setSvgWidth] = useState(0);
   // const [scale, setScale] = useState(1);
   // const calculatedTop = useRef(0); 
   // const top = useMotionValue(0);
@@ -27,8 +29,14 @@ export default function Name() {
   // const height = useMotionValue(160);
 
   let elementRef = useElementSizeCSSVars<HTMLDivElement>("name");
+  // let svgRef = useRef<SVGSVGElement>(null);
 
-
+  useLayoutEffect(() => {
+    if (elementRef.current) {
+      setSvgWidth(elementRef.current.getBoundingClientRect().width);
+    }
+    console.log(svgWidth);
+  }, []);
 
   useThrottleScroll(() => {
     // hiding title
@@ -74,7 +82,9 @@ export default function Name() {
           height: hiding ? 60 : 180,
           top: hiding ? 0 : top,
           // use calc to reduce the "left" animation
-          x: hiding ? 0 : `calc(-50% + ${screenWidth / 2}px)`,
+          // /8 since the height is reduce from 180 to 60 (/2)
+          x: hiding ? `calc(0% + ${((menuBarWidth-(svgWidth*pRatio))/2) + svgWidth*pRatio/8}px)` : `calc(-50% + ${screenWidth / 2}px)`,
+          // x: hiding? (menuBarWidth-(svgWidth*pRatio))/2 : -0.5*svgWidth + screenWidth/2,
           margin: hiding ? "1em 1em": 0,
           // paddingLeft: `calc(${pRatio} * (var(--name-width) - 2em))`,
           

@@ -35,7 +35,7 @@
   /* left:-10%; */
   left: calc(0.12 / 4 * -1 * var(--name-width));
   top: 0%;
-  width: 120%;
+  width: 100%;
   height: 100%;
   background-color: red;
   z-index: -1;
