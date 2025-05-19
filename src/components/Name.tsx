@@ -1,19 +1,48 @@
-import { useLayoutEffect, useState } from "react";
+import { use, useLayoutEffect, useRef, useState } from "react";
 import PasteliteSvg from "../assets/pastelite.svg?react";
 import "./Name.style.css";
 import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber } from "../utils/number";
-import { motion, useMotionValue } from "motion/react";
+import { motion, useMotionValue, useTransform } from "motion/react";
 import { animate } from "motion";
+import { useElementSizeCSSVars } from "../hooks/useElementCSSVariable";
 
-const motionPasteliteSvg = motion(PasteliteSvg);
+// how "p" in the title takes up entire title space
+const pRatio = 0.13;
+
 
 export default function Name() {
   const [top, setTop] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(0);
   // const [scale, setScale] = useState(1);
+  // const calculatedTop = useRef(0); 
+  // const top = useMotionValue(0);
   const scale = useMotionValue(1);
+  // const yRaw = useMotionValue(0);
+  // const y = useTransform([yRaw, top], ([vyRaw, vtop]) => `calc(${vtop}px + ${vyRaw}%)`);
+  // const xRaw = useMotionValue(-50);
+  // const screenWidth = useMotionValue(window.innerWidth);
+  // const x = useTransform([screenWidth,xRaw], ([vwidth, v]) => `calc(${vwidth}px + ${v}%)`);
+  const [hiding, setHiding] = useState(false);
+  // const height = useMotionValue(160);
+
+  let elementRef = useElementSizeCSSVars<HTMLDivElement>("name");
+
+
 
   useThrottleScroll(() => {
+    // hiding title
+    let limit = window.innerHeight * 0.5;
+
+    if (window.scrollY > limit) {
+      animate(scale, 1, { duration: 0.1, ease: "easeOut" });
+      setHiding(true);
+      return
+    } else {
+      if (hiding) setHiding(false);
+    }
+
+    // calculate scale
     let newScale = mappingNumber(
       1 - window.scrollY / window.innerHeight,
       0.8,
@@ -21,8 +50,6 @@ export default function Name() {
     );
 
     animate(scale, newScale, { duration: 0.2, ease: "easeOut" });
-    // setScale(newScale);
-    // animate(scale, newScale, {duration: 0.2, ease: "easeOut"});
   });
 
   useLayoutEffect(() => {
@@ -31,6 +58,7 @@ export default function Name() {
       let titleHeight = (Math.round(screenHeight * 0.5 / 80) - 1) * 80;
 
       setTop(titleHeight);
+      setScreenWidth(window.innerWidth);
     }
 
     handleResize();
@@ -41,17 +69,27 @@ export default function Name() {
   return (
     <>
       <motion.div
-        className="title-name"
+        className={"title-name"+(hiding ? " to-top" : "")}
+        animate={{
+          height: hiding ? 60 : 180,
+          top: hiding ? 0 : top,
+          // use calc to reduce the "left" animation
+          x: hiding ? 0 : `calc(-50% + ${screenWidth / 2}px)`,
+          margin: hiding ? "1em 1em": 0,
+          // paddingLeft: `calc(${pRatio} * (var(--name-width) - 2em))`,
+          
+        }}
         style={{
           scale: scale,
-          x: "-50%",
-          y: "10%",
-          top: top,
         }}
-        // animate={{ scale: scale, x: "-50%", y: "10%" }}
-        // transition={{ duration: 0.2, ease: "easeOut" }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        ref={elementRef}
       >
-        <PasteliteSvg />
+        <PasteliteSvg style={{
+          clipPath: hiding ? "polygon(0px 0px, 13% 0px, 10% 100%, 0px 100%)" 
+          : "polygon(-10px -10px, 110% -10px, 110% 110%, -10px 110%)",
+          transition: "clip-path .2s ease-out"
+        }} />
       </motion.div>
     </>
   );
