@@ -65,6 +65,7 @@ export default function TextCorouselBackground() {
           height: 80,
           speed: (Math.floor(Math.random() * 100) + 50) *
             ((corouselList.length + i) % 2 ? -1 : 1),
+          // speed: 0,
         });
       }
       setCorouselList((corouselList) => [...corouselList, ...newCorousels]);

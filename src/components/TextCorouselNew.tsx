@@ -48,26 +48,34 @@ export default function TextCorouselNew(
 
   let offsetRef = useRef(0);
   const offsetMotion = useMotionValue(0);
+  // reduce expensive calculation
+  const checkItemTimer = useRef<number | null>(setTimeout(() => {}, 2000));
 
   useAnimationTicker((deltaTime) => {
     const distanceToMove = (speed * deltaTime) / 1000;
     let offset = offsetRef.current;
-
-    let firstItemWidth = 0;
-    if (containerRef.current) {
-      if (containerRef.current.children.length === 0) return;
-      let firstItem = containerRef.current.children[0] as HTMLDivElement;
-      firstItemWidth = firstItem.offsetWidth + gap;
-    }
-
     offset -= distanceToMove; //need to be negative because of my shitty decision
 
-    if (speed > 0 && -offset > firstItemWidth) {
-      offset += firstItemWidth;
-      setItems((prev) => prev.slice(1));
-    } else if (speed < 0 && offset >= firstItemWidth) {
-      offset -= firstItemWidth;
-      setItems((prev) => prev.slice(1));
+    // remove not needed items
+    if (checkItemTimer.current == null) {
+      let firstItemWidth = 0;
+      if (containerRef.current) {
+        if (containerRef.current.children.length === 0) return;
+        let firstItem = containerRef.current.children[0] as HTMLDivElement;
+        firstItemWidth = firstItem.offsetWidth + gap;
+      }
+
+      if (speed > 0 && -offset > firstItemWidth) {
+        offset += firstItemWidth;
+        setItems((prev) => prev.slice(1));
+      } else if (speed < 0 && offset >= firstItemWidth) {
+        offset -= firstItemWidth;
+        setItems((prev) => prev.slice(1));
+      }
+
+      checkItemTimer.current = window.setTimeout(() => {
+        checkItemTimer.current = null;
+      }, 1000);
     }
 
     offsetRef.current = offset;

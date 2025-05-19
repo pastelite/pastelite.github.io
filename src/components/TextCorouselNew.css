@@ -27,9 +27,11 @@
   /* font-weight: inherit; */
   transition: color .1s ease-in-out;
   /* border */
-  text-shadow: -1px -1px 0 rgb(255, 255, 255), 1px -1px 0 rgb(255, 255, 255), -1px 1px 0 rgb(255, 255, 255), 1px 1px 0 #fff;
+  /* text-shadow: -1px -1px 0 rgb(255, 255, 255), 1px -1px 0 rgb(255, 255, 255), -1px 1px 0 rgb(255, 255, 255), 1px 1px 0 #fff; */
   cursor: default;
+  /* opacity: 1; */
   user-select: none;
+  will-change: opacity;
 }
 
 .corousel-item:hover {
@@ -48,9 +50,22 @@
   100% { text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; }
 }
 
+@keyframes flickerOnNew {
+  0%   { opacity: 0; }
+  /* 10%  { text-shadow: none; } */
+  20%  { opacity: 1; }
+  30%  { opacity: 0; }
+  50%  { opacity: 1; }
+  /* 70%  { text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; } */
+  80%  { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
 .blink-on-start {
   /* text-shadow: -1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000;  */
-  animation: flickerOn 1.5s ease-out forwards;
+  opacity: 0;
+  animation: flickerOnNew 1.5s ease-out forwards;
 }
 
 .text-corousel-background {

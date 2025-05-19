@@ -25,6 +25,12 @@ export const fontFamily = [
 ];
 const fontWeight = ["200", "300", "400", "500", "600"];
 
+function linearHexMap(x: number) {
+  if (x < 0.1 || x > 1) return null; // handle out-of-range input
+  const val = Math.round((x - 0.1) / (1 - 0.1) * 15);
+  return val.toString(16); // convert to hex string
+}
+
 export default class CustomTextCorouselItemGenerator implements ItemGenerator {
   countUntilShuffle: number;
   shuffledLanguages: string[];
@@ -37,7 +43,7 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
     this.timerEnd = false;
     this.timer = setTimeout(() => {
       this.timerEnd = true;
-    }, 500)
+    }, 1000)
   }
 
   getItem(): TextCorouselItemData {
@@ -60,20 +66,32 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
       }
     }
     let text = this.shuffledLanguages[this.countUntilShuffle];
+    let opacity = linearHexMap(randomBetween(0.2, 0.5));
+    let textShadowColor = `#fff${opacity}`;
+    console.log(textShadowColor);
+    let textShadowEmpty = `#0000`;
+    // let mappedToHex = Math.round(opacity * 255).toString(16).padStart(2, "0");
     let props: HTMLAttributes<HTMLDivElement> = {
       style: {
         fontFamily: randomElement(fontFamily),
         fontSize: "48px",
         fontWeight: randomElement(fontWeight),
-        opacity: randomBetween(0.2, 0.5),
-        animationDelay: randomBetween(0.2, 1.25) + "s",
+        // opacity: randomBetween(0.2, 0.5),
+        animationDelay: randomBetween(0.5, 1.25) + "s",
         animationDuration: randomBetween(1, 2) + "s",
+        textShadow: `-1px -1px 0 ${textShadowColor}, 1px -1px 0 ${textShadowColor}, -1px 1px 0 ${textShadowColor}, 1px 1px 0 ${textShadowColor}`,
         // textShadow: "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff"
+        // ...this.timerEnd ? {
+        //   textShadow: `-1px -1px 0 ${textShadowColor}, 1px -1px 0 ${textShadowColor}, -1px 1px 0 ${textShadowColor}, 1px 1px 0 ${textShadowColor}`,
+        // } : {
+        //   textShadow: `-1px -1px 0 ${textShadowEmpty}, 1px -1px 0 ${textShadowEmpty}, -1px 1px 0 ${textShadowEmpty}, 1px 1px 0 ${textShadowEmpty}`,
+        // },
         ...this.timerEnd ? {
-          textShadow: "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff",
+          opacity: 1,
         } : {
-          textShadow: "-1px -1px 0 #0000, 1px -1px 0 #0000, -1px 1px 0 #0000, 1px 1px 0 #0000",
-        },
+          opacity: 0,
+        }
+        
       },
       className: this.timerEnd ? "" : "blink-on-start",
     };
