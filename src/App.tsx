@@ -1,7 +1,9 @@
 import "./App.css";
+import TextSVG from "./components/TextSVG";
 import Layout from "./components/Layout";
 import Name from "./components/Name";
 import TextCorouselBackgroundNew from "./components/TextCorouselBackgroundNew";
+import { AboutPage } from "./components/AboutPage";
 
 function App() {
   return (
@@ -9,9 +11,7 @@ function App() {
       <TextCorouselBackgroundNew />
       <Name />
       <Layout>
-        <div className="page-container" style={{ textAlign: "left", backgroundColor: "var(--color-second-background)", height: "100vh" }}>
-          Test
-        </div>
+        <AboutPage></AboutPage>
       </Layout>
     </>
   );

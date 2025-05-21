@@ -80,5 +80,5 @@
   /* transform: scale(var(--background-scale));  */
   will-change: transform;
   /* transition: transform .1s ease-out; */
-  scroll-snap-align: center;
+  scroll-snap-align: start;
 }

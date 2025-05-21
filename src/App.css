@@ -98,3 +98,38 @@
     stroke-dashoffset: 0;
   }
 }
+
+/* Text Title */
+@keyframes dash2 {
+  0% {
+    stroke-dashoffset: var(--path-length);
+    fill: #fff0;
+  }
+  80% {
+    stroke-dashoffset: 0;
+    fill: #fff0;
+  }
+  100% {
+    /* stroke-dashoffset: 0; */
+    fill: #fff;
+    stroke-dashoffset: 0;
+  }
+}
+
+svg path {
+  transition: all 1s ease-in-out;
+}
+
+.start-path-animation > path {
+  animation: 1s dash2 calc(var(--item-number) * 100ms) linear forwards;
+}
+
+.end-path-animation > path {
+  animation: 1s dash2 calc(var(--item-number) * 100ms) linear forwards
+    reverse;
+}
+
+.test-animation > path {
+  animation: 1s dash2 calc(var(--item-number) * 100ms + 1s) linear forwards
+    reverse;
+}
