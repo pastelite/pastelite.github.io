@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div>Test2</div>
         <div>Test3</div>
       </div>
-      <div className="content" style={{ left: menuBarWidth, top: topBarHeight }}>{children}</div>
+      <div className="content" style={{ left: 0, top: `calc(100vh)` }}>{children}</div>
     </>
   );
 }

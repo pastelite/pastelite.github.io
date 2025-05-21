@@ -43,7 +43,7 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
     this.timerEnd = false;
     this.timer = setTimeout(() => {
       this.timerEnd = true;
-    }, 1000)
+    }, 100)
   }
 
   getItem(): TextCorouselItemData {
@@ -68,8 +68,8 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
     let text = this.shuffledLanguages[this.countUntilShuffle];
     let opacity = linearHexMap(randomBetween(0.2, 0.5));
     let textShadowColor = `#fff${opacity}`;
-    console.log(textShadowColor);
-    let textShadowEmpty = `#0000`;
+    // console.log(textShadowColor);
+    // let textShadowEmpty = `#0000`;
     // let mappedToHex = Math.round(opacity * 255).toString(16).padStart(2, "0");
     let props: HTMLAttributes<HTMLDivElement> = {
       style: {
