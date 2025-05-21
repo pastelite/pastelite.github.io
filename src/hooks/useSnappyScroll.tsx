@@ -1,35 +1,35 @@
 import { useEffect, useRef } from "react";
 
-export default function useSnappyScroll(stickyness = 0.01) {
-  let scrollTimeout = useRef<any>(null);
-  let isTouching = useRef(false);
-  let lastScrollTop = useRef(0);
+// export default function useSnappyScroll(stickyness = 0.01) {
+//   let scrollTimeout = useRef<any>(null);
+//   let isTouching = useRef(false);
+//   let lastScrollTop = useRef(0);
 
-  useEffect(()=> {
-    function handleSnap() {
-      console.log("Snapping!")
+//   useEffect(()=> {
+//     function handleSnap() {
+//       console.log("Snapping!")
 
-      // move to current position
-      window.scrollTo({
-        top: window.scrollY,
-        behavior: "smooth",
-      })
-    }
+//       // move to current position
+//       window.scrollTo({
+//         top: window.scrollY,
+//         behavior: "smooth",
+//       })
+//     }
 
-    function handleTouchEnd() {
-      console.log("Touch ended!");
-      handleSnap();
-      isTouching.current = true;
-    }
+//     function handleTouchEnd() {
+//       console.log("Touch ended!");
+//       handleSnap();
+//       isTouching.current = true;
+//     }
 
-    window.addEventListener("touchend", handleTouchEnd);
+//     window.addEventListener("touchend", handleTouchEnd);
     
-    return () => {
-      window.removeEventListener("touchend", handleTouchEnd);
-    }
+//     return () => {
+//       window.removeEventListener("touchend", handleTouchEnd);
+//     }
 
 
-  }, [])
+//   }, [])
 
   // useEffect(() => {
   //   function handleScroll() {
@@ -107,4 +107,4 @@ export default function useSnappyScroll(stickyness = 0.01) {
   //     window.removeEventListener("touchend", handleTouchEnd);
   //   };
   // });
-}
+// }

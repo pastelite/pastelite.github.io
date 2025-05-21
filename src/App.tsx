@@ -9,7 +9,7 @@ function App() {
       <TextCorouselBackgroundNew />
       <Name />
       <Layout>
-        <div style={{ textAlign: "left", backgroundColor: "var(--color-second-background)"}}>
+        <div className="page-container" style={{ textAlign: "left", backgroundColor: "var(--color-second-background)", height: "100vh" }}>
           Test
         </div>
       </Layout>

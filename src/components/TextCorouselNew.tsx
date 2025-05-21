@@ -65,7 +65,7 @@ export default function TextCorouselNew({
       // offsetRef.current -= distanceToMove;
       // offsetMotion.set(offsetMotion.get() - distanceToMove);
 
-      if (checkItemTimerRef.current === null) {
+      if (checkItemTimerRef.current === null && speed !== 0) {
         let itemsToRemoveCount = 0;
         let widthOfItemsToRemove = 0;
         

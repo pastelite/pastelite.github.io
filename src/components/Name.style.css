@@ -21,18 +21,23 @@
   height: 70;
 }
 
+.title-name.to-top .title-name-background {
+  cursor: pointer;
+}
+
 .title-name svg {
   /* width: 100%; */
   width: max-content;
   max-width: calc(100vw - 2em);
   height: 100%;
   overflow: visible;
+  pointer-events: none;
 }
 
 .title-name #text1 {
   stroke-dasharray: 40;
   stroke-dashoffset: 40;
-  animation: dash 1s linear forwards;
+  animation: 1s dash .5s linear forwards;
 }
 
 /* .title-name::before {

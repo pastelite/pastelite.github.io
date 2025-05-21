@@ -105,7 +105,7 @@ export default function Name() {
             height: hiding ? nameBackgroundWidth : "100%",
             width: hiding ? nameBackgroundWidth : "100%",
             position: "absolute",
-            background: "gray",
+            background: "var(--color-first-background)",
             borderRadius: hiding ? nameBackgroundWidth * 0.25 : 180 * 0.25,
             opacity: hiding ? 1 : 0,
             left: (menuBarWidth - nameBackgroundWidth) / 2 - leftOffset - 16,
@@ -114,6 +114,15 @@ export default function Name() {
             scale: hiding ? 1 : 1.2,
           }}
           transition={{ duration: readyToAnimate ? 0.2 : 0, ease: "easeOut" }}
+          onClick={() => {
+            animate(window.scrollY, 0, {
+              duration: 0.5, // Adjust duration as needed
+              ease: "easeOut",
+              onUpdate: (latest) => {
+                window.scrollTo(0, latest);
+              }
+            });;
+          }}
         >
         </motion.div>
         <PasteliteSvg
@@ -123,7 +132,6 @@ export default function Name() {
               : "polygon(-10px -10px, 110% -10px, 110% 110%, -10px 110%)",
             transition: `clip-path ${readyToAnimate ? 0.2 : 0}s ease-out`,
           }}
-
           ref={svgRef}
         />
       </motion.div>
