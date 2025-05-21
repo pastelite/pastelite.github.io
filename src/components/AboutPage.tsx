@@ -9,7 +9,7 @@ export function AboutPage() {
     const handleResize = () => {
       if (pageRef.current) {
         let rect = pageRef.current.getBoundingClientRect();
-        setPageScrollLocation(rect.top + window.scrollY);
+        setPageScrollLocation(rect.top + window.scrollY - 50);
         console.log("pagescroll", rect.top + window.scrollY);
       }
     };
@@ -28,7 +28,9 @@ export function AboutPage() {
         textAlign: "left",
         backgroundColor: "var(--color-second-background)",
         height: "100vh",
-        paddingLeft: 100,
+        paddingLeft: 120,
+        paddingTop: 50,
+        boxSizing: "border-box",
       }}
     >
       <div

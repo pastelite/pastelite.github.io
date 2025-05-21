@@ -79,26 +79,16 @@ export default function TextSVG(
         className={`${className || ""}`}
       >
         {pathData.map((d, i) => (
-          <motion.path
+          <path
             key={i}
             d={d}
-            fill={fill || "black"}
+            fill={fill || "white"}
             stroke={stroke || "white"}
-            initial={{
-              strokeDashoffset:0,
-            }}
-            animate={{
-              strokeDashoffset: drawStroke ? 0: pathLength[i],
-              strokeDasharray: pathLength[i],
-            }}
-            transition={{
-              duration: 1,
-              // delay: i * 0.1,
-              ease: "linear",
-            }}
             style={{
               strokeWidth: 1,
-              
+              strokeDashoffset: drawStroke ? 0: pathLength[i],
+              strokeDasharray: pathLength[i],
+              transition: "stroke-dashoffset 0.5s ease-in-out, fill 0.2s ease-in-out 0.5s",
               ...{
                 "--item-number": i,
                 "--path-length": pathLength[i],

@@ -116,9 +116,9 @@
   }
 }
 
-svg path {
+/* svg path {
   transition: all 1s ease-in-out;
-}
+} */
 
 .start-path-animation > path {
   animation: 1s dash2 calc(var(--item-number) * 100ms) linear forwards;

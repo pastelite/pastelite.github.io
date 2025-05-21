@@ -20,6 +20,6 @@ export default function TextHeader({text, scrollYToStartAnimation=-1, scrollYToE
   })
   
   return <div className={"text-header"}>
-    <TextSVG drawStroke={inRange} text={text} fontSize={100} />
+    <TextSVG drawStroke={inRange} fill={inRange ? "#fff" : "#fff0"} text={text} fontSize={100} />
   </div>
 }
