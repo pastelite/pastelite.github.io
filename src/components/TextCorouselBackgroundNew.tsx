@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import TextCorouselNew from "./TextCorouselNew";
-import { motion, useAnimate, useMotionValue, useTransform } from "motion/react";
+import { motion, useAnimate, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber, mappingNumberPoint } from "../utils/number";
 
@@ -28,18 +28,20 @@ export default function TextCorouselBackground() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useThrottleScroll(()=>{
-    if (window.scrollY>window.innerHeight) {
+  const {scrollY} = useScroll();
+
+  // can I remove this shit? It's need for the first time
+  useEffect(() => {
+    if (window.screenY > window.innerWidth) {
       setDisableAnimation(true);
       return;
-    };
+    }
 
     setDisableAnimation(false);
 
-    let scale = mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1);
-    // let opacity = mappingNumber(1 - window.scrollY / window.innerHeight, 0, 1);
-    let opacity = mappingNumberPoint(window.scrollY / window.innerHeight, [0.2,1],[0.5,0]);
-    let blur = mappingNumber(1 - window.scrollY / window.innerHeight, 5, 0);
+    let scale = mappingNumber(1 - window.screenY / window.innerHeight, 0.5, 1);
+    let opacity = mappingNumberPoint(window.screenY / window.innerHeight, [0.2,1],[0.5,0]);
+    let blur = mappingNumber(1 - window.screenY / window.innerHeight, 5, 0);
 
     animate(scaleValue, scale, {
       duration: 0.2,
@@ -53,7 +55,60 @@ export default function TextCorouselBackground() {
       duration: 0.2,
       ease: "easeOut",
     })
-  })
+  }, []);
+
+  useMotionValueEvent(scrollY, "change", (value) => {
+    if (value > window.innerWidth) {
+      setDisableAnimation(true);
+      return;
+    }
+
+    setDisableAnimation(false);
+
+    let scale = mappingNumber(1 - value / window.innerHeight, 0.5, 1);
+    let opacity = mappingNumberPoint(value / window.innerHeight, [0.2,1],[0.5,0]);
+    let blur = mappingNumber(1 - value / window.innerHeight, 5, 0);
+
+    animate(scaleValue, scale, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
+    animate(opacityValue, opacity, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
+    animate(blurValue, blur, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
+  });
+
+  // useThrottleScroll(()=>{
+  //   if (window.scrollY>window.innerHeight) {
+  //     setDisableAnimation(true);
+  //     return;
+  //   };
+
+  //   setDisableAnimation(false);
+
+  //   let scale = mappingNumber(1 - window.scrollY / window.innerHeight, 0.5, 1);
+  //   // let opacity = mappingNumber(1 - window.scrollY / window.innerHeight, 0, 1);
+  //   let opacity = mappingNumberPoint(window.scrollY / window.innerHeight, [0.2,1],[0.5,0]);
+  //   let blur = mappingNumber(1 - window.scrollY / window.innerHeight, 5, 0);
+
+  //   animate(scaleValue, scale, {
+  //     duration: 0.2,
+  //     ease: "easeOut",
+  //   })
+  //   animate(opacityValue, opacity, {
+  //     duration: 0.2,
+  //     ease: "easeOut",
+  //   })
+  //   animate(blurValue, blur, {
+  //     duration: 0.2,
+  //     ease: "easeOut",
+  //   })
+  // })
 
   // initialized corousels
   useEffect(() => {

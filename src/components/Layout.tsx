@@ -1,4 +1,10 @@
-import { motion, useMotionValue, useTransform } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "motion/react";
 import "./Layout.style.css";
 import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber, mappingNumberPoint } from "../utils/number";
@@ -16,8 +22,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const [showLine, setShowLine] = useState(false);
 
-  useThrottleScroll((scrollY) => {
-    // let color = mappingNumber(scrollY / window.innerHeight, 0, 1);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (scrollY) => {
     let color = mappingNumberPoint(scrollY / window.innerHeight, [0, 0], [
       0.3,
       0,
@@ -26,6 +33,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     setShowLine(scrollY > window.innerHeight);
   });
+
+  // useThrottleScroll((scrollY) => {
+  //   // let color = mappingNumber(scrollY / window.innerHeight, 0, 1);
+  //   let color = mappingNumberPoint(scrollY / window.innerHeight, [0, 0], [
+  //     0.3,
+  //     0,
+  //   ], [1, 1]);
+  //   colorValue.set(color);
+
+  //   setShowLine(scrollY > window.innerHeight);
+  // });
 
   return (
     <>

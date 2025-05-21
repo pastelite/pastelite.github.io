@@ -88,7 +88,7 @@ export default function TextSVG(
               strokeWidth: 1,
               strokeDashoffset: drawStroke ? 0: pathLength[i],
               strokeDasharray: pathLength[i],
-              transition: "stroke-dashoffset 0.5s ease-in-out, fill 0.2s ease-in-out 0.5s",
+              transition: `stroke-dashoffset 0.5s ease-in-out ${i * 0.05}s, fill 0.2s ease-in-out ${0.5 + pathData.length * 0.05}s`, //${0.5 + i * 0.05}
               ...{
                 "--item-number": i,
                 "--path-length": pathLength[i],

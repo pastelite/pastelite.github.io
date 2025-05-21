@@ -3,7 +3,7 @@ import PasteliteSvg from "../assets/pastelite.svg?react";
 import "./Name.style.css";
 import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber } from "../utils/number";
-import { motion, useMotionValue, useTransform } from "motion/react";
+import { motion, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { animate } from "motion";
 import { useElementSizeCSSVars } from "../hooks/useElementCSSVariable";
 
@@ -50,11 +50,12 @@ export default function Name() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useThrottleScroll(() => {
-    // hiding title
+  let {scrollY} = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (scroll) => {
     let limit = window.innerHeight * 0.5;
 
-    if (window.scrollY > limit) {
+    if (scroll > limit) {
       animate(scale, 1, { duration: 0.1, ease: "easeOut" });
       setHiding(true);
       return;
@@ -62,15 +63,37 @@ export default function Name() {
       if (hiding) setHiding(false);
     }
 
-    // calculate scale
+    // scale
     let newScale = mappingNumber(
-      1 - window.scrollY / window.innerHeight,
+      1 - scroll / window.innerHeight,
       0.8,
       1,
     );
 
     animate(scale, newScale, { duration: 0.2, ease: "easeOut" });
-  });
+  })
+
+  // useThrottleScroll(() => {
+  //   // hiding title
+  //   let limit = window.innerHeight * 0.5;
+
+  //   if (window.scrollY > limit) {
+  //     animate(scale, 1, { duration: 0.1, ease: "easeOut" });
+  //     setHiding(true);
+  //     return;
+  //   } else {
+  //     if (hiding) setHiding(false);
+  //   }
+
+  //   // calculate scale
+  //   let newScale = mappingNumber(
+  //     1 - window.scrollY / window.innerHeight,
+  //     0.8,
+  //     1,
+  //   );
+
+  //   animate(scale, newScale, { duration: 0.2, ease: "easeOut" });
+  // });
 
   let presumedSvgWidth = 160 * svgWidthHeightRatio;
   let pSize = presumedSvgWidth * pRatio;
@@ -115,13 +138,17 @@ export default function Name() {
           }}
           transition={{ duration: readyToAnimate ? 0.2 : 0, ease: "easeOut" }}
           onClick={() => {
-            animate(window.scrollY, 0, {
-              duration: 0.5, // Adjust duration as needed
-              ease: "easeOut",
-              onUpdate: (latest) => {
-                window.scrollTo(0, latest);
-              }
-            });;
+            // animate(window.scrollY, 0, {
+            //   duration: 0.5, // Adjust duration as needed
+            //   ease: "easeOut",
+            //   onUpdate: (latest) => {
+            //     window.scrollTo(0, latest);
+            //   }
+            // });;
+            window.scrollTo({
+              top: 0,
+              behavior: "instant", // I want to fix this shit so hard
+            });
           }}
         >
         </motion.div>
