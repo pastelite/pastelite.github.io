@@ -99,7 +99,7 @@ export default function TextCorouselNew({
 
         checkItemTimerRef.current = window.setTimeout(() => {
           checkItemTimerRef.current = null;
-        }, throttleTime);
+        }, Math.random() * throttleTime+throttleTime/2);
       }
     },
     [speed, gap, throttleTime] // Dependencies for the animation ticker

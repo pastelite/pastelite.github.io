@@ -138,17 +138,20 @@ export default function Name() {
           }}
           transition={{ duration: readyToAnimate ? 0.2 : 0, ease: "easeOut" }}
           onClick={() => {
-            // animate(window.scrollY, 0, {
-            //   duration: 0.5, // Adjust duration as needed
-            //   ease: "easeOut",
-            //   onUpdate: (latest) => {
-            //     window.scrollTo(0, latest);
-            //   }
-            // });;
-            window.scrollTo({
-              top: 0,
-              behavior: "instant", // I want to fix this shit so hard
+            animate(window.scrollY, 0, {
+              duration: 0.3, // Adjust duration as needed
+              ease: "easeOut",
+              onUpdate: (latest) => {
+                window.scrollTo({
+                  top: latest,
+                  behavior: "instant",
+                });
+              }
             });
+            // window.scrollTo({
+            //   top: 0,
+            //   behavior: "instant", // I want to fix this shit so hard
+            // });
           }}
         >
         </motion.div>
