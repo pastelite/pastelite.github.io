@@ -40,6 +40,9 @@ export function AboutPage() {
         ref={pageRef}
       >
         <TextHeader text="Hello" scrollYToStartAnimation={pageScrollLocation-1} scrollYToEndAnimation={pageScrollLocation + 100} />
+        <div onClick={()=>{window.scrollTo(0,0)}}>
+          go to top
+        </div>
       </div>
     </div>
   );

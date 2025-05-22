@@ -48,11 +48,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* This is for background color */}
-      <motion.div
+      {/* <motion.div
         className="background-color"
         style={{ backgroundColor: colorTransform }}
       >
-      </motion.div>
+      </motion.div> */}
       <div
         className="top-bar"
         style={{ left: menuBarWidth, height: topBarHeight }}

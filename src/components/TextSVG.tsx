@@ -11,8 +11,16 @@ interface TextSVGProps extends React.SVGProps<SVGSVGElement> {
 }
 
 export default function TextSVG(
-  { text, fontSize = 50, className, style, fill, stroke, drawStroke = true, ...props }:
-    TextSVGProps,
+  {
+    text,
+    fontSize = 50,
+    className,
+    style,
+    fill,
+    stroke,
+    drawStroke = true,
+    ...props
+  }: TextSVGProps,
 ) {
   const fontRef = useRef<Font | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -71,34 +79,34 @@ export default function TextSVG(
   }, [pathData]);
 
   return (
-    <div>
-      <svg
-        ref={svgRef}
-        height={fontSize}
-        style={{ overflow: "visible", ...style }}
-        className={`${className || ""}`}
-      >
-        {pathData.map((d, i) => (
-          <path
-            key={i}
-            d={d}
-            fill={fill || "white"}
-            stroke={stroke || "white"}
-            style={{
-              strokeWidth: 1,
-              strokeDashoffset: drawStroke ? 0: pathLength[i],
-              strokeDasharray: pathLength[i],
-              transition: `stroke-dashoffset 0.5s ease-in-out ${i * 0.05}s, fill 0.2s ease-in-out ${0.5 + pathData.length * 0.05}s`, //${0.5 + i * 0.05}
-              ...{
-                "--item-number": i,
-                "--path-length": pathLength[i],
-              } as React.CSSProperties,
-            }}
-          />
-        ))}
+    <svg
+      ref={svgRef}
+      height={fontSize}
+      style={{ overflow: "visible", ...style }}
+      className={`${className || ""}`}
+    >
+      {pathData.map((d, i) => (
+        <path
+          key={i}
+          d={d}
+          fill={fill || "white"}
+          stroke={stroke || "white"}
+          style={{
+            strokeWidth: 1,
+            strokeDashoffset: drawStroke ? 0 : pathLength[i],
+            strokeDasharray: pathLength[i],
+            transition: `stroke-dashoffset 0.5s ease-in-out ${
+              i * 0.05
+            }s, fill 0.2s ease-in-out ${0.5 + pathData.length * 0.05}s`, //${0.5 + i * 0.05}
+            ...{
+              "--item-number": i,
+              "--path-length": pathLength[i],
+            } as React.CSSProperties,
+          }}
+        />
+      ))}
 
-        {/* {pathData && <path id="testpath" d={pathData} fill="black" />} */}
-      </svg>
-    </div>
+      {/* {pathData && <path id="testpath" d={pathData} fill="black" />} */}
+    </svg>
   );
 }

@@ -149,7 +149,7 @@ export default function TextCorouselBackground() {
       style={{
         scale: scaleValue,
         opacity: opacityValue,
-        filter: blurFilter,
+        // filter: blurFilter,
       }}
       ref={scope}
     >

@@ -70,8 +70,12 @@ export default function Name() {
       1,
     );
 
-    animate(scale, newScale, { duration: 0.2, ease: "easeOut" });
-  })
+    animate(
+      scale,  newScale, { duration: 0.2, ease: "easeOut" }
+    );
+  });
+
+  
 
   // useThrottleScroll(() => {
   //   // hiding title

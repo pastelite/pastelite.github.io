@@ -1,0 +1,42 @@
+.name-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-first-background);
+  z-index: 10;
+  /* border-radius: 2em; */
+  /* border-radius: 2em; */
+  /* transition: all .2s ease-in-out; */
+  /* transition: top 0.2s ease-out, left 0.2s ease-out; */
+}
+
+.name-background.collapsed {
+  top: 15px;
+  left: 15px;
+  height: 70px;
+  width: 70px;
+  border-radius: 15px;
+  /* transition: height .2s ease-in-out; */
+}
+
+.sticky-container {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid green;
+}
+
+.sticky-element {
+  position: -webkit-sticky;
+  position: sticky;  
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid red;
+  background-color: red;
+}
