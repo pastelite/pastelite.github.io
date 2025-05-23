@@ -7,10 +7,11 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate } from "motion";
 import TextCorouselBackgroundNew from "./TextCorouselBackgroundNew";
 import useThrottleScroll from "../hooks/useThrottleScroll";
+import type { BoundingBox } from "opentype.js";
 
 export default function BetterName() {
   let { scrollY } = useScroll();
@@ -20,6 +21,8 @@ export default function BetterName() {
   let [isCollapsed, setIsCollapsed] = useState(false);
   let [isAnimation, setIsAnimation] = useState(false);
   let timeoutRef = useRef<number | null>(null);
+  let [pRatio, setPRatio] = useState(0);
+  let [drawingAnimation, setDrawingAnimation] = useState(false)
   // let [animateHeight, setAnimateHeight] = useState(false)
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
@@ -47,6 +50,24 @@ export default function BetterName() {
     }
   });
 
+  useEffect(()=>{
+    let timeout = setTimeout(()=>{
+      setDrawingAnimation(true)
+    },1000)
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    }
+  }, [])
+
+  let svgRef = useRef<SVGSVGElement | null>(null)
+
+  function setPRatioCallback(list: BoundingBox[], width: number) {
+    if (list.length == 0) return
+    let pWidth = list[0].x2 - list[0].x1
+    setPRatio(pWidth/width)
+  }
+
   return (
     <>
       <motion.div
@@ -67,8 +88,10 @@ export default function BetterName() {
           : { duration: 0 }}
       >
         <TextCorouselBackgroundNew />
-        <div className="title-box">
-          <TextSVG text="pastelite" fontSize={160} />
+        <div className={`title-box ${isCollapsed ? "only-show-first" : ""}`}>
+          <TextSVG ref={svgRef} fill={drawingAnimation ? "#fff" : "#fff0"} drawStroke={drawingAnimation} style={{
+            transform: isCollapsed ? `translateX(-${pRatio/2 * 100}%)` : "translateX(0)"
+          }} text="pastelite" fontSize={160} boudingBoxCallback={setPRatioCallback} />
         </div>
       </motion.div>
     </>

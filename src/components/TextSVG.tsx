@@ -1,4 +1,4 @@
-import { Font, load, Path as OpentypePath } from "opentype.js";
+import { BoundingBox, Font, load, Path as OpentypePath } from "opentype.js";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import RobotoSlabMedium from "../assets/fonts/RobotoSlab-Medium.ttf";
 import { path } from "motion/react-client";
@@ -8,6 +8,7 @@ interface TextSVGProps extends React.SVGProps<SVGSVGElement> {
   text: string;
   fontSize?: number;
   drawStroke?: boolean;
+  boudingBoxCallback?: (list: BoundingBox[], width: number) => void
 }
 
 export default function TextSVG(
@@ -18,30 +19,25 @@ export default function TextSVG(
     style,
     fill,
     stroke,
-    drawStroke = true,
+    drawStroke = false,
     ref,
+    boudingBoxCallback,
     ...props
   }: TextSVGProps,
 ) {
   const fontRef = useRef<Font | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [pathData, setPathData] = useState<OpentypePath[]>([]); // Changed to store pathData directly
+  const [pathData, setPathData] = useState<OpentypePath[]>([]);
   const [pathLength, setPathLength] = useState<number[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     load(RobotoSlabMedium).then((font) => {
       if (font) {
         fontRef.current = font;
       }
     }).then(() => {
       if (fontRef.current && svgRef.current) {
-        // const fontSize = 50;
-        // // Calculate a reasonable starting position for the text
-        // // You might want to adjust these values based on your specific layout needs
-        // const x = 0; // A small offset from the left edge
-        // const y = fontSize; // Place the baseline at the font size, so it's visible within the height
-
-        // Get the path for the text
+       // Get the path for the text
         const textPath = fontRef.current.getPaths(
           text,
           0,
@@ -49,8 +45,6 @@ export default function TextSVG(
           fontSize,
         );
         setPathData(textPath);
-        // const pathData = textPath.map((p) => p.toPathData(2));
-        // setPathData(pathData);
       }
     }).catch((err) => {
       console.error(err);
@@ -72,19 +66,22 @@ export default function TextSVG(
 
       let leftMostPath = Infinity;
       let rightMostPath = -Infinity;
+      let boundingBox = []
       for (let elem of pathData) {
         const rect = elem.getBoundingBox()
+        boundingBox.push(rect)
         leftMostPath = Math.min(leftMostPath, rect.x1);
         rightMostPath = Math.max(rightMostPath, rect.x2);
-        console.log("rect", rect)
       }
 
-      // const width = Math.max(0, rightMost - leftMost);
       const newWidth = Math.max(0, rightMostPath - leftMostPath);
-      console.log(newWidth)
       svgElement.setAttribute("width", `${newWidth}px`);
-      // set viewbox
       svgElement.setAttribute("viewBox", `0 0 ${newWidth} ${fontSize}`);
+
+      // title needed it. I know it's look like shit but if it works dont fix it
+      if (boudingBoxCallback) {
+        boudingBoxCallback(boundingBox, newWidth);
+      }
 
       setPathLength(pathLengthes);
     }
@@ -92,7 +89,18 @@ export default function TextSVG(
 
   return (
     <svg
-      ref={svgRef}
+      ref={(node)=>{
+        if (node) {
+          svgRef.current = node;
+          if (ref) {
+            if (typeof ref === 'function') {
+              ref(node);
+            } else if (ref.hasOwnProperty('current')) {
+              (ref as React.RefObject<SVGSVGElement | null>).current = node;
+            }
+          }
+        }
+      }}
       height={fontSize}
       style={{ overflow: "visible", ...style }}
       className={`${className || ""}`}
@@ -117,8 +125,6 @@ export default function TextSVG(
           }}
         />
       ))}
-
-      {/* {pathData && <path id="testpath" d={pathData} fill="black" />} */}
     </svg>
   );
 }

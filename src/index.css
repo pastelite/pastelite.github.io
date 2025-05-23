@@ -8,8 +8,8 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background-color: #0b0b0b; */
-  background-color: #535bf2;
+  background-color: var(--color-second-background);
+  /* background-color: #535bf2; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
