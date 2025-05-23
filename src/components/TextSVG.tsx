@@ -19,12 +19,13 @@ export default function TextSVG(
     fill,
     stroke,
     drawStroke = true,
+    ref,
     ...props
   }: TextSVGProps,
 ) {
   const fontRef = useRef<Font | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [pathData, setPathData] = useState<string[]>([]); // Changed to store pathData directly
+  const [pathData, setPathData] = useState<OpentypePath[]>([]); // Changed to store pathData directly
   const [pathLength, setPathLength] = useState<number[]>([]);
 
   useEffect(() => {
@@ -47,8 +48,9 @@ export default function TextSVG(
           0.9 * fontSize,
           fontSize,
         );
-        const pathData = textPath.map((p) => p.toPathData(2));
-        setPathData(pathData);
+        setPathData(textPath);
+        // const pathData = textPath.map((p) => p.toPathData(2));
+        // setPathData(pathData);
       }
     }).catch((err) => {
       console.error(err);
@@ -59,20 +61,30 @@ export default function TextSVG(
   useLayoutEffect(() => {
     if (svgRef.current) {
       const svgElement = svgRef.current;
-      let leftMost = Infinity;
-      let rightMost = -Infinity;
+
+      // calculate path lengthes
       let pathLengthes = [];
       for (let elem of svgElement.children) {
         if (!(elem instanceof SVGPathElement)) continue;
-        const rect = elem.getBoundingClientRect();
         const pathLength = elem.getTotalLength();
         pathLengthes.push(pathLength);
-        leftMost = Math.min(leftMost, rect.left);
-        rightMost = Math.max(rightMost, rect.right);
       }
 
-      const width = Math.max(0, rightMost - leftMost);
-      svgElement.setAttribute("width", `${width}px`);
+      let leftMostPath = Infinity;
+      let rightMostPath = -Infinity;
+      for (let elem of pathData) {
+        const rect = elem.getBoundingBox()
+        leftMostPath = Math.min(leftMostPath, rect.x1);
+        rightMostPath = Math.max(rightMostPath, rect.x2);
+        console.log("rect", rect)
+      }
+
+      // const width = Math.max(0, rightMost - leftMost);
+      const newWidth = Math.max(0, rightMostPath - leftMostPath);
+      console.log(newWidth)
+      svgElement.setAttribute("width", `${newWidth}px`);
+      // set viewbox
+      svgElement.setAttribute("viewBox", `0 0 ${newWidth} ${fontSize}`);
 
       setPathLength(pathLengthes);
     }
@@ -88,7 +100,7 @@ export default function TextSVG(
       {pathData.map((d, i) => (
         <path
           key={i}
-          d={d}
+          d={d.toPathData(2)}
           fill={fill || "white"}
           stroke={stroke || "white"}
           style={{
@@ -100,7 +112,7 @@ export default function TextSVG(
             }s, fill 0.2s ease-in-out ${0.5 + pathData.length * 0.05}s`, //${0.5 + i * 0.05}
             ...{
               "--item-number": i,
-              "--path-length": pathLength[i],
+              "--path-length": pathData[i],
             } as React.CSSProperties,
           }}
         />

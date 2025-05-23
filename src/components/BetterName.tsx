@@ -50,7 +50,7 @@ export default function BetterName() {
   return (
     <>
       <motion.div
-        className={`name-background`}
+        className={`name-background ${isCollapsed ? "collapsed" : ""}`}
         style={{
           color: "white",
         }}
@@ -67,11 +67,10 @@ export default function BetterName() {
           : { duration: 0 }}
       >
         <TextCorouselBackgroundNew />
+        <div className="title-box">
+          <TextSVG text="pastelite" fontSize={160} />
+        </div>
       </motion.div>
-      <TextSVG text="pastelite" style={{
-        zIndex: 20
-      }} />
-      <TextSVG text="pastelite" />
     </>
   );
 }
