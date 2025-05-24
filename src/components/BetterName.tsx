@@ -73,6 +73,7 @@ export default function BetterName() {
 
   return (
     <>
+      {/* I know motion.div is kinda over kill but there's like a little bit of delay to calculate backgroundHeight so it's kinda needed here */}
       <motion.div
         className={`name-background ${isCollapsed ? "collapsed" : ""}`}
         style={{

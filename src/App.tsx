@@ -11,7 +11,7 @@ function App() {
     <>
       
       {/* <Name /> */}
-      <BetterName></BetterName>
+      {/* <BetterName></BetterName> */}
       <Layout>
         <AboutPage></AboutPage>
       </Layout>

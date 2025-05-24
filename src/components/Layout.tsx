@@ -9,6 +9,7 @@ import "./Layout.style.css";
 import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber, mappingNumberPoint } from "../utils/number";
 import { useState } from "react";
+import BetterName from "./BetterName";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const topBarHeight = 50;
@@ -66,6 +67,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           // height: `calc(100vh - ${topBarHeight}px)`,
         }}
       >
+        <BetterName/>
         <div
           style={{
             position: "absolute",
