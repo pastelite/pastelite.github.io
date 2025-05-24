@@ -1,27 +1,31 @@
 import { BoundingBox, Font, load, Path as OpentypePath } from "opentype.js";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
 import RobotoSlabMedium from "../assets/fonts/RobotoSlab-Medium.ttf";
-import { path } from "motion/react-client";
 import { motion } from "motion/react";
 
 interface TextSVGProps extends React.SVGProps<SVGSVGElement> {
   text: string;
   fontSize?: number;
-  drawStroke?: boolean;
-  boudingBoxCallback?: (list: BoundingBox[], width: number) => void
+  font?: string;
+  drawedText?: boolean;
+  drawingTimeSec?: number;
+  pathStyle?: React.CSSProperties;
+  pathDataCallback?: (pathData: OpentypePath[]) => void;
 }
 
 export default function TextSVG(
   {
     text,
     fontSize = 50,
-    className,
     style,
+    pathStyle,
     fill,
     stroke,
-    drawStroke = false,
     ref,
-    boudingBoxCallback,
+    font = RobotoSlabMedium,
+    drawedText = true,
+    drawingTimeSec = 0.5,
+    pathDataCallback,
     ...props
   }: TextSVGProps,
 ) {
@@ -29,19 +33,21 @@ export default function TextSVG(
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [pathData, setPathData] = useState<OpentypePath[]>([]);
   const [pathLength, setPathLength] = useState<number[]>([]);
+  const [animatingStroke, setAnimatingStroke] = useState<boolean>(false);
 
+  // get font path
   useLayoutEffect(() => {
-    load(RobotoSlabMedium).then((font) => {
+    load(font).then((font) => {
       if (font) {
         fontRef.current = font;
       }
     }).then(() => {
       if (fontRef.current && svgRef.current) {
-       // Get the path for the text
+        // Get the path for the text
         const textPath = fontRef.current.getPaths(
           text,
           0,
-          0.9 * fontSize,
+          0.9 * fontSize, // reserve 0.1 for the unline line stuff (like p,j,q)
           fontSize,
         );
         setPathData(textPath);
@@ -64,12 +70,11 @@ export default function TextSVG(
         pathLengthes.push(pathLength);
       }
 
+      // calculate svg width
       let leftMostPath = Infinity;
       let rightMostPath = -Infinity;
-      let boundingBox = []
       for (let elem of pathData) {
-        const rect = elem.getBoundingBox()
-        boundingBox.push(rect)
+        const rect = elem.getBoundingBox();
         leftMostPath = Math.min(leftMostPath, rect.x1);
         rightMostPath = Math.max(rightMostPath, rect.x2);
       }
@@ -79,23 +84,42 @@ export default function TextSVG(
       svgElement.setAttribute("viewBox", `0 0 ${newWidth} ${fontSize}`);
 
       // title needed it. I know it's look like shit but if it works dont fix it
-      if (boudingBoxCallback) {
-        boudingBoxCallback(boundingBox, newWidth);
+      if (pathDataCallback) {
+        pathDataCallback(pathData);
       }
 
       setPathLength(pathLengthes);
     }
   }, [pathData]);
 
+  // delay animation so the pathlength stuff can be set without the transition
+  useEffect(()=>{
+    if (pathLength.length > 0) {
+      setAnimatingStroke(true);
+    }
+  },[pathLength])
+
+  const generateTransition = useMemo(() => {
+    return (i: number) => {
+      let timePerPath = drawingTimeSec / text.length;
+      let strokeDelay = i * timePerPath;
+      let fillDelay = drawedText ? drawingTimeSec * 2 : 0;
+      // return `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}, fill ${drawingTimeSec}s ease-in-out ${fillDelay}`;
+      return animatingStroke
+        ? `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}s, fill 0.2s ease-in-out ${fillDelay}s`
+        : `stroke-dashoffset 0s ease 0s, fill 0s ease 0s`; // Safe fallback
+    };
+  }, [animatingStroke, drawingTimeSec, text, drawedText]);
+
   return (
     <svg
-      ref={(node)=>{
+      ref={(node) => {
         if (node) {
           svgRef.current = node;
           if (ref) {
-            if (typeof ref === 'function') {
+            if (typeof ref === "function") {
               ref(node);
-            } else if (ref.hasOwnProperty('current')) {
+            } else if (ref.hasOwnProperty("current")) {
               (ref as React.RefObject<SVGSVGElement | null>).current = node;
             }
           }
@@ -103,25 +127,22 @@ export default function TextSVG(
       }}
       height={fontSize}
       style={{ overflow: "visible", ...style }}
-      className={`${className || ""}`}
+      {...props}
     >
       {pathData.map((d, i) => (
         <path
           key={i}
           d={d.toPathData(2)}
-          fill={fill || "white"}
+          fill={fill || drawedText ? "white" : "transparent"}
           stroke={stroke || "white"}
           style={{
             strokeWidth: 1,
-            strokeDashoffset: drawStroke ? 0 : pathLength[i],
             strokeDasharray: pathLength[i],
-            transition: `stroke-dashoffset 0.5s ease-in-out ${
-              i * 0.05
-            }s, fill 0.2s ease-in-out ${0.5 + pathData.length * 0.05}s`, //${0.5 + i * 0.05}
-            ...{
-              "--item-number": i,
-              "--path-length": pathData[i],
-            } as React.CSSProperties,
+            strokeDashoffset: drawedText ? 0 : pathLength[i],
+            // delay animation because it will make it looks better
+            // ${0.5 + i * 0.05}
+            transition: generateTransition(i),
+            ...pathStyle
           }}
         />
       ))}

@@ -9,7 +9,7 @@ interface TextHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'ch
 }
 
 export default function TextHeader({text, scrollYToStartAnimation=-1, scrollYToEndAnimation=-1}: TextHeaderProps) {
-  const [inRange, setInRange] = useState(true);
+  const [inRange, setInRange] = useState(false);
   const {scrollY} = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -20,6 +20,6 @@ export default function TextHeader({text, scrollYToStartAnimation=-1, scrollYToE
   })
   
   return <div className={"text-header"}>
-    <TextSVG drawStroke={inRange} fill={inRange ? "#fff" : "#fff0"} text={text} fontSize={100} />
+    <TextSVG drawedText={inRange} text={text} fontSize={100} />
   </div>
 }

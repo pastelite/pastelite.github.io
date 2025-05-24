@@ -22,7 +22,7 @@ export default function BetterName() {
   let [isAnimation, setIsAnimation] = useState(false);
   let timeoutRef = useRef<number | null>(null);
   let [pRatio, setPRatio] = useState(0);
-  let [drawingAnimation, setDrawingAnimation] = useState(false)
+  let [drawingAnimation, setDrawingAnimation] = useState(false);
   // let [animateHeight, setAnimateHeight] = useState(false)
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
@@ -50,23 +50,26 @@ export default function BetterName() {
     }
   });
 
-  useEffect(()=>{
-    let timeout = setTimeout(()=>{
-      setDrawingAnimation(true)
-    },1000)
+  // delay animation by 0.5 sec only if everything is setted up
+  useEffect(() => {
+    let animationFrame = requestAnimationFrame(() => {
+      setTimeout(() => {
+        setDrawingAnimation(true);
+      }, 500);
+    });
 
     return () => {
-      if (timeout) clearTimeout(timeout);
-    }
-  }, [])
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+    };
+  }, []);
 
-  let svgRef = useRef<SVGSVGElement | null>(null)
+  let svgRef = useRef<SVGSVGElement | null>(null);
 
-  function setPRatioCallback(list: BoundingBox[], width: number) {
-    if (list.length == 0) return
-    let pWidth = list[0].x2 - list[0].x1
-    setPRatio(pWidth/width)
-  }
+  // function setPRatioCallback(list: BoundingBox[], width: number) {
+  //   if (list.length == 0) return
+  //   let pWidth = list[0].x2 - list[0].x1
+  //   setPRatio(pWidth/width)
+  // }
 
   return (
     <>
@@ -82,16 +85,49 @@ export default function BetterName() {
           width: isCollapsed ? 70 : "100%",
           borderRadius: isCollapsed ? 70 * 0.25 : 0,
           overflow: "hidden",
+          cursor: isCollapsed ? "pointer" : "default",
         }}
         transition={isAnimation
           ? { duration: 0.2, ease: "easeOut" }
           : { duration: 0 }}
+        onClick={isCollapsed
+          ? () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+          : undefined}
       >
         <TextCorouselBackgroundNew />
         <div className={`title-box ${isCollapsed ? "only-show-first" : ""}`}>
-          <TextSVG ref={svgRef} fill={drawingAnimation ? "#fff" : "#fff0"} drawStroke={drawingAnimation} style={{
-            transform: isCollapsed ? `translateX(-${pRatio/2 * 100}%)` : "translateX(0)"
-          }} text="pastelite" fontSize={160} boudingBoxCallback={setPRatioCallback} />
+          <TextSVG
+            ref={svgRef}
+            drawedText={drawingAnimation}
+            style={{
+              transform: isCollapsed
+                ? `translateX(-${pRatio / 2 * 100}%)`
+                : "translateX(0)",
+            }}
+            text="pastelite"
+            fontSize={160}
+            drawingTimeSec={1}
+            pathDataCallback={(pathData) => {
+              if (pathData.length > 0 && svgRef.current) {
+                const pBoundingBox = pathData[0].getBoundingBox();
+                const [minLeft, maxRight] = pathData.reduce(
+                  ([minLeft, maxRight], path) => {
+                    const rect = path.getBoundingBox();
+                    return [
+                      Math.min(minLeft, rect.x1),
+                      Math.max(maxRight, rect.x2),
+                    ];
+                  },
+                  [Infinity, -Infinity],
+                );
+                const svgWidth = maxRight - minLeft;
+                const pWidth = pBoundingBox.x2 - pBoundingBox.x1;
+                setPRatio(pWidth / svgWidth);
+              }
+            }}
+          />
         </div>
       </motion.div>
     </>
