@@ -12,6 +12,8 @@ import { useState } from "react";
 import BetterName from "../components/BetterName";
 import useBreakpoint from "../hooks/useBreakpoint";
 import ContactList from "./layout/ContactList";
+import usePositionStore from "../store";
+import AboutIcon from "../assets/material_icons/person.svg?react"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const topBarHeight = 50;
@@ -28,6 +30,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const { scrollY } = useScroll();
 
+  const scrollToLocation = usePositionStore((state) => state.position);
+
   useMotionValueEvent(scrollY, "change", (scrollY) => {
     let color = mappingNumberPoint(scrollY / window.innerHeight, [0, 0], [
       0.3,
@@ -35,7 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     ], [1, 1]);
     colorValue.set(color);
 
-    setShowLine(scrollY > window.innerHeight);
+    setShowLine(scrollY > window.innerHeight / 2);
   });
 
   // useThrottleScroll((scrollY) => {
@@ -85,7 +89,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           }]),
         }}
       >
-        <div>Test</div>
+        <div
+          className="absolute bottom-0 right-0 w-[1px] bg-white transition-all duration-300"
+          style={{
+            height: showLine ? "100vh" : "0",
+          }}
+        >
+        </div>
+        <div
+          className="cursor-pointer"
+          onClick={() =>
+            window.scrollTo({ top: scrollToLocation[0], behavior: "smooth" })}
+        >
+          <AboutIcon fill="white" style={{height: "40px", width: "max-content"}}/>
+        </div>
         <div>Test2</div>
         <div>Test3</div>
       </div>

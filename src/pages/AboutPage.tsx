@@ -3,11 +3,13 @@ import TextHeader from "../components/TextHeader";
 import DivWithAnimation from "../components/DivWithAnimation";
 import useBreakpoint from "../hooks/useBreakpoint";
 import { choosing } from "../utils/number";
+import usePositionStore from "../store";
 
 export function AboutPage() {
   const [pageScrollLocation, setPageScrollLocation] = useState(0);
   const pageRef = useRef<HTMLDivElement>(null);
   let breakpoint = useBreakpoint([768]);
+  const setPosition = usePositionStore((state) => state.setPosition);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -16,6 +18,7 @@ export function AboutPage() {
         setPageScrollLocation(
           rect.top + window.scrollY - window.innerHeight / 2,
         );
+        setPosition(0, rect.top + window.scrollY)
       }
     };
 
