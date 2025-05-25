@@ -10,6 +10,7 @@ import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber, mappingNumberPoint } from "../utils/number";
 import { useState } from "react";
 import BetterName from "./BetterName";
+import useBreakpoint from "../hooks/useBreakpoint";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const topBarHeight = 50;
@@ -46,14 +47,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   //   setShowLine(scrollY > window.innerHeight);
   // });
 
+  let breakpoint = useBreakpoint([768]);
+
   return (
     <>
       {/* This is for background color */}
-      {/* <motion.div
-        className="background-color"
-        style={{ backgroundColor: colorTransform }}
-      >
-      </motion.div> */}
       <div
         className="top-bar"
         style={{ left: menuBarWidth, height: topBarHeight }}
@@ -62,26 +60,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div
         className="menu-bar"
         style={{
-          width: menuBarWidth,
-          // borderRight: `1px solid ${showLine ? "#fff" : "#000"}`,
-          // height: `calc(100vh - ${topBarHeight}px)`,
+          display: "flex",
+          flexDirection: "column",
+          // flexDirection: ["row","column"][breakpoint],
+          justifyContent: "center",
+          ...[{},{width: menuBarWidth}][breakpoint]
         }}
       >
         <BetterName/>
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: 1,
-            backgroundColor: "#fff8",
-            scale: `1 ${showLine ? 1 : 0}`,
-            transformOrigin: "bottom",
-            transition: "scale .5s ease-in-out",
-          }}
-        >
-        </div>
         <div>Test</div>
         <div>Test2</div>
         <div>Test3</div>

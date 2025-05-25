@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import TextHeader from "./TextHeader";
+import DivWithAnimation from "./DivWithAnimation";
 
 export function AboutPage() {
   const [pageScrollLocation, setPageScrollLocation] = useState(0);
@@ -9,8 +10,9 @@ export function AboutPage() {
     const handleResize = () => {
       if (pageRef.current) {
         let rect = pageRef.current.getBoundingClientRect();
-        setPageScrollLocation(rect.top + window.scrollY - 50);
-        console.log("pagescroll", rect.top + window.scrollY);
+        setPageScrollLocation(
+          rect.top + window.scrollY - window.innerHeight / 2,
+        );
       }
     };
 
@@ -18,7 +20,7 @@ export function AboutPage() {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-    }
+    };
   }, []);
 
   return (
@@ -39,10 +41,23 @@ export function AboutPage() {
         }}
         ref={pageRef}
       >
-        <TextHeader text="Hello" scrollYToStartAnimation={pageScrollLocation-1} scrollYToEndAnimation={pageScrollLocation + 100} />
-        <div onClick={()=>{window.scrollTo(0,0)}}>
-          go to top
+        <TextHeader
+          text="About"
+          scrollYToStartAnimation={pageScrollLocation - 1}
+          scrollYToEndAnimation={pageScrollLocation + window.innerHeight}
+          drawingTimeSec={0.3}
+        />
+        <div>
+          Hello! I'm pastelite. Just a normal coder
         </div>
+        <DivWithAnimation
+          scrollYToStartAnimation={pageScrollLocation - 1}
+          scrollYToEndAnimation={pageScrollLocation + window.innerHeight}
+          delaySecond={.2}
+          className="relative md:absolute"
+        >
+          Test
+        </DivWithAnimation>
       </div>
     </div>
   );
