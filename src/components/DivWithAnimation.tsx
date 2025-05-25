@@ -69,12 +69,8 @@ export default function DivWithAnimation(
   useEffect(() => {
     const handleResize = () => {
       if (elementRef.current) {
-        if (height !== elementRef.current.offsetHeight) {
-          setHeight(elementRef.current.offsetHeight);
-        }
-        if (width !== elementRef.current.offsetWidth) {
-          setWidth(elementRef.current.offsetWidth);
-        }
+        setHeight(elementRef.current.offsetHeight);
+        setWidth(elementRef.current.offsetWidth);
       }
     };
 

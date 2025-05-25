@@ -1,10 +1,13 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import TextHeader from "./TextHeader";
-import DivWithAnimation from "./DivWithAnimation";
+import TextHeader from "../components/TextHeader";
+import DivWithAnimation from "../components/DivWithAnimation";
+import useBreakpoint from "../hooks/useBreakpoint";
+import { choosing } from "../utils/number";
 
 export function AboutPage() {
   const [pageScrollLocation, setPageScrollLocation] = useState(0);
   const pageRef = useRef<HTMLDivElement>(null);
+  let breakpoint = useBreakpoint([768]);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -30,8 +33,9 @@ export function AboutPage() {
         textAlign: "left",
         backgroundColor: "var(--color-second-background)",
         height: "100vh",
-        paddingLeft: 120,
-        paddingTop: 50,
+        paddingLeft: choosing(breakpoint,[20, 120]),
+        paddingRight: 20,
+        paddingTop: choosing(breakpoint,[100, 50]),
         boxSizing: "border-box",
       }}
     >

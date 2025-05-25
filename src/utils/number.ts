@@ -75,3 +75,10 @@ export function mappingNumberPoint(n: number, ...points: [number, number][]) {
 
   return mappingNumber(mappedToOne, currentPoint[1], nextPoint[1]);
 }
+
+export function choosing<T>(n: number, array: T[]): T {
+  if (n < 0 || n >= array.length) {
+    return array[0];
+  }
+  return array[n];
+}

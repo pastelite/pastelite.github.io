@@ -15,15 +15,12 @@ import type { BoundingBox } from "opentype.js";
 
 export default function BetterName() {
   let { scrollY } = useScroll();
-  // let backgroundHeight = useMotionValue(window.innerHeight); // Initialize with full height
   let [backgroundHeight, setBackgroundHeight] = useState(window.innerHeight); // Initialize with full height]
-  let hasCollapsed = useRef(false); // Use a ref to track if it has collapsed
   let [isCollapsed, setIsCollapsed] = useState(false);
   let [isAnimation, setIsAnimation] = useState(false);
   let timeoutRef = useRef<number | null>(null);
   let [pRatio, setPRatio] = useState(0);
   let [drawingAnimation, setDrawingAnimation] = useState(false);
-  // let [animateHeight, setAnimateHeight] = useState(false)
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
     setBackgroundHeight(window.innerHeight - scroll);
