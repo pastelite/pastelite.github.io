@@ -20,6 +20,8 @@ export default function BetterName() {
   let [disableScrollRelatedAnimation, setDisableScrollRelatedAnimation] =
     useState(false);
 
+  let heightImmunityTimeout = useRef<number | null>(null);
+
   // Effect for handling scroll events
   // useEffect(() => {
   //   const handleScroll = () => {
@@ -66,7 +68,9 @@ export default function BetterName() {
     const handleScroll = () => {
       let scroll = window.scrollY;
       let willCollapse = scroll > window.innerHeight / 2;
-      setBackgroundHeight(window.innerHeight - scroll);
+      if (heightImmunityTimeout.current == null) {
+        setBackgroundHeight(window.innerHeight - scroll);
+      }
 
       // if (scroll > window.innerHeight / 2 && !isCollapsed) {
       //   setIsCollapsed(true);
@@ -183,11 +187,15 @@ export default function BetterName() {
         onClick={isCollapsed
           ? () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
-            setDisableScrollRelatedAnimation(true);
-            setTimeout(() => {
-              setDisableScrollRelatedAnimation(false);
-            }, 400);
-            // scrollTo(0)
+            // setDisableScrollRelatedAnimation(true);
+            // setTimeout(() => {
+            //   setDisableScrollRelatedAnimation(false);
+            // }, 400);
+            // heightImmunity
+            setBackgroundHeight(window.innerHeight);
+            heightImmunityTimeout.current = window.setTimeout(() => {
+              heightImmunityTimeout.current = null;
+            }, 500);
           }
           : undefined}
       >

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AboutIcon from "../../assets/material_icons/person.svg?react";
 import ContactIcon from "../../assets/material_icons/contact_page.svg?react";
 import WorksIcon from "../../assets/material_icons/work.svg?react";
@@ -86,11 +86,15 @@ function MenuItem({ pageIndex, children }: MenuItemProps) {
   const { scrollY } = useScroll();
   const [selected, setSelected] = useState(false);
   let breakpoint = useBreakpoint([768]);
+  // when I select something, it shouldn't unselect during scrolling
+  let selectionImmunityTimeout = useRef<number | null>(null);
+  // If I scrolling pass something briefly, it shouldn't show as selected
+  let selectionDelayTimeout = useRef<number | null>(null);
 
   useMotionValueEvent(scrollY, "change", (scrollY) => {
     console.log(scrollToLocation);
     let nextScroll = (scrollToLocation.length > pageIndex + 1)
-      ? scrollToLocation[pageIndex + 1] - window.innerHeight / 2
+      ? scrollToLocation[pageIndex + 1] - (window.innerHeight / 2) + 1
       : Math.max(
         document.body.scrollHeight,
         document.body.offsetHeight,
@@ -111,9 +115,20 @@ function MenuItem({ pageIndex, children }: MenuItemProps) {
       scrollY >= (currentScroll - window.innerHeight / 2) &&
       scrollY <= nextScroll
     ) {
-      setSelected(true);
+      if (selectionDelayTimeout.current) {
+        clearTimeout(selectionDelayTimeout.current);
+      }
+      selectionDelayTimeout.current = setTimeout(() => {
+        setSelected(true);
+        selectionDelayTimeout.current = null;
+      }, 500);
     } else {
-      setSelected(false);
+      if (selectionDelayTimeout.current) {
+        clearTimeout(selectionDelayTimeout.current);
+      }
+      if (selectionImmunityTimeout.current == null) {
+        setSelected(false);
+      }
     }
   });
 
@@ -126,6 +141,11 @@ function MenuItem({ pageIndex, children }: MenuItemProps) {
             top: scrollToLocation[pageIndex],
             behavior: "smooth",
           });
+          setSelected(true);
+          selectionImmunityTimeout.current = setTimeout(() => {
+            // setSelected(false);
+            selectionImmunityTimeout.current = null;
+          }, 500);
         }
       }}
       style={{
