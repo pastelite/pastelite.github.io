@@ -5,6 +5,8 @@ import Name from "./components/Name";
 import TextCorouselBackgroundNew from "./components/TextCorouselBackgroundNew";
 import { AboutPage } from "./pages/AboutPage";
 import BetterName from "./components/BetterName";
+import { ContactPage } from "./pages/ContactPage";
+import { WorksPage } from "./pages/WorksPage";
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
       {/* <Name /> */}
       {/* <BetterName></BetterName> */}
       <Layout>
-        <AboutPage></AboutPage>
+        <AboutPage/>
+        <WorksPage/>
+        <ContactPage/>
       </Layout>
     </>
   );

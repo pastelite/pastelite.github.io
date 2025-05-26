@@ -50,3 +50,44 @@
 .page-container {
   scroll-snap-align: start;
 }
+
+.menu-item {
+  /* background-color: red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.menu-item::after {
+  content: "";
+  background-color: var(--pill-color);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  transform: scaleX(0.5);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* .menu-item.pressed {
+  height: 70px;
+} */
+
+.menu-item:hover::after {
+  /* background-color: red; */
+  border-radius: 32px;
+  opacity: 0.5;
+  transform: scaleX(1);
+}
+
+.menu-item.pressed::after {
+  border-radius: 16px;
+  opacity: 1;
+  transform: scaleX(1);
+}

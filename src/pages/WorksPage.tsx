@@ -1,13 +1,11 @@
-import { Children, useLayoutEffect, useRef, useState } from "react";
+
 import TextHeader from "../components/TextHeader";
 import DivWithAnimation from "../components/DivWithAnimation";
-import useBreakpoint from "../hooks/useBreakpoint";
-import { choosing } from "../utils/number";
 import usePositionStore from "../store";
 import PageContainer from "../components/PageContainer";
 
-export function AboutPage() {
-  const pageIndex = 0;
+export function WorksPage() {
+  const pageIndex = 1;
   const pageScrollLocation = usePositionStore((state) =>
     state.position[pageIndex]
   );
@@ -23,24 +21,15 @@ export function AboutPage() {
       }}
     >
       <TextHeader
-        text="About"
+        text="Project"
         scrollYToStartAnimation={pageScrollLocation -
           (window.innerHeight / 2)}
         scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
         drawingTimeSec={0.3}
       />
       <div>
-        Hello! I'm pastelite. Just a normal coder
+        List of projects go here...
       </div>
-      <DivWithAnimation
-        scrollYToStartAnimation={pageScrollLocation -
-          (window.innerHeight / 2)}
-        scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
-        delaySecond={.2}
-        className="relative md:absolute"
-      >
-        Test
-      </DivWithAnimation>
     </PageContainer>
   );
 }

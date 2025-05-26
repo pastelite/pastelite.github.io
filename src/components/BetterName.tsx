@@ -162,7 +162,7 @@ export default function BetterName() {
     top: isCollapsed ? 15 : 0,
     left: isCollapsed ? 15 : 0,
     width: isCollapsed ? 70 : "100%",
-    borderRadius: isCollapsed ? 70 * 0.25 : 0,
+    borderRadius: isCollapsed ? 16 : 0,
     overflow: "hidden", // This was part of animate, kept as direct style
     cursor: isCollapsed ? "pointer" : "default",
 
