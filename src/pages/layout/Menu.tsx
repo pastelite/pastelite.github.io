@@ -31,18 +31,19 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
         display: "flex",
         flexDirection: choosing(breakpoint, ["row", "column"]),
         justifyContent: "center",
-        alignItems: "stretch",
+        alignItems:  choosing(breakpoint, ["center","stretch"]),
         padding: 15,
         gap: 15,
+        transition: "all .3s cubic-bezier(0.5, 1, 0.89, 1)",
         ...choosing(breakpoint, [{
-          left: 0,
+          left: showLine ? menuBarWidth : 0, // account for the home icon
           right: 0,
           bottom: 0,
           height: menuBarWidth,
         }, {
           width: menuBarWidth,
           left: 0,
-          top: 0,
+          top: showLine ? menuBarWidth : 0,
           bottom: 0,
         }]),
       }}

@@ -6,6 +6,8 @@ import TextCorouselBackgroundNew from "./TextCorouselBackgroundNew";
 import useThrottleScroll from "../hooks/useThrottleScroll"; // This import is kept as per "don't change other irrelevent code"
 import type { BoundingBox } from "opentype.js";
 import usePositionStore from "../store";
+import useBreakpoint from "../hooks/useBreakpoint";
+import { choosing } from "../utils/number";
 
 export default function BetterName() {
   // State for scroll position is implicitly managed by window.scrollY directly in the event handler
@@ -63,6 +65,8 @@ export default function BetterName() {
   //     }
   //   };
   // }, [isCollapsed]); // Re-run effect if isCollapsed changes to use its latest value in the handler
+
+  let breakpoint = useBreakpoint([768]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -162,8 +166,18 @@ export default function BetterName() {
   // }
 
   const dynamicStyles = {
-    height: isCollapsed ? 70 : backgroundHeight,
-    top: isCollapsed ? 15 : 0,
+    height: isCollapsed
+      ? 70
+      : choosing(breakpoint, [
+        backgroundHeight,
+        backgroundHeight,
+      ]),
+    ...choosing(breakpoint, [
+      isCollapsed ? { bottom: 15 } : { bottom: window.innerHeight - backgroundHeight },
+      {
+        top: isCollapsed ? 15 : 0,
+      },
+    ]),
     left: isCollapsed ? 15 : 0,
     width: isCollapsed ? 70 : "100%",
     borderRadius: isCollapsed ? 16 : 0,
@@ -171,11 +185,10 @@ export default function BetterName() {
     cursor: isCollapsed ? "pointer" : "default",
 
     // CSS transition properties
-    transitionProperty: "height, top, left, width, border-radius",
+    transitionProperty: "height, top, bottom, left, width, border-radius",
     transitionDuration: isAnimation ? "0.3s" : "0s",
-    transitionTimingFunction: isAnimation
-      ? "cubic-bezier(0, 0, 0.58, 1)"
-      : "ease", // 'circOut' easing
+    transitionTimingFunction: "cubic-bezier(0.61, 1, 0.88, 1)",
+    // transitionTimingFunction: "ease-out",
     color: "white", // Base style from original motion.div
   };
 
