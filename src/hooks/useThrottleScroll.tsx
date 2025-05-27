@@ -6,7 +6,7 @@ import { useEffect } from "react";
  * 
  * @param callback - Function that receives current scrollY
  */
-export default function useThrottleScroll(callback: (scrollY: number) => void) {
+export default function useThrottleScroll(callback: (scrollY: number) => void, dependencies: any[]) {
   useEffect(() => {
     let ticking = false;
 
@@ -28,5 +28,5 @@ export default function useThrottleScroll(callback: (scrollY: number) => void) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [callback]);
+  }, [callback, ...dependencies]);
 }

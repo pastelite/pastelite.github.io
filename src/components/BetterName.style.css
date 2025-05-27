@@ -28,7 +28,7 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   height: 160px;
-  transition: all 0.2s ease-out;
+  /* transition: all 0.3s ease-out; */
 
 }
 
@@ -44,12 +44,16 @@
   height: 100%;
   width: min-content;
   max-width: calc(100vw - 60px);
-  transition: all 0.2s ease-out;
+  /* transition: all 0.2s ease-out; */
+  opacity: 1;
+}
+
+.title-box svg path {
+  /* transition: opacity 1s ease-in-out; */
   opacity: 1;
 }
 
 .title-box.only-show-first svg path {
-  transition: all 1s ease-in-out;
   opacity: 0;
 }
 

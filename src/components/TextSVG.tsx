@@ -106,8 +106,8 @@ export default function TextSVG(
       let fillDelay = drawedText ? drawingTimeSec * 2 : 0;
       // return `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}, fill ${drawingTimeSec}s ease-in-out ${fillDelay}`;
       return animatingStroke
-        ? `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}s, fill 0.2s ease-in-out ${fillDelay}s`
-        : `stroke-dashoffset 0s ease 0s, fill 0s ease 0s`; // Safe fallback
+        ? `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}s, fill 0.2s ease-in-out ${fillDelay}s, opacity 0.2s ease-in-out`
+        : `stroke-dashoffset 0s ease 0s, fill 0s ease 0s, opacity 0.2s ease-in-out`; // Safe fallback
     };
   }, [animatingStroke, drawingTimeSec, text, drawedText]);
 

@@ -37,7 +37,7 @@ export function AboutPage() {
           (window.innerHeight / 2)}
         scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
         delaySecond={.2}
-        className="relative md:absolute"
+        className="relative md:absolute md:right-4 w-full md:w-[448px]"
       >
         Test
       </DivWithAnimation>

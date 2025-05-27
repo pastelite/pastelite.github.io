@@ -8,6 +8,7 @@ import type { BoundingBox } from "opentype.js";
 import usePositionStore from "../store";
 import useBreakpoint from "../hooks/useBreakpoint";
 import { choosing } from "../utils/number";
+import { useMotionValueEvent, useScroll } from "motion/react";
 
 export default function BetterName() {
   // State for scroll position is implicitly managed by window.scrollY directly in the event handler
@@ -67,6 +68,46 @@ export default function BetterName() {
   // }, [isCollapsed]); // Re-run effect if isCollapsed changes to use its latest value in the handler
 
   let breakpoint = useBreakpoint([768]);
+  let { scrollY } = useScroll();
+
+  // useMotionValueEvent(scrollY, "change", (scroll) => {
+  //   // const handleScroll = () => {
+  //     // let scroll = window.scrollY;
+  //     let willCollapse = scroll > window.innerHeight / 2;
+  //     if (heightImmunityTimeout.current == null) {
+  //       setBackgroundHeight(window.innerHeight - scroll);
+  //     }
+
+  //     // if thing will change
+  //     if (
+  //       isCollapsed !== willCollapse
+  //     ) {
+  //       setIsCollapsed(willCollapse);
+  //       setIsAnimation(true);
+  //       setTimeout(() => {
+  //         setIsAnimation(false);
+  //       }, 300);
+  //     }
+
+  //     // continue animation if there is animation
+  //     if (timeoutRef.current) {
+  //       clearTimeout(timeoutRef.current);
+  //       timeoutRef.current = window.setTimeout(() => {
+  //         setIsAnimation(false);
+  //         timeoutRef.current = null;
+  //       }, 300);
+  //     }
+  //   // };
+
+  //   // window.addEventListener("scroll", handleScroll);
+  //   // handleScroll();
+  //   // return () => {
+  //   //   window.removeEventListener("scroll", handleScroll);
+  //   //   if (timeoutRef.current) {
+  //   //     clearTimeout(timeoutRef.current);
+  //   //   }
+  //   // };
+  // });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,22 +117,9 @@ export default function BetterName() {
         setBackgroundHeight(window.innerHeight - scroll);
       }
 
-      // if (scroll > window.innerHeight / 2 && !isCollapsed) {
-      //   setIsCollapsed(true);
-      // } else if (isCollapsed) {
-      //   setIsCollapsed(false);
-      // }
-      // setIsCollapsed(scroll > (window.innerHeight / 2));
-
-      console.log(
-        "prev:",
-        isCollapsed,
-        "new:",
-        scroll > window.innerHeight / 2,
-      );
-
+      // if thing will change
       if (
-        isCollapsed !== willCollapse && disableScrollRelatedAnimation === false
+        isCollapsed !== willCollapse
       ) {
         setIsCollapsed(willCollapse);
         setIsAnimation(true);
@@ -100,38 +128,14 @@ export default function BetterName() {
         }, 300);
       }
 
+      // continue animation if there is animation
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = window.setTimeout(() => {
+          setIsAnimation(false);
+          timeoutRef.current = null;
+        }, 300);
       }
-      timeoutRef.current = window.setTimeout(() => {
-        setIsAnimation(false);
-        timeoutRef.current = null;
-      }, 300);
-
-      setIsCollapsed(willCollapse);
-
-      // if (scroll > window.innerHeight / 2 && !isCollapsed) {
-      //   setIsCollapsed(true);
-      //   setIsAnimation(true);
-      //   timeoutRef.current = setTimeout(() => {
-      //     setIsAnimation(false);
-      //     timeoutRef.current = null;
-      //   }, 300);
-      // } else if (scroll <= window.innerHeight / 2 && !isCollapsed) {
-      //   setIsCollapsed(false);
-      //   console.log("start animation")
-      //   setIsAnimation(true);
-      //   timeoutRef.current = setTimeout(() => {
-      //     setIsAnimation(false);
-      //     timeoutRef.current = null;
-      //   }, 300);
-      // } else if (timeoutRef.current) {
-      //   clearTimeout(timeoutRef.current);
-      //   timeoutRef.current = setTimeout(() => {
-      //     setIsAnimation(false);
-      //     timeoutRef.current = null;
-      //   }, 300);
-      // }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -142,7 +146,7 @@ export default function BetterName() {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isCollapsed, disableScrollRelatedAnimation]);
+  }, [isCollapsed]);
 
   // delay animation by 0.5 sec only if everything is setted up
   useEffect(() => {
@@ -159,21 +163,15 @@ export default function BetterName() {
 
   let svgRef = useRef<SVGSVGElement | null>(null);
 
-  // function setPRatioCallback(list: BoundingBox[], width: number) {
-  //   if (list.length == 0) return
-  //   let pWidth = list[0].x2 - list[0].x1
-  //   setPRatio(pWidth/width)
-  // }
-
   const dynamicStyles = {
-    height: isCollapsed
-      ? 70
-      : choosing(breakpoint, [
-        backgroundHeight,
-        backgroundHeight,
-      ]),
+    height: isCollapsed ? 70 : choosing(breakpoint, [
+      backgroundHeight,
+      backgroundHeight,
+    ]),
     ...choosing(breakpoint, [
-      isCollapsed ? { bottom: 15 } : { bottom: window.innerHeight - backgroundHeight },
+      isCollapsed
+        ? { bottom: 15 }
+        : { bottom: window.innerHeight - backgroundHeight },
       {
         top: isCollapsed ? 15 : 0,
       },
@@ -181,15 +179,15 @@ export default function BetterName() {
     left: isCollapsed ? 15 : 0,
     width: isCollapsed ? 70 : "100%",
     borderRadius: isCollapsed ? 16 : 0,
-    overflow: "hidden", // This was part of animate, kept as direct style
+    overflow: "hidden",
     cursor: isCollapsed ? "pointer" : "default",
 
     // CSS transition properties
     transitionProperty: "height, top, bottom, left, width, border-radius",
     transitionDuration: isAnimation ? "0.3s" : "0s",
-    transitionTimingFunction: "cubic-bezier(0.61, 1, 0.88, 1)",
+    transitionTimingFunction: "ease-out",
     // transitionTimingFunction: "ease-out",
-    color: "white", // Base style from original motion.div
+    color: "white",
   };
 
   return (
@@ -200,11 +198,6 @@ export default function BetterName() {
         onClick={isCollapsed
           ? () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
-            // setDisableScrollRelatedAnimation(true);
-            // setTimeout(() => {
-            //   setDisableScrollRelatedAnimation(false);
-            // }, 400);
-            // heightImmunity
             setBackgroundHeight(window.innerHeight);
             heightImmunityTimeout.current = window.setTimeout(() => {
               heightImmunityTimeout.current = null;
@@ -218,9 +211,8 @@ export default function BetterName() {
             ref={svgRef}
             drawedText={drawingAnimation}
             style={{
-              // This transform will be instant unless TextSVG or its CSS has a transition for transform
               transform: isCollapsed
-                ? `translateX(-${(pRatio / 2) * 100}%)` // Ensure pRatio/2 is calculated correctly
+                ? `translateX(-${(pRatio / 2) * 100}%)`
                 : "translateX(0)",
             }}
             text="pastelite"
