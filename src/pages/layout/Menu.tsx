@@ -6,13 +6,15 @@ import useBreakpoint from "../../hooks/useBreakpoint";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import usePositionStore from "../../store";
 import { choosing } from "../../utils/number";
+import useBreakpointNew from "../../hooks/useBreakpointNew";
 
 interface MenuProps {
   menuBarWidth?: number;
 }
 
 const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
-  let breakpoint = useBreakpoint([768]);
+  let breakpoint = useBreakpoint([768, 1024]);
+  // let breakpoint = useBreakpointNew([768, 1024]);
 
   const [showLine, setShowLine] = useState(false);
 
@@ -24,6 +26,16 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
     setShowLine(scrollY > window.innerHeight / 2);
   });
 
+  // const [growMenu, setGrowMenu] = useState(false);
+
+  // if (breakpoint === 2 && growMenu === false) {
+  //   setGrowMenu(true);
+  // } else if ((breakpoint === 0 || breakpoint === 1) && growMenu === true) {
+  //   setGrowMenu(false);
+  // }
+
+  const growMenu = (breakpoint === 2) && showLine;
+
   return (
     <div
       className="menu-bar"
@@ -31,7 +43,7 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
         display: "flex",
         flexDirection: choosing(breakpoint, ["row", "column"]),
         justifyContent: "center",
-        alignItems:  choosing(breakpoint, ["center","stretch"]),
+        alignItems: choosing(breakpoint, ["center", "stretch"]),
         padding: 15,
         gap: 15,
         transition: "all .3s cubic-bezier(0.5, 1, 0.89, 1)",
@@ -41,7 +53,7 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
           bottom: 0,
           height: menuBarWidth,
         }, {
-          width: menuBarWidth,
+          width: growMenu ? 224 : menuBarWidth,
           left: 0,
           top: showLine ? menuBarWidth : 0,
           bottom: 0,
@@ -55,23 +67,29 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
         }}
       >
       </div>
-      <MenuItem pageIndex={0}>
-        <AboutIcon
+      <MenuItem pageIndex={0} SvgItem={AboutIcon} isExpanded={growMenu} text="About">
+        {
+          /* <AboutIcon
           fill="white"
           style={{ height: "40px", width: "max-content" }}
-        />
+        /> */
+        }
       </MenuItem>
-      <MenuItem pageIndex={1}>
-        <WorksIcon
+      <MenuItem pageIndex={1} SvgItem={WorksIcon} isExpanded={growMenu} text="Project">
+        {
+          /* <WorksIcon
           fill="white"
           style={{ height: "40px", width: "max-content" }}
-        />
+        /> */
+        }
       </MenuItem>
-      <MenuItem pageIndex={2}>
-        <ContactIcon
+      <MenuItem pageIndex={2} SvgItem={ContactIcon} isExpanded={growMenu} text="Contact">
+        {
+          /* <ContactIcon
           fill="white"
           style={{ height: "40px", width: "max-content" }}
-        />
+        /> */
+        }
       </MenuItem>
     </div>
   );
@@ -79,14 +97,20 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
 
 interface MenuItemProps {
   pageIndex: number;
-  children?: React.ReactNode;
+  // children?: React.ReactNode;
+  SvgItem: React.FC<React.SVGProps<SVGSVGElement>>;
+  isExpanded?: boolean;
+  text?: string;
 }
 
-function MenuItem({ pageIndex, children }: MenuItemProps) {
+function MenuItem(
+  { pageIndex, SvgItem, isExpanded, text = "Menu Item" }: MenuItemProps,
+) {
   const scrollToLocation = usePositionStore((state) => state.position);
   const { scrollY } = useScroll();
   const [selected, setSelected] = useState(false);
-  let breakpoint = useBreakpoint([768]);
+  // let breakpoint = useBreakpoint([768]);
+  let breakpoint = useBreakpointNew([768]);
   // when I select something, it shouldn't unselect during scrolling
   let selectionImmunityTimeout = useRef<number | null>(null);
   // If I scrolling pass something briefly, it shouldn't show as selected
@@ -135,7 +159,9 @@ function MenuItem({ pageIndex, children }: MenuItemProps) {
 
   return (
     <div
-      className={`menu-item cursor-pointer ${selected ? "pressed" : ""} `}
+      className={`menu-item cursor-pointer ${
+        selected ? "pressed" : ""
+      } relative`}
       onClick={() => {
         if (scrollToLocation.length > pageIndex) {
           window.scrollTo({
@@ -150,13 +176,35 @@ function MenuItem({ pageIndex, children }: MenuItemProps) {
         }
       }}
       style={{
-        ...choosing(breakpoint, [{ width: selected ? 100 : 70 }, {
+        ...breakpoint({ width: selected ? 100 : 70 }, {
           height: selected ? 70 : 48,
-        }]),
+        }),
         ...{ "--pill-color": "#00c5fc" } as React.CSSProperties,
       }}
     >
-      {children}
+      <div
+        className="flex items-center justify-center"
+        style={{
+          height: 70,
+          width: 70,
+        }}
+      >
+        <SvgItem
+          className=""
+          fill="white"
+          style={{ height: "40px", width: "40px" }}
+        />
+      </div>
+
+      <div
+        className="text-nowrap overflow-hidden transition-all duration-300 text-left"
+        style={{
+          flexGrow: isExpanded ? 1 : 0,
+          width: 0,
+        }}
+      >
+        {text}
+      </div>
     </div>
   );
 }

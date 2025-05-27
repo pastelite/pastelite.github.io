@@ -13,7 +13,7 @@ export default function PageContainer(
   { children, style, className = "", pageIndex = -1, ...props }:
     PageContainerProps,
 ) {
-  let breakpoint = useBreakpoint([768]);
+  let breakpoint = useBreakpoint([768, 1024]);
 
   const setPosition = usePositionStore((state) => state.setPosition);
   const pageRef = useRef<HTMLDivElement>(null);
@@ -41,7 +41,7 @@ export default function PageContainer(
       ref={pageRef}
       className={`page-container ${className}`}
       style={{
-        paddingLeft: choosing(breakpoint, [20, 120]),
+        paddingLeft: choosing(breakpoint, [20, 120, 244]),
         paddingRight: 20,
         paddingTop: choosing(breakpoint, [100, 50]),
         boxSizing: "border-box",
