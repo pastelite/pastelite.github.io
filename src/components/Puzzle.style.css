@@ -1,0 +1,32 @@
+.puzzle {
+  position: relative;
+  height: 300px;
+  min-height: 300px;
+  width: 300px;
+  min-width: 300px;
+  border: 1px solid red;
+}
+
+.puzzle div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 95px;
+  width: 95px;
+  background-color: blue;
+  display: grid;
+  place-content: center;
+  font-size: 2em;
+  transform: translateY(calc(var(--item-row) * 100px + 5px))
+    translateX(calc(var(--item-col) * 100px + 5px));
+  transition: all .2s ease-in-out;
+}
+
+.puzzle div:not(.the-dot) {
+  cursor: pointer;
+}
+
+.puzzle div.the-dot {
+  background-color: black;
+  transition: none;
+}

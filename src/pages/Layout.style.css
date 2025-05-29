@@ -47,10 +47,6 @@
   z-index: -10;
 }
 
-.page-container {
-  scroll-snap-align: start;
-}
-
 .menu-item {
   /* background-color: red; */
   display: flex;

@@ -16,6 +16,8 @@ export default function TextHeader(
     scrollYToStartAnimation = -1,
     scrollYToEndAnimation = -1,
     drawingTimeSec = 0.5,
+    className,
+    ...props
   }: TextHeaderProps,
 ) {
   const [inRange, setInRange] = useState(false);
@@ -30,7 +32,7 @@ export default function TextHeader(
   });
 
   return (
-    <div className={"text-header"}>
+    <div className={`text-header ${className}`} {...props}>
       <TextSVG
         drawedText={inRange}
         text={text}

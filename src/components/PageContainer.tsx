@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from "react";
 import useBreakpoint from "../hooks/useBreakpoint";
 import usePositionStore from "../store";
 import { choosing } from "../utils/number";
+import "./PageContainer.style.css"
 
 
 interface PageContainerProps extends React.HTMLAttributes<HTMLDivElement> {

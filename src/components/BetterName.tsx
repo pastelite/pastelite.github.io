@@ -70,48 +70,9 @@ export default function BetterName() {
   let breakpoint = useBreakpoint([768]);
   let { scrollY } = useScroll();
 
-  // useMotionValueEvent(scrollY, "change", (scroll) => {
-  //   // const handleScroll = () => {
-  //     // let scroll = window.scrollY;
-  //     let willCollapse = scroll > window.innerHeight / 2;
-  //     if (heightImmunityTimeout.current == null) {
-  //       setBackgroundHeight(window.innerHeight - scroll);
-  //     }
-
-  //     // if thing will change
-  //     if (
-  //       isCollapsed !== willCollapse
-  //     ) {
-  //       setIsCollapsed(willCollapse);
-  //       setIsAnimation(true);
-  //       setTimeout(() => {
-  //         setIsAnimation(false);
-  //       }, 300);
-  //     }
-
-  //     // continue animation if there is animation
-  //     if (timeoutRef.current) {
-  //       clearTimeout(timeoutRef.current);
-  //       timeoutRef.current = window.setTimeout(() => {
-  //         setIsAnimation(false);
-  //         timeoutRef.current = null;
-  //       }, 300);
-  //     }
-  //   // };
-
-  //   // window.addEventListener("scroll", handleScroll);
-  //   // handleScroll();
-  //   // return () => {
-  //   //   window.removeEventListener("scroll", handleScroll);
-  //   //   if (timeoutRef.current) {
-  //   //     clearTimeout(timeoutRef.current);
-  //   //   }
-  //   // };
-  // });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      let scroll = window.scrollY;
+  useMotionValueEvent(scrollY, "change", (scroll) => {
+    // const handleScroll = () => {
+      // let scroll = window.scrollY;
       let willCollapse = scroll > window.innerHeight / 2;
       if (heightImmunityTimeout.current == null) {
         setBackgroundHeight(window.innerHeight - scroll);
@@ -136,17 +97,56 @@ export default function BetterName() {
           timeoutRef.current = null;
         }, 300);
       }
-    };
+    // };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [isCollapsed]);
+    // window.addEventListener("scroll", handleScroll);
+    // handleScroll();
+    // return () => {
+    //   window.removeEventListener("scroll", handleScroll);
+    //   if (timeoutRef.current) {
+    //     clearTimeout(timeoutRef.current);
+    //   }
+    // };
+  });
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     let scroll = window.scrollY;
+  //     let willCollapse = scroll > window.innerHeight / 2;
+  //     if (heightImmunityTimeout.current == null) {
+  //       setBackgroundHeight(window.innerHeight - scroll);
+  //     }
+
+  //     // if thing will change
+  //     if (
+  //       isCollapsed !== willCollapse
+  //     ) {
+  //       setIsCollapsed(willCollapse);
+  //       setIsAnimation(true);
+  //       setTimeout(() => {
+  //         setIsAnimation(false);
+  //       }, 300);
+  //     }
+
+  //     // continue animation if there is animation
+  //     if (timeoutRef.current) {
+  //       clearTimeout(timeoutRef.current);
+  //       timeoutRef.current = window.setTimeout(() => {
+  //         setIsAnimation(false);
+  //         timeoutRef.current = null;
+  //       }, 300);
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   handleScroll();
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //     if (timeoutRef.current) {
+  //       clearTimeout(timeoutRef.current);
+  //     }
+  //   };
+  // }, [isCollapsed]);
 
   // delay animation by 0.5 sec only if everything is setted up
   useEffect(() => {
