@@ -16,64 +16,70 @@ export function AboutPage() {
   return (
     <PageContainer
       pageIndex={pageIndex}
-      className="page-container flex flex-col"
+      className="page-container"
       style={{
         textAlign: "left",
         backgroundColor: "var(--color-second-background)",
         minHeight: "100vh",
       }}
     >
-      <div className="left-side w-full md:max-w-[600px]">
-        <TextHeader
-          text="About"
-          scrollYToStartAnimation={pageScrollLocation -
-            (window.innerHeight / 2)}
-          scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
-          drawingTimeSec={0.3}
-          className="mb-4"
-        />
-        <div className="text-3xl text-white my-4">
-          Hello! I'm <span className="font-bold">pastelite</span>,<br />{" "}
-          Just a normal guy who like to code!
+      <div className="flex flex-col md:flex-row items-center justify-between">
+        <div className="left-side w-full md:max-w-[600px]">
+          <TextHeader
+            text="About"
+            scrollYToStartAnimation={pageScrollLocation -
+              (window.innerHeight / 2)}
+            scrollYToEndAnimation={pageScrollLocation +
+              (window.innerHeight / 2)}
+            drawingTimeSec={0.3}
+            className="mb-4"
+          />
+          <div className="text-3xl text-white my-4">
+            Hello! I'm <span className="font-bold">pastelite</span>,<br />{" "}
+            Just a normal guy who like to code!
+          </div>
+          <p className="mb-2">
+            I've been coding since I was in highschool and I have been coding
+            ever since.
+          </p>
+          <p>
+            I did it because it's fun I guess? Coding is like solving the puzzle
+            where the answer is the result you desired, kinda like a sandbox
+            game where you can built whatever you want.
+          </p>
+          <p>
+            By the way, the puzzle is playable.
+          </p>
         </div>
-        <p className="mb-2">
-          I've been coding since I was in highschool and I have been coding ever
-          since.
-        </p>
-        <p>
-          I did it because it's fun I guess? Coding is like solving the puzzle
-          where the answer is the result you desired, kinda like a sandbox game
-          where you can built whatever you want.
-        </p>
-        <div className="text-5xl mt-8">
-          Q&A
+        <div className="right-side grow flex justify-center items-center">
+          <Puzzle className="!h-[200px] !w-[200px] lg:!h-[300px] lg:!w-[300px] my-4"/>
         </div>
       </div>
-      <div className="right-side">
-        <DivWithAnimation
-          scrollYToStartAnimation={pageScrollLocation -
-            (window.innerHeight / 2)}
-          scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
-          delaySecond={.2}
-          className="relative"
-        >
-          My Language knowledge (Relative, I have zero professional so Imma rank
-          this lowly):
-          <ul>Javascript/Typescript</ul>
-          <Bar width={.75} />
-          <ul>Python</ul>
-          <Bar width={.75} />
-          <ul>C#</ul>
-          <Bar width={.5} />
-          <ul>Java</ul>
-          <Bar width={.5} />
-          <ul>Rust</ul>
-          <Bar width={.25} />
-          <ul>C</ul>
-          <Bar width={.25} />
-        </DivWithAnimation>
-        <Puzzle />
+      <div className="text-5xl mt-8">
+        Q&A
       </div>
+      <DivWithAnimation
+        scrollYToStartAnimation={pageScrollLocation -
+          (window.innerHeight / 2)}
+        scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
+        delaySecond={.2}
+        className="relative"
+      >
+        My Language knowledge (Relative, I have zero professional so Imma rank
+        this lowly):
+        <ul>Javascript/Typescript</ul>
+        <Bar width={.75} />
+        <ul>Python</ul>
+        <Bar width={.75} />
+        <ul>C#</ul>
+        <Bar width={.5} />
+        <ul>Java</ul>
+        <Bar width={.5} />
+        <ul>Rust</ul>
+        <Bar width={.25} />
+        <ul>C</ul>
+        <Bar width={.25} />
+      </DivWithAnimation>
     </PageContainer>
   );
 }
