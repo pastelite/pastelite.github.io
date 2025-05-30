@@ -9,7 +9,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: var(--color-second-background);
+  background-color: var(--color-first-background);
   /* background-color: #535bf2; */
 
   font-synthesis: none;

@@ -16,8 +16,8 @@ export function ContactPage() {
       className="page-container"
       style={{
         textAlign: "left",
-        backgroundColor: "var(--color-second-background)",
-        height: "100vh",
+        backgroundColor: "var(--color-fourth-background)",
+        minHeight: "100vh",
       }}
     >
       <TextHeader

@@ -2,17 +2,23 @@ import { useLayoutEffect, useRef } from "react";
 import useBreakpoint from "../hooks/useBreakpoint";
 import usePositionStore from "../store";
 import { choosing } from "../utils/number";
-import "./PageContainer.style.css"
-
+import "./PageContainer.style.css";
 
 interface PageContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   pageIndex: number;
+  noPaddingTop?: boolean;
 }
 
 export default function PageContainer(
-  { children, style, className = "", pageIndex = -1, ...props }:
-    PageContainerProps,
+  {
+    children,
+    style,
+    className = "",
+    pageIndex = -1,
+    noPaddingTop = false,
+    ...props
+  }: PageContainerProps,
 ) {
   let breakpoint = useBreakpoint([768, 1024]);
 
@@ -44,7 +50,8 @@ export default function PageContainer(
       style={{
         paddingLeft: choosing(breakpoint, [20, 120, 244]),
         paddingRight: 20,
-        paddingTop: choosing(breakpoint, [100, 50]),
+        paddingTop: noPaddingTop ? 0 : choosing(breakpoint, [50, 50]),
+        paddingBottom: 20,
         boxSizing: "border-box",
         ...style,
       }}

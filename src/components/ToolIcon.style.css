@@ -1,0 +1,19 @@
+@reference "tailwindcss";
+
+.tool-icon {
+  @apply relative rounded-md h-12 w-12 p-1 ;
+  transition: all .2s ease-in-out;
+}
+
+.tool-explain {
+  @apply absolute px-1 py-0.5 top-0 opacity-0 left-0 rounded-sm;
+  transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tool-icon:hover {
+  @apply scale-110;
+}
+
+.tool-icon:hover .tool-explain {
+  @apply opacity-100 -top-8;
+}

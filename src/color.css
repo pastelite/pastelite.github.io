@@ -2,4 +2,6 @@
   --color-first-background: #0b0b0b;
   --color-second-background: rgb(40, 45, 50);
   --color-second-background-number: 40, 45, 50;
+  --color-third-background: rgb(50, 40, 45);
+  --color-fourth-background: rgb(50, 45, 40);
 }
