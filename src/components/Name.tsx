@@ -1,11 +1,9 @@
-import { use, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import PasteliteSvg from "../assets/pastelite.svg?react";
 import "./Name.style.css";
-import useThrottleScroll from "../hooks/useThrottleScroll";
 import { mappingNumber } from "../utils/number";
-import { motion, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "motion/react";
+import { motion, useMotionValue, useMotionValueEvent, useScroll } from "motion/react";
 import { animate } from "motion";
-import { useElementSizeCSSVars } from "../hooks/useElementCSSVariable";
 
 // how "p" in the title takes up entire title space
 const pRatio = 0.115;

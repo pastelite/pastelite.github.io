@@ -1,11 +1,8 @@
 import TextSVG from "./TextSVG";
 import "./BetterName.style.css";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // Removed framer-motion imports: motion, useMotionValue, useMotionValueEvent, useScroll, useTransform, animate
 import TextCorouselBackgroundNew from "./TextCorouselBackgroundNew";
-import useThrottleScroll from "../hooks/useThrottleScroll"; // This import is kept as per "don't change other irrelevent code"
-import type { BoundingBox } from "opentype.js";
-import usePositionStore from "../store";
 import useBreakpoint from "../hooks/useBreakpoint";
 import { choosing } from "../utils/number";
 import { useMotionValueEvent, useScroll } from "motion/react";
@@ -24,48 +21,6 @@ export default function BetterName() {
     useState(false);
 
   let heightImmunityTimeout = useRef<number | null>(null);
-
-  // Effect for handling scroll events
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const scroll = window.scrollY;
-  //     setBackgroundHeight(Math.max(0, window.innerHeight - scroll)); // Ensure height is not negative
-
-  //     let shouldTriggerAnimation = false;
-  //     if (scroll > window.innerHeight / 2) {
-  //       if (!isCollapsed) {
-  //         setIsCollapsed(true);
-  //         shouldTriggerAnimation = true;
-  //       }
-  //     } else { // scroll <= window.innerHeight / 2
-  //       if (isCollapsed) {
-  //         setIsCollapsed(false);
-  //         shouldTriggerAnimation = true;
-  //       }
-  //     }
-
-  //     if (shouldTriggerAnimation) {
-  //       setIsAnimation(true);
-  //       if (timeoutRef.current) {
-  //         clearTimeout(timeoutRef.current);
-  //       }
-  //       timeoutRef.current = window.setTimeout(() => {
-  //         setIsAnimation(false);
-  //         timeoutRef.current = null;
-  //       }, 300); // This duration should match your CSS transition duration
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   handleScroll(); // Call once on mount to set initial state based on current scroll
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //     if (timeoutRef.current) {
-  //       clearTimeout(timeoutRef.current);
-  //     }
-  //   };
-  // }, [isCollapsed]); // Re-run effect if isCollapsed changes to use its latest value in the handler
 
   let breakpoint = useBreakpoint([768]);
   let { scrollY } = useScroll();
@@ -164,10 +119,7 @@ export default function BetterName() {
   let svgRef = useRef<SVGSVGElement | null>(null);
 
   const dynamicStyles = {
-    height: isCollapsed ? 70 : choosing(breakpoint, [
-      backgroundHeight,
-      backgroundHeight,
-    ]),
+    height: isCollapsed ? 70 : backgroundHeight,
     ...choosing(breakpoint, [
       isCollapsed
         ? { bottom: 15 }

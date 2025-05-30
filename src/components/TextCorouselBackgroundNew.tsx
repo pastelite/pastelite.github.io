@@ -1,8 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import TextCorouselNew from "./TextCorouselNew";
 import { motion, useAnimate, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "motion/react";
-import useThrottleScroll from "../hooks/useThrottleScroll";
-import { mappingNumber, mappingNumberPoint } from "../utils/number";
+import { mappingNumberPoint } from "../utils/number";
 
 export default function TextCorouselBackground() {
   let [screenHeight, setScreenHeight] = useState(0);

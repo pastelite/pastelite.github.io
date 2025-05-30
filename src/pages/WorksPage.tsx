@@ -2,12 +2,13 @@ import TextHeader from "../components/TextHeader";
 import DivWithAnimation from "../components/DivWithAnimation";
 import usePositionStore from "../store";
 import PageContainer from "../components/PageContainer";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import useBreakpoint from "../hooks/useBreakpoint";
 import TopRightIcon from "../assets/icons/arrow-top-right.svg?react";
 import ReactLogo from "../assets/logo/React.svg?react";
 import TypeScriptLogo from "../assets/logo/TypescriptNoBorder.svg?react";
 import ViteLogo from "../assets/logo/ViteBlack.svg?react";
+import TailwindLogo from "../assets/logo/Tailwind.svg?react";
 
 import OldWebsiteImage from "../assets/previousWork/old_website.png";
 import ToolIcon from "../components/ToolIcon";
@@ -25,6 +26,48 @@ function devideArrayByColumn<T>(array: T[], col: number): T[][] {
   }
 
   return arrays;
+}
+
+interface WorkListItemProps {
+  title: string;
+  image?: string;
+  children?: ReactNode;
+  tools: ReactNode;
+  linkName?: string;
+  linkTo?: string;
+}
+
+function WorkListItem(
+  { title, image, children, tools, linkName, linkTo }: WorkListItemProps,
+) {
+  return (
+    <div className="work-list-item relative h-full w-full">
+      <img
+        className="w-full h-[calc(100%-48px)] object-cover object-left transition-all duration-200"
+        src={image}
+      >
+      </img>
+      <div className="desc text-white absolute left-0 w-full top-[calc(100%-48px)] h-full">
+        <div className="h-[48px] border-t border-b border-white flex justify-between items-center px-2">
+          {title}
+          <a href={linkTo}>
+            <div className="link flex px-2 py-1">
+              <div className="link-text text-white">{linkName}</div>
+              <TopRightIcon fill="white"></TopRightIcon>
+            </div>
+          </a>
+        </div>
+
+        <div className="desc text-white h-0 px-2 py-2">
+          {children}
+        </div>
+
+        <div className="absolute bottom-4 left-4 h-12 gap-2 flex">
+          {tools}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function WorksPage() {
@@ -51,39 +94,31 @@ export function WorksPage() {
         drawingTimeSec={0.3}
       />
       <GrowingGrid>
-        <div className="work-list-item relative h-full w-full">
-          <img
-            className="w-full h-[calc(100%-48px)] object-cover object-left transition-all duration-200"
-            src={OldWebsiteImage}
-          >
-          </img>
-          <div className="desc text-white absolute left-0 w-full top-[calc(100%-48px)] h-full">
-            <div className="h-[48px] border-t border-b border-white flex justify-between items-center px-2">
-              My Previous Website
-              <div className="link flex px-2 py-1">
-                <div className="link-text">GitHub</div>
-                <TopRightIcon fill="white"></TopRightIcon>
-              </div>
-            </div>
-
-            <div className="desc text-white h-0 px-2 py-2">
-              The second website I've ever made! arguably looks even better than
-              this one but lack the "coolness"
-            </div>
-
-            <div className="absolute bottom-4 left-4 h-12 gap-2 flex">
+        <WorkListItem
+          title="My Previous Website"
+          tools={
+            <>
               <ToolIcon color="#087ea4" tooltip="React">
                 <ReactLogo className="h-full w-full" />
               </ToolIcon>
               <ToolIcon color="#3178c6" tooltip="TypeScript">
                 <TypeScriptLogo className="h-full w-full" />
               </ToolIcon>
+              <ToolIcon color="#38bdf8" tooltip="Tailwind">
+                <TailwindLogo className="h-full w-full" fill="white" />
+              </ToolIcon>
               <ToolIcon color="#8b73fe" tooltip="Vite">
                 <ViteLogo className="h-full w-full" fill="white" />
               </ToolIcon>
-            </div>
-          </div>
-        </div>
+            </>
+          }
+          image={OldWebsiteImage}
+          linkName="GitHub"
+          linkTo="https://github.com/pastelite/pstl.pw"
+        >
+          The second website I've ever made! arguably looks even better than
+          this one but lack the "coolness"
+        </WorkListItem>
         <div>Test2</div>
         <div>Test3</div>
       </GrowingGrid>

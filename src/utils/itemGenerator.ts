@@ -1,5 +1,8 @@
 import type { HTMLAttributes } from "react";
-import type { ItemGenerator, TextCorouselItemData } from "../components/TextCorouselNew";
+import type {
+  ItemGenerator,
+  TextCorouselItemData,
+} from "../components/TextCorouselNew";
 import { randomBetween, randomElement, shuffleArray } from "./random";
 
 const helloLanguages = [
@@ -27,26 +30,25 @@ const fontWeight = ["200", "300", "400", "500", "600"];
 
 function linearHexMap(x: number) {
   if (x < 0.1 || x > 1) return null; // handle out-of-range input
-  const val = Math.round((x - 0.1) / (1 - 0.1) * 15);
+  const val = Math.round(((x - 0.1) / (1 - 0.1)) * 15);
   return val.toString(16); // convert to hex string
 }
 
 export default class CustomTextCorouselItemGenerator implements ItemGenerator {
   countUntilShuffle: number;
   shuffledLanguages: string[];
-  timer: any;
-  timerEnd: boolean;
+  initTime: number;
 
   constructor() {
     this.countUntilShuffle = helloLanguages.length - 1;
     this.shuffledLanguages = shuffleArray(helloLanguages);
-    this.timerEnd = false;
-    this.timer = setTimeout(() => {
-      this.timerEnd = true;
-    }, 100)
+    this.initTime = Date.now();
   }
 
   getItem(): TextCorouselItemData {
+    // is time end
+    let timerEnd = Date.now() - this.initTime > 100;
+
     // reset counter
     this.countUntilShuffle--;
     if (this.countUntilShuffle === -1) {
@@ -55,7 +57,7 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
       this.shuffledLanguages = shuffleArray(helloLanguages);
       if (
         this.shuffledLanguages[helloLanguages.length - 1] ===
-          previousShuffledLanguages
+        previousShuffledLanguages
       ) {
         // swap with the middle
         let middleIndex = Math.floor(helloLanguages.length / 2);
@@ -68,9 +70,6 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
     let text = this.shuffledLanguages[this.countUntilShuffle];
     let opacity = linearHexMap(randomBetween(0.2, 0.5));
     let textShadowColor = `#fff${opacity}`;
-    // console.log(textShadowColor);
-    // let textShadowEmpty = `#0000`;
-    // let mappedToHex = Math.round(opacity * 255).toString(16).padStart(2, "0");
     let props: HTMLAttributes<HTMLDivElement> = {
       style: {
         fontFamily: randomElement(fontFamily),
@@ -86,14 +85,9 @@ export default class CustomTextCorouselItemGenerator implements ItemGenerator {
         // } : {
         //   textShadow: `-1px -1px 0 ${textShadowEmpty}, 1px -1px 0 ${textShadowEmpty}, -1px 1px 0 ${textShadowEmpty}, 1px 1px 0 ${textShadowEmpty}`,
         // },
-        ...this.timerEnd ? {
-          opacity: 1,
-        } : {
-          opacity: 0,
-        }
-        
+        opacity: timerEnd ? 1 : 0,
       },
-      className: this.timerEnd ? "" : "blink-on-start",
+      className: timerEnd ? "" : "blink-on-start",
     };
     return { children: text, props };
   }
