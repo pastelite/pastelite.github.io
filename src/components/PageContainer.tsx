@@ -37,6 +37,8 @@ export default function PageContainer(
     };
 
     handleResize();
+    // run after everything loaded
+    setTimeout(handleResize,1000);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);

@@ -5,13 +5,19 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import TextCorouselBackgroundNew from "./TextCorouselBackgroundNew";
 import useBreakpoint from "../hooks/useBreakpoint";
 import { choosing } from "../utils/number";
-import { motion, useMotionValue, useMotionValueEvent, useScroll } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "motion/react";
 import { animate } from "motion";
 
 export default function BetterName() {
   // State for scroll position is implicitly managed by window.scrollY directly in the event handler
-  let backgroundHeightMv = useMotionValue(window.innerHeight)
-  let backgroundWidthMv = useMotionValue(window.innerWidth)
+  let backgroundHeightMv = useMotionValue(window.innerHeight);
+  let backgroundWidthMv = useMotionValue(window.innerWidth);
   let [isCollapsed, setIsCollapsed] = useState(false);
   let [isAnimation, setIsAnimation] = useState(true); // Controls CSS transition duration
   let timeoutRef = useRef<number | null>(null);
@@ -25,8 +31,8 @@ export default function BetterName() {
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
     let willCollapse = scroll > window.innerHeight / 2;
-    let newBackgroundHeight = willCollapse ? 70 : (window.innerHeight - scroll)
-    let newBackgroundWidth = willCollapse ? 70 : window.innerWidth
+    let newBackgroundHeight = willCollapse ? 70 : (window.innerHeight - scroll);
+    let newBackgroundWidth = willCollapse ? 70 : window.innerWidth;
 
     // setBackgroundHeight(window.innerHeight - scroll);
 
@@ -39,11 +45,11 @@ export default function BetterName() {
         setIsCollapsed(willCollapse);
       });
       animate(backgroundHeightMv, newBackgroundHeight, {
-        duration: 0.2
-      })
+        duration: 0.2,
+      });
       animate(backgroundWidthMv, newBackgroundWidth, {
-        duration: 0.2
-      })
+        duration: 0.2,
+      });
       // setIsAnimation(true);
       timeoutRef.current = setTimeout(() => {
         // setIsAnimation(false);
@@ -58,25 +64,27 @@ export default function BetterName() {
         timeoutRef.current = null;
       }, 300);
       animate(backgroundHeightMv, newBackgroundHeight, {
-        duration: 0.2
-      })
+        duration: 0.2,
+      });
       animate(backgroundWidthMv, newBackgroundWidth, {
-        duration: 0.2
-      })
+        duration: 0.2,
+      });
     } else {
-      backgroundHeightMv.set(newBackgroundHeight)
-      backgroundWidthMv.set(newBackgroundWidth)
+      backgroundHeightMv.set(newBackgroundHeight);
+      backgroundWidthMv.set(newBackgroundWidth);
     }
   });
 
   // when resize screen
   useLayoutEffect(() => {
     const handleResize = () => {
-      let newBackgroundHeight = isCollapsed ? 70 : (window.innerHeight - window.scrollY)
-      let newBackgroundWidth = isCollapsed ? 70 : window.innerWidth
+      let newBackgroundHeight = isCollapsed
+        ? 70
+        : (window.innerHeight - window.scrollY);
+      let newBackgroundWidth = isCollapsed ? 70 : window.innerWidth;
 
-      backgroundHeightMv.set(newBackgroundHeight)
-      backgroundWidthMv.set(newBackgroundWidth)
+      backgroundHeightMv.set(newBackgroundHeight);
+      backgroundWidthMv.set(newBackgroundWidth);
     };
 
     window.addEventListener("resize", handleResize);
@@ -85,7 +93,6 @@ export default function BetterName() {
       window.removeEventListener("resize", handleResize);
     };
   }, [isCollapsed, backgroundHeightMv, backgroundWidthMv]); // Depend on isCollapsed and motion values
-  
 
   // delay animation by 0.5 sec only if everything is setted up
   useEffect(() => {
@@ -101,6 +108,12 @@ export default function BetterName() {
   }, []);
 
   let svgRef = useRef<SVGSVGElement | null>(null);
+  let bottom = useTransform(backgroundHeightMv, (bgheight) => {
+    if (breakpoint == 1) return "auto";
+    else {
+      return isCollapsed ? 15 + (bgheight - 70) : window.innerHeight - bgheight;
+    }
+  });
 
   const dynamicStyles = {
     // TODO: fix bottom
@@ -113,7 +126,7 @@ export default function BetterName() {
     //     top: isCollapsed ? 15 : 0,
     //   },
     // ]),
-    top: isCollapsed ? 15 : 0,
+    top: (breakpoint == 1) ? (isCollapsed ? 15 : 0) : "auto",
     left: isCollapsed ? 15 : 0,
     // width: isCollapsed ? 70 : "100%",
     borderRadius: isCollapsed ? 16 : 0,
@@ -135,7 +148,8 @@ export default function BetterName() {
         animate={dynamicStyles}
         style={{
           height: backgroundHeightMv,
-          width: backgroundWidthMv
+          width: backgroundWidthMv,
+          bottom: bottom,
         }}
         transition={{ duration: 0.2, ease: "easeOut" }}
         onClick={isCollapsed
