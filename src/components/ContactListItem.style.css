@@ -1,0 +1,51 @@
+@reference "tailwindcss";
+
+.copy-to-clipboard-notice {
+  @apply h-full w-full flex justify-center items-center absolute top-0 left-0 transition-all duration-300 gap-2;
+}
+
+.contact-list-item {
+  @apply relative text-white border border-white rounded-3xl py-2 px-4 flex gap-2 mb-2 bg-transparent overflow-hidden z-10;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.contact-list-item::before {
+  @apply absolute top-0 left-0 bottom-0 right-0 -z-10 scale-x-[20%] opacity-0;
+  background-color: var(--hover-bg-color);
+  border-radius: 35%;
+  content: "";
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.contact-list-item:hover::before {
+  @apply scale-x-100 scale-y-100 rounded-lg opacity-100;
+}
+
+.contact-list-item:hover {
+  @apply rounded-lg;
+  height: var(--hover-height) !important;
+  /* @apply bg-purple-600 rounded-lg; */
+}
+
+.contact-list-item-icon {
+  @apply flex items-center justify-center py-2 pr-2;
+  transition: opacity 0.3s ease-out;
+}
+
+.contact-list-text {
+  @apply grow flex flex-col justify-center py-1;
+  transition: opacity 0.3s ease-out;
+}
+
+.contact-list-text .subtitle {
+  @apply h-[16px];
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.contact-list-item.smaller .contact-list-text .subtitle {
+  @apply h-[0px] opacity-0;
+}
+
+.contact-list-item.smaller:hover .contact-list-text .subtitle {
+  @apply h-[16px] opacity-100;
+}

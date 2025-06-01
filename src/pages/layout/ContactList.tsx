@@ -1,4 +1,4 @@
-import GithubIcon from "../../assets/icons/github-icon.svg?react";
+import GithubIcon from "../../assets/logo/github-icon.svg?react";
 import WikipediaIcon from "../../assets/icons/wikipedia-icon.svg?react";
 import EmailIcon from "../../assets/icons/envelope-icon.svg?react";
 

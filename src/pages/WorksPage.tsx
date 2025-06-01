@@ -29,66 +29,12 @@ function devideArrayByColumn<T>(array: T[], col: number): T[][] {
   return arrays;
 }
 
-interface WorkListItemProps {
-  title: string;
-  image?: string;
-  children?: ReactNode;
-  tools: ReactNode;
-  linkName?: string;
-  linkTo?: string;
-  imageObjectPosition?: string;
-}
-
-function WorkListItem(
-  {
-    title,
-    image,
-    children,
-    tools,
-    linkName,
-    linkTo,
-    imageObjectPosition = "center",
-  }: WorkListItemProps,
-) {
-  return (
-    <div className="work-list-item relative h-full w-full">
-      <img
-        className="w-full h-[calc(100%-48px)] object-cover transition-all duration-200"
-        src={image}
-        style={{
-          objectPosition: imageObjectPosition,
-        }}
-      >
-      </img>
-      <div className="desc text-white absolute left-0 w-full top-[calc(100%-48px)] h-full">
-        <div className="h-[48px] border-t border-b border-white flex justify-between items-center px-2">
-          {title}
-          <a href={linkTo}>
-            <div className="link flex px-2 py-1">
-              <div className="link-text text-white">{linkName}</div>
-              <TopRightIcon fill="white"></TopRightIcon>
-            </div>
-          </a>
-        </div>
-
-        <div className="text-white px-2 py-2">
-          {children}
-        </div>
-
-        <div className="absolute bottom-4 left-4 h-12 gap-2 flex">
-          {tools}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function WorksPage() {
   const pageIndex = 1;
-  const pageScrollLocation = usePositionStore((state) =>
-    state.position[pageIndex]
-  );
-  let breakpoint = useBreakpoint([768, 1024])
+  const scrollPosition = usePositionStore((state) => state.position);
+  const pageScrollLocation = scrollPosition[pageIndex];
+  const nextScrollLocation = scrollPosition[pageIndex + 1];
+  let breakpoint = useBreakpoint([768, 1024]);
 
   return (
     <PageContainer
@@ -108,9 +54,16 @@ export function WorksPage() {
         drawingTimeSec={0.3}
         className="mb-6"
       />
-      <GrowingGrid style={{
-        height: choosing(breakpoint,["calc(300px * 6)","calc(300px * 3)","calc(300px * 2)"])
-      }}>
+      <GrowingGrid
+        style={{
+          height: choosing(breakpoint, [
+            "calc(300px * 6)",
+            "calc(300px * 3)",
+            "calc(300px * 2)",
+          ]),
+        }}
+        gap={20}
+      >
         <WorkListItem
           title="My Previous Website"
           tools={ToolIconList({
@@ -196,9 +149,63 @@ export function WorksPage() {
   );
 }
 
+interface WorkListItemProps {
+  title: string;
+  image?: string;
+  children?: ReactNode;
+  tools: ReactNode;
+  linkName?: string;
+  linkTo?: string;
+  imageObjectPosition?: string;
+}
+
+function WorkListItem(
+  {
+    title,
+    image,
+    children,
+    tools,
+    linkName,
+    linkTo,
+    imageObjectPosition = "center",
+  }: WorkListItemProps,
+) {
+  return (
+    <div className="work-list-item relative h-full w-full">
+      <img
+        className="w-full h-[calc(100%-48px)] object-cover transition-all duration-200"
+        src={image}
+        style={{
+          objectPosition: imageObjectPosition,
+        }}
+      >
+      </img>
+      <div className="desc text-white absolute left-0 w-full top-[calc(100%-48px)] h-full">
+        <div className="h-[48px] border-t border-b border-white flex justify-between items-center px-2">
+          {title}
+          <a href={linkTo}>
+            <div className="link flex px-2 py-1">
+              <div className="link-text text-white">{linkName}</div>
+              <TopRightIcon fill="white"></TopRightIcon>
+            </div>
+          </a>
+        </div>
+
+        <div className="text-white px-2 py-2">
+          {children}
+        </div>
+
+        <div className="absolute bottom-4 left-4 h-12 gap-2 flex">
+          {tools}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface GrowingGridProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode[];
-  gap?: 10;
+  gap?: number;
 }
 
 export function GrowingGrid(
@@ -227,7 +234,7 @@ export function GrowingGrid(
       }}
       {...props}
     >
-      {devideArrayByColumn(items, numColumn).map((rows, _) => {
+      {devideArrayByColumn(items, numColumn).map((rows, rowIndex) => {
         return (
           <div
             className="flex w-full grow-2 hover:grow-3 shrink-1 basis-0 transition-all duration-200 overflow-hidden"
@@ -247,6 +254,7 @@ export function GrowingGrid(
                   }}
                   style={{
                     flexGrow: colIndex == currentCol ? 3 : 2,
+                    ...{ "--item-index": rowIndex * numColumn + colIndex },
                   }}
                 >
                   {item}

@@ -58,7 +58,7 @@ export function AboutPage() {
         </div>
       </div>
       <div className="text-5xl mt-8">
-        What is my knowledge level?
+        How would I rate myself?
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 relative gap-4 mt-8">
         <DivWithAnimation
