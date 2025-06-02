@@ -1,5 +1,5 @@
 import { BoundingBox, Font, load, Path as OpentypePath } from "opentype.js";
-import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import RobotoSlabMedium from "../assets/fonts/RobotoSlab-Medium.ttf";
 import { motion } from "motion/react";
 
@@ -93,11 +93,11 @@ export default function TextSVG(
   }, [pathData]);
 
   // delay animation so the pathlength stuff can be set without the transition
-  useEffect(()=>{
+  useEffect(() => {
     if (pathLength.length > 0) {
       setAnimatingStroke(true);
     }
-  },[pathLength])
+  }, [pathLength]);
 
   const generateTransition = useMemo(() => {
     return (i: number) => {
@@ -106,8 +106,8 @@ export default function TextSVG(
       let fillDelay = drawedText ? drawingTimeSec * 2 : 0;
       // return `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}, fill ${drawingTimeSec}s ease-in-out ${fillDelay}`;
       return animatingStroke
-        ? `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}s, fill 0.2s ease-in-out ${fillDelay}s, opacity 0.2s ease-in-out`
-        : `stroke-dashoffset 0s ease 0s, fill 0s ease 0s, opacity 0.2s ease-in-out`; // Safe fallback
+        ? `stroke-dashoffset ${drawingTimeSec}s ease-in-out ${strokeDelay}s, fill-opacity 0.2s ease-in-out ${fillDelay}s, opacity 0.2s ease-in-out`
+        : `stroke-dashoffset 0s ease 0s, fill-opacity 0s ease 0s, opacity 0.2s ease-in-out`; // Safe fallback
     };
   }, [animatingStroke, drawingTimeSec, text, drawedText]);
 
@@ -125,6 +125,8 @@ export default function TextSVG(
           }
         }
       }}
+      fill={fill || "white"}
+      stroke={stroke || "white"}
       height={fontSize}
       style={{ overflow: "visible", ...style }}
       {...props}
@@ -133,8 +135,9 @@ export default function TextSVG(
         <path
           key={i}
           d={d.toPathData(2)}
-          fill={fill || drawedText ? "white" : "transparent"}
-          stroke={stroke || "white"}
+          fillOpacity={drawedText ? 1 : 0}
+          // fill={fill || drawedText ? "white" : "transparent"}
+          // stroke={stroke || "white"}
           style={{
             strokeWidth: 1,
             strokeDasharray: pathLength[i],
@@ -142,7 +145,7 @@ export default function TextSVG(
             // delay animation because it will make it looks better
             // ${0.5 + i * 0.05}
             transition: generateTransition(i),
-            ...pathStyle
+            ...pathStyle,
           }}
         />
       ))}

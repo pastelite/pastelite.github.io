@@ -13,6 +13,7 @@ import SteamIcon from "../assets/logo/steam.svg?react";
 import WikipediaIcon from "../assets/icons/wikipedia-icon.svg?react";
 import WiktionaryIcon from "../assets/logo/Wiktionary_small_optimized.svg?react";
 import HuggingfaceIcon from "../assets/logo/hf-logo-pirate-black-white.svg?react"
+import ParticleBG from "../components/ParticlesBG";
 // import ContactListItem
 
 export function ContactPage() {
@@ -27,7 +28,7 @@ export function ContactPage() {
       className="page-container"
       style={{
         textAlign: "left",
-        backgroundColor: "var(--color-fourth-background)",
+        backgroundColor: "var(--color-fourth-background)", // change in color.css
         minHeight: "100vh",
       }}
     >
@@ -125,6 +126,7 @@ export function ContactPage() {
           />
         </div>
       </div>
+      {/* <ParticleBG/> */}
     </PageContainer>
   );
 }

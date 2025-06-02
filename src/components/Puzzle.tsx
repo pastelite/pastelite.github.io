@@ -67,7 +67,7 @@ function generatePossibleAction(playState: string[][]) {
 interface PuzzleProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
-export default function Puzzle({className, ...props }: PuzzleProps) {
+export default function Puzzle({ className, ...props }: PuzzleProps) {
   const [playState, setPlayState] = useState(generateInit());
   const defaultItem = ["p", "a", "s", "t1", "e1", "l", "i", "t2", "e2", "."];
   const [isWon, setIsWon] = useState(false);
@@ -136,12 +136,20 @@ export default function Puzzle({className, ...props }: PuzzleProps) {
   }, [playState]);
 
   return (
-    <div className={`${className || ""} puzzle flex justify-center items-center relative`} {...props}>
+    <div
+      className={`${
+        className || ""
+      } puzzle flex justify-center items-center relative`}
+      {...props}
+    >
       {defaultItem.map((item, _) => {
         let [row, col] = findItemIn2DArray(playState, item);
         return (
           <div
-            className={(item == ".") ? "item the-dot" : "item"}
+            // className={(item == ".") ? "item the-dot" : "item"}
+            className={`item ${(item == ".") ? "the-dot" : ""} ${
+              (item[0] == defaultItem[row * 3 + col][0]) ? "correct" : ""
+            }`}
             key={`puzzle-item-${item}`}
             style={{
               "--item-row": row,

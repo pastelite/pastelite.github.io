@@ -6,6 +6,7 @@ import { choosing } from "../utils/number";
 import usePositionStore from "../store";
 import PageContainer from "../components/PageContainer";
 import Puzzle from "../components/Puzzle";
+import WaveCanvas from "../components/WaveCanvas";
 
 export function AboutPage() {
   const pageIndex = 0;
@@ -20,7 +21,7 @@ export function AboutPage() {
       className="page-container"
       style={{
         textAlign: "left",
-        backgroundColor: "var(--color-second-background)",
+        // backgroundColor: "var(--color-second-background)",
         minHeight: "100vh",
       }}
       noPaddingTop={breakpoint == 1}
@@ -37,8 +38,13 @@ export function AboutPage() {
             className="mb-4"
           />
           <div className="text-3xl text-white mb-4">
-            Hello! I'm <span className="font-bold">pastelite</span>,<br />{" "}
-            Just a normal guy who like to code!
+            Hello! I'm{" "}
+            <span
+              className="font-bold"
+              style={{ color: "var(--accent-color-1)" }}
+            >
+              pastelite
+            </span>,<br /> Just a normal guy who like to code!
           </div>
           <p>
             I've been coding since I was in highschool and I have been coding
@@ -83,7 +89,20 @@ export function AboutPage() {
           <ul>C</ul>
           <Bar width={.25} />
         </DivWithAnimation>
-        <DivWithAnimation
+        <div className="p-4 rounded-3xl" style={{
+          background: "rgb(from var(--secondary-color) r g b / 0.25)"
+        }}>
+          Framework:
+          <ul>React</ul>
+          <Bar width={.75} />
+          <ul>Pytorch</ul>
+          <Bar width={.5} />
+          <div className="w-20 h-20 relative border border-red-500">
+            <WaveCanvas/>
+          </div>
+        </div>
+        {
+          /* <DivWithAnimation
           scrollYToStartAnimation={pageScrollLocation -
             (window.innerHeight / 2)}
           scrollYToEndAnimation={nextPageScrollLocation -
@@ -91,12 +110,9 @@ export function AboutPage() {
           delaySecond={.2}
           className="relative w-full"
         >
-          Framework:
-          <ul>React</ul>
-          <Bar width={.75} />
-          <ul>Pytorch</ul>
-          <Bar width={.5} />
-        </DivWithAnimation>
+
+        </DivWithAnimation> */
+        }
       </div>
       <p className="my-4">
         But ultimately, everything is learnable with time and programming

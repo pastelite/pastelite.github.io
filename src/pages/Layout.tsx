@@ -6,8 +6,7 @@ import Menu from "./layout/Menu";
 import { motion, useScroll, useTransform } from "motion/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const topBarHeight = 50;
-  const topBarHeightSmall = 100;
+  const topBarHeight = 100;
   const menuBarWidth = 100;
 
   let breakpoint = useBreakpoint([768]);
@@ -17,17 +16,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div
-        className="fixed top-0 right-0 z-20 flex flex-row items-center justify-end pr-4"
+        className="top-bar"
         style={{
-          left: menuBarWidth,
-          height: [topBarHeightSmall, topBarHeightSmall][breakpoint],
-          paddingRight: topBarHeightSmall / 2,
+          height: topBarHeight,
+          paddingRight: topBarHeight / 2,
         }}
       >
         <ContactList />
       </div>
       <Menu menuBarWidth={menuBarWidth} />
-      <div className="content" style={{ left: 0, top: `calc(100vh)` }}>
+      <div className="content" style={{ left: 0, top: `100vh` }}>
         {children}
       </div>
       <BetterName />

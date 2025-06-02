@@ -4,7 +4,7 @@ import EmailIcon from "../../assets/icons/envelope-icon.svg?react";
 
 export default function ContactList() {
   return (
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-row gap-4 pointer-events-auto">
       <div className="min-content">
         <a href="https://github.com/pastelite">
           <GithubIcon className="h-6 w-6" />

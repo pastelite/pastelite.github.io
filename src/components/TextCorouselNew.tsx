@@ -40,7 +40,6 @@ export default function TextCorouselNew({
   const containerRef = useRef<HTMLDivElement>(null);
   const [items, setItems] = useState<TextCorouselItemData[]>([defaultItem]);
 
-  // const offsetRef = useRef(0);
   const offsetMotion = useMotionValue(0);
 
   // there was a flickering issue due to the item removal and offsetMotion setting
