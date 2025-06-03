@@ -27,10 +27,6 @@
   user-select: none;
 }
 
-.puzzle .item.correct {
-  background-color: var(--secondary-color)
-}
-
 .puzzle .item:not(.the-dot) {
   cursor: pointer;
 }
@@ -42,4 +38,11 @@
 .puzzle .item.the-dot {
   background-color: transparent;
   transition: none;
+}
+
+.puzzle .item.correct {
+  background-color: rgb(from var(--accent-color-1) r g b / 80%);
+}
+.puzzle .item.correct:hover {
+  background-color: var(--accent-color-1);
 }

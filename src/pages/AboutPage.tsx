@@ -6,7 +6,9 @@ import { choosing } from "../utils/number";
 import usePositionStore from "../store";
 import PageContainer from "../components/PageContainer";
 import Puzzle from "../components/Puzzle";
-import WaveCanvas from "../components/WaveCanvas";
+import ReverseWaveDiv from "../components/WaveSVG";
+import ToolIcon, { ToolIconList } from "../components/ToolIcon";
+import IconSquare, { IconSquareGenerator } from "../components/IconSquare";
 
 export function AboutPage() {
   const pageIndex = 0;
@@ -89,16 +91,77 @@ export function AboutPage() {
           <ul>C</ul>
           <Bar width={.25} />
         </DivWithAnimation>
-        <div className="p-4 rounded-3xl" style={{
-          background: "rgb(from var(--secondary-color) r g b / 0.25)"
-        }}>
+        <div
+          className="p-4 rounded-3xl"
+          style={{
+            background: "rgb(from var(--secondary-color) r g b / 0.25)",
+          }}
+        >
           Framework:
-          <ul>React</ul>
-          <Bar width={.75} />
-          <ul>Pytorch</ul>
-          <Bar width={.5} />
-          <div className="w-20 h-20 relative border border-red-500">
-            <WaveCanvas/>
+          <div className="flex gap-2 mt-4 ">
+            <IconSquareGenerator
+              toolList={[
+                "typescript",
+                "javascript",
+                "python",
+                "vite",
+                "express",
+                "nodejs",
+                "pytorch",
+                "tailwind",
+                "c",
+                "c#",
+                "rust",
+                "java"
+              ]}
+              showWave
+            />
+
+            {
+              /* <div
+              className="relative w-min h-min hover:scale-120 rounded-lg"
+              style={{
+                height: 64,
+                width: 64,
+              }}
+            >
+              <ReverseWaveDiv className="absolute top-0 left-0 bottom-0 right-0 brightness-75 overflow-hidden pointer-events-none z-10 rounded-md">
+                {ToolIconList({
+                  list: ["react"],
+                  size: 64,
+                  noScaleHover: true,
+                })}
+              </ReverseWaveDiv>
+              <div className="absolute top-0 left-0 bottom-0 right-0">
+                {ToolIconList({
+                  list: ["react"],
+                  size: 64,
+                  noScaleHover: true,
+                })}
+              </div> */
+            }
+            {
+              /* <div className="absolute top-0 left-0 bottom-0 right-0 pointer-events-none blur-lg overflow-hidden">
+                {ToolIconList({
+                  list: ["react"],
+                  size: 64,
+                  noScaleHover: true,
+                })}
+              </div> */
+            }
+            {
+              /* <ReverseWaveDiv
+                className="absolute top-0 left-0 bottom-0 right-0 pointer-events-none blur-lg overflow-hidden"
+                level={0.5}
+              >
+                {ToolIconList({
+                  list: ["react"],
+                  size: 64,
+                  noScaleHover: true,
+                })}
+              </ReverseWaveDiv> */
+            }
+            {/* </div> */}
           </div>
         </div>
         {

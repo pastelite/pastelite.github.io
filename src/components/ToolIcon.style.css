@@ -10,7 +10,7 @@
   transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.tool-icon:hover {
+.tool-icon:not(.no-scale-hover):hover {
   @apply scale-110;
 }
 
