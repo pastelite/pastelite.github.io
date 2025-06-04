@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import AboutIcon from "../../assets/material_icons/person.svg?react";
+import AboutIcon from "@/assets/material_icons/person.svg?react";
 import ContactIcon from "../../assets/material_icons/contact_page.svg?react";
 import WorksIcon from "../../assets/material_icons/work.svg?react";
 import useBreakpoint from "../../hooks/useBreakpoint";
@@ -60,13 +60,13 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
         }]),
       }}
     >
-      <div
+      {/* <div
         className="absolute bottom-0 -right-[1px] w-[1px] bg-white transition-all duration-300"
         style={{
           height: showLine ? "100vh" : "0",
         }}
       >
-      </div>
+      </div> */}
       <MenuItem pageIndex={0} SvgItem={AboutIcon} isExpanded={growMenu} text="About">
         {
           /* <AboutIcon

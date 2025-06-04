@@ -1,0 +1,14 @@
+@use "variables" as *;
+
+$menu-indent:
+  0  0
+  $layout-breakpoint-md 100
+  $layout-breakpoint-lg 224;
+
+.auto-left-padding {
+  @each $breakpoint, $indent in $menu-indent {
+    @media (min-width: $breakpoint) {
+      padding-left: $indent;
+    }
+  }
+}

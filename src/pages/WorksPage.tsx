@@ -42,7 +42,7 @@ export function WorksPage() {
       className="page-container"
       style={{
         textAlign: "left",
-        backgroundColor: "var(--color-third-background)",
+        // backgroundColor: "var(--color-third-background)",
         minHeight: "100vh",
       }}
     >

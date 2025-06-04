@@ -58,7 +58,8 @@ export default function IconSquare(
             className="progress-wave"
             level={waveProgress}
             style={{
-              backgroundColor: "#0008",
+              backgroundColor: "#0005",
+              // background: "linear-gradient(0deg,#0006 0%, #0004 100%)"
             }}
           />
         )}

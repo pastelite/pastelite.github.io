@@ -19,8 +19,8 @@ import SVGBorder from "../components/SVGBorder";
 import "./AboutPage.style.scss";
 import useScrollShown from "../hooks/useScrollShown";
 import TextSVG from "../components/TextSVG";
-import { darken, mix } from "color2k";
-import theme from "../theme";
+import { darken, mix, saturate } from "color2k";
+import theme from "@/styles/theme";
 
 export function AboutPage() {
   const pageIndex = 0;
@@ -88,7 +88,7 @@ export function AboutPage() {
           <Puzzle className="!h-[200px] !w-[200px] lg:!h-[300px] lg:!w-[300px] my-4" />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 relative gap-4 mt-8 max-w-[1024px] m-auto">
+      <div className="about-summary-grid">
         <div
           className={"about-container p-4 rounded-3xl relative" +
             (rendered ? " show" : "")}
@@ -146,23 +146,36 @@ export function AboutPage() {
               level={0.4}
             />
           </div>
+          <p className="my-4">
+            But ultimately, everything is learnable with time and programming
+            knowledge is transferable.
+          </p>
         </div>
-        <div
-          className={"about-container p-4 rounded-3xl relative" +
-            (rendered ? " show" : "")}
-        >
-          <SVGBorder
-            className="drawing-border"
-            borderRadius={24}
-            drawBorder={false}
-          />
-          <div className="text-xl text-center">More info about me?</div>
-        </div>
+        <AboutPageBox className="flex flex-col" rendered={rendered}>
+          <div className="grow text-4xl grid place-content-center text-nowrap">🇹🇭🛕🐘</div>
+          <div className="">
+            I'm from Thailand, somewhere near Bangkok
+          </div>
+        </AboutPageBox>
+        <AboutPageBox className="flex flex-col" rendered={rendered}>
+          <div className="grow text-4xl grid place-content-center text-nowrap">💻🌐🤖</div>
+          <div className="">
+            I think I'm good at full stack and ML
+          </div>
+        </AboutPageBox>
+        <AboutPageBox className="flex flex-col" rendered={rendered}>
+          <div className="grow text-4xl grid place-content-center text-nowrap">🥐🥐🥐</div>
+          <div className="">
+            I love crossant. Is it even possible to not love croissant?
+          </div>
+        </AboutPageBox>
+        <AboutPageBox className="flex flex-col" rendered={rendered}>
+          <div className="grow text-4xl grid place-content-center text-nowrap">{"</>"}⌨️🖱️</div>
+          <div className="">
+            In free time, I code and playing games, especially strategy game
+          </div>
+        </AboutPageBox>
       </div>
-      <p className="my-4">
-        But ultimately, everything is learnable with time and programming
-        knowledge is transferable.
-      </p>
     </PageContainer>
   );
 }
@@ -177,15 +190,36 @@ function AboutPageIconSquare({ toolList, level = 0.5 }: {
       showWave
       waveProgress={level}
       containerStyle={{
-        "--background-color": darken(
-          mix(
-            theme.secondaryColor,
-            theme.accentColor,
-            Math.abs(level - 0.33) * (1 / 0.66),
-          ),
-          0.1,
+        "--background-color": mix(
+          theme.secondaryColor,
+          saturate(darken(theme.accentColor, 0.2), 0.2),
+          Math.abs(level - 0.33) * (1 / 0.66),
         ),
       } as CSSProperties}
     />
+  );
+}
+
+function AboutPageBox(
+  { rendered = false, children, style, className }: {
+    rendered?: boolean;
+    children?: React.ReactNode;
+    style?: CSSProperties;
+    className?: string;
+  },
+) {
+  return (
+    <div
+      className={"about-container p-4 rounded-3xl relative" +
+        (rendered ? " show" : "") + (className ? ` ${className}` : "")}
+      style={style}
+    >
+      <SVGBorder
+        className="drawing-border"
+        borderRadius={24}
+        drawBorder={false}
+      />
+      {children}
+    </div>
   );
 }
