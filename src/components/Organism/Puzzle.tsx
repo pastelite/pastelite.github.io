@@ -1,6 +1,6 @@
 import { type CSSProperties, useEffect, useState } from "react";
-import "./Puzzle.style.css";
-import { shuffleArray } from "../utils/random";
+import "../Organism/Puzzle.style.css";
+import { shuffleArray } from "../../utils/random";
 
 function findItemIn2DArray(array: string[][], item: string) {
   for (let i = 0; i < array.length; i++) {

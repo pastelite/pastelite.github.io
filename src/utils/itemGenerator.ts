@@ -2,7 +2,7 @@ import type { HTMLAttributes } from "react";
 import type {
   ItemGenerator,
   TextCorouselItemData,
-} from "../components/TextCorouselNew";
+} from "../components/Organism/TextCorouselNew";
 import { randomBetween, randomElement, shuffleArray } from "./random";
 
 const helloLanguages = [

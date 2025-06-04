@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import "./TextCorouselNew.css"; // Make sure this CSS file exists
-import CustomTextCorouselItemGenerator from "../utils/itemGenerator"; // Adjust path if needed
-import { useAnimationTicker } from "../hooks/useAnimationTicker"; // Adjust path if needed
+import "../Organism/TextCorouselNew.css"; // Make sure this CSS file exists
+import CustomTextCorouselItemGenerator from "../../utils/itemGenerator"; // Adjust path if needed
+import { useAnimationTicker } from "../../hooks/useAnimationTicker"; // Adjust path if needed
 import { motion, useMotionValue } from "motion/react";
 
 export interface ItemGenerator {

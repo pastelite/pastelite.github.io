@@ -1,12 +1,12 @@
-import ScrollPositionTracker from "@/components/Layouts/ScrollPositionTracker";
+import ScrollPositionTracker from "@/components/UI/ScrollPositionTracker";
 import useShownWhenOnScreen from "@/hooks/useShownWhenOnScreen";
 import theme from "@/styles/theme";
 import { darken, mix, saturate } from "color2k";
 import { type CSSProperties } from "react";
-import { IconSquareGenerator } from "@/components/IconSquare";
-import Puzzle from "@/components/Puzzle";
-import SVGBorder from "@/components/SVGBorder";
-import TextSVG from "@/components/TextSVG";
+import { IconSquareGenerator } from "@/components/UI/IconSquare";
+import Puzzle from "@/components/Organism/Puzzle";
+import SVGBorder from "@/components/Atoms/SVGBorder";
+import TextSVG from "@/components/Atoms/TextSVG";
 import "./AboutPage.style.scss";
 
 export function AboutPage() {

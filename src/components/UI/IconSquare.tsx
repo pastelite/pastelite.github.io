@@ -1,5 +1,5 @@
-import ReverseWaveDiv from "./WaveSVG";
-import TypeScriptLogo from "../assets/logo/TypescriptNoBorder.svg?react";
+import ReverseWaveDiv from "@/components/Atoms/WaveSVG";
+import TypeScriptLogo from "../../assets/logo/TypescriptNoBorder.svg?react";
 import "./IconSquare.style.scss";
 import type { ReactNode } from "react";
 
@@ -68,20 +68,20 @@ export default function IconSquare(
   );
 }
 
-import ReactLogo from "../assets/logo/devicon/react-original.svg?react";
-import PythonLogo from "../assets/logo/python.svg?react";
-import JavaScriptLogo from "../assets/logo/js.svg?react";
-import ViteLogo from "../assets/logo/ViteBlack.svg?react";
-import TailwindLogo from "../assets/logo/Tailwind.svg?react";
-import PytorchLogo from "../assets/logo/pytorch.svg?react";
-import NodeJSLogo from "../assets/logo/node.svg?react";
-import ExpressLogo from "../assets/logo/express.svg?react";
-import CLogo from "../assets/logo/c_bw.svg?react";
-import CPPLogo from "../assets/logo/c++.svg?react";
-import CSharpLogo from "../assets/logo/c_sharp.svg?react";
-import RustLogo from "../assets/logo/rust.svg?react";
-import JavaLogo from "../assets/logo/java.svg?react";
-import CSSLogo from "../assets/logo/devicon/css3-plain.svg?react";
+import ReactLogo from "../../assets/logo/devicon/react-original.svg?react";
+import PythonLogo from "../../assets/logo/python.svg?react";
+import JavaScriptLogo from "../../assets/logo/js.svg?react";
+import ViteLogo from "../../assets/logo/ViteBlack.svg?react";
+import TailwindLogo from "../../assets/logo/Tailwind.svg?react";
+import PytorchLogo from "../../assets/logo/pytorch.svg?react";
+import NodeJSLogo from "../../assets/logo/node.svg?react";
+import ExpressLogo from "../../assets/logo/express.svg?react";
+import CLogo from "../../assets/logo/c_bw.svg?react";
+import CPPLogo from "../../assets/logo/c++.svg?react";
+import CSharpLogo from "../../assets/logo/c_sharp.svg?react";
+import RustLogo from "../../assets/logo/rust.svg?react";
+import JavaLogo from "../../assets/logo/java.svg?react";
+import CSSLogo from "../../assets/logo/devicon/css3-plain.svg?react";
 
 interface IconSquareGeneratorProps extends IconSquareProps {
   toolList: string[];

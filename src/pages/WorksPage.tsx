@@ -1,17 +1,16 @@
-import TextHeader from "../components/TextHeader";
-import DivWithAnimation from "../components/DivWithAnimation";
-import usePositionStore from "../store";
-import PageContainer from "../components/PageContainer";
 import { type ReactNode, useEffect, useState } from "react";
-import useBreakpoint from "../hooks/useBreakpoint";
 import TopRightIcon from "../assets/icons/arrow-top-right.svg?react";
+import TextHeader from "../components/UI/TextHeader";
+import useBreakpoint from "../hooks/useBreakpoint";
+import usePositionStore from "../store";
 
-import OldWebsiteImage from "../assets/previousWork/old_website.png";
-import GameAiImage from "../assets/previousWork/game_ai.png";
-import PastelbinImage from "../assets/previousWork/pastelbin.png";
+import ScrollPositionTracker from "@/components/UI/ScrollPositionTracker";
 import BrainTrainerImage from "../assets/previousWork/brain_trainer.png";
+import GameAiImage from "../assets/previousWork/game_ai.png";
+import OldWebsiteImage from "../assets/previousWork/old_website.png";
+import PastelbinImage from "../assets/previousWork/pastelbin.png";
 import ZilentBotImage from "../assets/previousWork/zilentbot.png";
-import ToolIcon, { ToolIconList } from "../components/ToolIcon";
+import { ToolIconList } from "../components/Outdated/ToolIcon";
 import { choosing } from "../utils/number";
 
 function devideArrayByColumn<T>(array: T[], col: number): T[][] {
@@ -37,15 +36,9 @@ export function WorksPage() {
   let breakpoint = useBreakpoint([768, 1024]);
 
   return (
-    <PageContainer
-      pageIndex={pageIndex}
-      className="page-container"
-      style={{
-        textAlign: "left",
-        // backgroundColor: "var(--color-third-background)",
-        minHeight: "100vh",
-      }}
-    >
+    <ScrollPositionTracker className="auto-left-padding auto-top-padding mb-8" page={1} style={{
+      minHeight: "100vh"
+    }}>
       <TextHeader
         text="Project"
         scrollYToStartAnimation={pageScrollLocation -
@@ -145,7 +138,7 @@ export function WorksPage() {
           This Website! <br />(Because of course it is)
         </div>
       </GrowingGrid>
-    </PageContainer>
+    </ScrollPositionTracker>
   );
 }
 

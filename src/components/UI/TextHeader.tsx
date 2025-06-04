@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TextSVG from "./TextSVG";
+import TextSVG from "../Atoms/TextSVG";
 import { useMotionValueEvent, useScroll } from "motion/react";
 
 interface TextHeaderProps

@@ -1,4 +1,4 @@
-import CheckIcon from "../assets/material_icons/assignment_turned_in.svg?react";
+import CheckIcon from "@/assets/material_icons/assignment_turned_in.svg?react";
 import { type CSSProperties, useState } from "react";
 import "./ContactListItem.style.css";
 

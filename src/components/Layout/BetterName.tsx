@@ -1,10 +1,10 @@
-import TextSVG from "./TextSVG";
-import "./BetterName.style.css";
+import TextSVG from "../Atoms/TextSVG";
+import "../Layout/BetterName.style.css";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 // Removed framer-motion imports: motion, useMotionValue, useMotionValueEvent, useScroll, useTransform, animate
-import TextCorouselBackgroundNew from "./TextCorouselBackgroundNew";
-import useBreakpoint from "../hooks/useBreakpoint";
-import { choosing } from "../utils/number";
+import TextCorouselBackgroundNew from "../Organism/TextCorouselBackgroundNew";
+import useBreakpoint from "../../hooks/useBreakpoint";
+import { choosing } from "../../utils/number";
 import {
   motion,
   useMotionValue,
@@ -19,8 +19,7 @@ export default function BetterName() {
   let backgroundHeightMv = useMotionValue(window.innerHeight);
   let backgroundWidthMv = useMotionValue(window.innerWidth);
   let [isCollapsed, setIsCollapsed] = useState(false);
-  let [isAnimation, setIsAnimation] = useState(true); // Controls CSS transition duration
-  let timeoutRef = useRef<number | null>(null);
+  let timeoutRef = useRef<NodeJS.Timeout>(null);
   let [pRatio, setPRatio] = useState(0);
   let [drawingAnimation, setDrawingAnimation] = useState(false);
 
@@ -60,7 +59,7 @@ export default function BetterName() {
     // continue animation if there is animation
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-      timeoutRef.current = window.setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         timeoutRef.current = null;
       }, 300);
       animate(backgroundHeightMv, newBackgroundHeight, {

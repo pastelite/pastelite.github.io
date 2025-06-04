@@ -1,19 +1,17 @@
-import TextHeader from "../components/TextHeader";
-import DivWithAnimation from "../components/DivWithAnimation";
-import usePositionStore from "../store";
-import PageContainer from "../components/PageContainer";
-import GitHubIcon from "../assets/logo/github-icon.svg?react";
+import ScrollPositionTracker from "@/components/UI/ScrollPositionTracker";
 import EmailIcon from "../assets/icons/envelope-icon.svg?react";
-import DiscordIcon from "../assets/logo/discord.svg?react";
-import ContactListItem from "../components/ContactListItem";
-import OsuIcon from "../assets/logo/osu.svg?react";
-import RedditIcon from "../assets/logo/reddit.svg?react";
-import BlueskyIcon from "../assets/logo/bluesky.svg?react";
-import SteamIcon from "../assets/logo/steam.svg?react";
 import WikipediaIcon from "../assets/icons/wikipedia-icon.svg?react";
 import WiktionaryIcon from "../assets/logo/Wiktionary_small_optimized.svg?react";
-import HuggingfaceIcon from "../assets/logo/hf-logo-pirate-black-white.svg?react"
-import ParticleBG from "../components/ParticlesBG";
+import BlueskyIcon from "../assets/logo/bluesky.svg?react";
+import DiscordIcon from "../assets/logo/discord.svg?react";
+import GitHubIcon from "../assets/logo/github-icon.svg?react";
+import HuggingfaceIcon from "../assets/logo/hf-logo-pirate-black-white.svg?react";
+import OsuIcon from "../assets/logo/osu.svg?react";
+import RedditIcon from "../assets/logo/reddit.svg?react";
+import SteamIcon from "../assets/logo/steam.svg?react";
+import ContactListItem from "../components/UI/ContactListItem";
+import TextHeader from "../components/UI/TextHeader";
+import usePositionStore from "../store";
 // import ContactListItem
 
 export function ContactPage() {
@@ -23,15 +21,9 @@ export function ContactPage() {
   );
 
   return (
-    <PageContainer
-      pageIndex={pageIndex}
-      className="page-container"
-      style={{
-        textAlign: "left",
-        backgroundColor: "var(--color-fourth-background)", // change in color.css
-        minHeight: "100vh",
-      }}
-    >
+    <ScrollPositionTracker className="auto-left-padding auto-top-padding" page={pageIndex} style={{
+      minHeight: "100vh"
+    }}>
       <TextHeader
         text="Link"
         scrollYToStartAnimation={pageScrollLocation -
@@ -127,6 +119,6 @@ export function ContactPage() {
         </div>
       </div>
       {/* <ParticleBG/> */}
-    </PageContainer>
+    </ScrollPositionTracker>
   );
 }

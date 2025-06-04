@@ -16,3 +16,12 @@ $edge-padding: 16px;
     }
   }
 }
+
+.auto-top-padding {
+  // need more padding for mobile
+  padding-top: 50px;
+
+  @media (min-width: $layout-breakpoint-md) {
+    padding-top: 32px;
+  }
+}

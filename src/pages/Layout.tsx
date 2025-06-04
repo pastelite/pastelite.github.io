@@ -1,15 +1,14 @@
-import "./Layout.style.css";
-import BetterName from "../components/BetterName";
+import "../components/Layout/Layout.style.css";
+import BetterName from "../components/Layout/BetterName";
 import useBreakpoint from "../hooks/useBreakpoint";
-import ContactList from "./layout/ContactList";
-import Menu from "./layout/Menu";
+import ContactList from "../components/Layout/ContactList";
+import Menu from "../components/Layout/Menu";
 import { motion, useScroll, useTransform } from "motion/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const topBarHeight = 100;
   const menuBarWidth = 100;
 
-  let breakpoint = useBreakpoint([768]);
   let {scrollY} = useScroll()
   let backgroundColor = useTransform(scrollY, [0, window.innerHeight], ["rgb(11,11,11)", "rgb(30, 35, 40)"])
 

@@ -1,13 +1,13 @@
 import "./ToolIcon.style.css";
-import ReactLogo from "../assets/logo/React.svg?react";
-import PythonLogo from "../assets/logo/python.svg?react";
-import TypeScriptLogo from "../assets/logo/TypescriptNoBorder.svg?react";
-import JavaScriptLogo from "../assets/logo/js.svg?react";
-import ViteLogo from "../assets/logo/ViteBlack.svg?react";
-import TailwindLogo from "../assets/logo/Tailwind.svg?react";
-import PytorchLogo from "../assets/logo/pytorch.svg?react";
-import NodeJSLogo from "../assets/logo/node.svg?react";
-import ExpressLogo from "../assets/logo/express.svg?react";
+import ReactLogo from "@/assets/logo/React.svg?react";
+import PythonLogo from "@/assets/logo/python.svg?react";
+import TypeScriptLogo from "@/assets/logo/TypescriptNoBorder.svg?react";
+import JavaScriptLogo from "@/assets/logo/js.svg?react";
+import ViteLogo from "@/assets/logo/ViteBlack.svg?react";
+import TailwindLogo from "@/assets/logo/Tailwind.svg?react";
+import PytorchLogo from "@/assets/logo/pytorch.svg?react";
+import NodeJSLogo from "@/assets/logo/node.svg?react";
+import ExpressLogo from "@/assets/logo/express.svg?react";
 
 interface ToolIconProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;

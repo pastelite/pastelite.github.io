@@ -1,6 +1,6 @@
 import { use, useEffect, useLayoutEffect, useRef, useState } from "react";
-import CustomTextCorouselItemGenerator from "../utils/itemGenerator";
-import type { TextCorouselItemData } from "./TextCorouselNew";
+import CustomTextCorouselItemGenerator from "../../utils/itemGenerator";
+import type { TextCorouselItemData } from "../Organism/TextCorouselNew";
 
 export default function TextCorouselBackgroundCanvas() {
   let canvasRef = useRef<HTMLCanvasElement>(null);
