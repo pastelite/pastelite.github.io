@@ -1,20 +1,33 @@
-import { Children, useLayoutEffect, useRef, useState } from "react";
+import {
+  Children,
+  type CSSProperties,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import TextHeader from "../components/TextHeader";
 import DivWithAnimation from "../components/DivWithAnimation";
 import useBreakpoint from "../hooks/useBreakpoint";
-import { choosing } from "../utils/number";
+import { choosing, mappingNumber } from "../utils/number";
 import usePositionStore from "../store";
 import PageContainer from "../components/PageContainer";
 import Puzzle from "../components/Puzzle";
 import ReverseWaveDiv from "../components/WaveSVG";
 import ToolIcon, { ToolIconList } from "../components/ToolIcon";
 import IconSquare, { IconSquareGenerator } from "../components/IconSquare";
+import SVGBorder from "../components/SVGBorder";
+import "./AboutPage.style.scss";
+import useScrollShown from "../hooks/useScrollShown";
+import TextSVG from "../components/TextSVG";
+import { darken, mix } from "color2k";
+import theme from "../theme";
 
 export function AboutPage() {
   const pageIndex = 0;
   const pageLocation = usePositionStore((state) => state.position);
   const pageScrollLocation = pageLocation[pageIndex];
   const nextPageScrollLocation = pageLocation[pageIndex + 1];
+  const rendered = useScrollShown(0);
   const breakpoint = useBreakpoint([768]);
 
   return (
@@ -30,7 +43,8 @@ export function AboutPage() {
     >
       <div className="flex flex-col md:flex-row items-center justify-between min-h-[75vh]">
         <div className="left-side w-full md:max-w-[600px] flex flex-col gap-2">
-          <TextHeader
+          {
+            /* <TextHeader
             text="About"
             scrollYToStartAnimation={pageScrollLocation -
               (window.innerHeight / 2)}
@@ -38,7 +52,16 @@ export function AboutPage() {
               (window.innerHeight / 2)}
             drawingTimeSec={0.3}
             className="mb-4"
-          />
+          /> */
+          }
+          <div className={`text-header mb-4`}>
+            <TextSVG
+              drawedText={rendered}
+              text={"About"}
+              fontSize={100}
+              drawingTimeSec={0.3}
+            />
+          </div>
           <div className="text-3xl text-white mb-4">
             Hello! I'm{" "}
             <span
@@ -65,117 +88,76 @@ export function AboutPage() {
           <Puzzle className="!h-[200px] !w-[200px] lg:!h-[300px] lg:!w-[300px] my-4" />
         </div>
       </div>
-      <div className="text-5xl mt-8">
-        How would I rate myself?
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 relative gap-4 mt-8">
-        <DivWithAnimation
-          scrollYToStartAnimation={pageScrollLocation -
-            (window.innerHeight / 2)}
-          scrollYToEndAnimation={nextPageScrollLocation -
-            (window.innerHeight * (1 / 4))}
-          delaySecond={.2}
-          className="relative w-full"
-        >
-          Language:
-          <ul>Javascript/Typescript</ul>
-          <Bar width={.75} />
-          <ul>Python</ul>
-          <Bar width={.75} />
-          <ul>C#</ul>
-          <Bar width={.5} />
-          <ul>Java</ul>
-          <Bar width={.5} />
-          <ul>Rust</ul>
-          <Bar width={.25} />
-          <ul>C</ul>
-          <Bar width={.25} />
-        </DivWithAnimation>
+      <div className="grid grid-cols-1 md:grid-cols-2 relative gap-4 mt-8 max-w-[1024px] m-auto">
         <div
-          className="p-4 rounded-3xl"
-          style={{
-            background: "rgb(from var(--secondary-color) r g b / 0.25)",
-          }}
+          className={"about-container p-4 rounded-3xl relative" +
+            (rendered ? " show" : "")}
         >
-          Framework:
-          <div className="flex gap-2 mt-4 ">
-            <IconSquareGenerator
-              toolList={[
-                "typescript",
-                "javascript",
-                "python",
-                "vite",
-                "express",
-                "nodejs",
-                "pytorch",
-                "tailwind",
-                "c",
-                "c#",
-                "rust",
-                "java"
-              ]}
-              showWave
+          <SVGBorder
+            className="drawing-border"
+            borderRadius={24}
+            drawBorder={false}
+          />
+          <div className="text-xl text-center">How would I rate my skill?</div>
+          <div className="text-center">Higher = Better</div>
+          <div className="text-lg mt-4" style={{ lineHeight: 0.8 }}>
+            Programming Languages <span className="text-sm">(+CSS)</span>
+          </div>
+          <div className="flex gap-2 mt-4 flex-wrap logo-container-color-mix">
+            <AboutPageIconSquare
+              toolList={["typescript", "javascript"]}
+              level={0.9}
             />
-
-            {
-              /* <div
-              className="relative w-min h-min hover:scale-120 rounded-lg"
-              style={{
-                height: 64,
-                width: 64,
-              }}
-            >
-              <ReverseWaveDiv className="absolute top-0 left-0 bottom-0 right-0 brightness-75 overflow-hidden pointer-events-none z-10 rounded-md">
-                {ToolIconList({
-                  list: ["react"],
-                  size: 64,
-                  noScaleHover: true,
-                })}
-              </ReverseWaveDiv>
-              <div className="absolute top-0 left-0 bottom-0 right-0">
-                {ToolIconList({
-                  list: ["react"],
-                  size: 64,
-                  noScaleHover: true,
-                })}
-              </div> */
-            }
-            {
-              /* <div className="absolute top-0 left-0 bottom-0 right-0 pointer-events-none blur-lg overflow-hidden">
-                {ToolIconList({
-                  list: ["react"],
-                  size: 64,
-                  noScaleHover: true,
-                })}
-              </div> */
-            }
-            {
-              /* <ReverseWaveDiv
-                className="absolute top-0 left-0 bottom-0 right-0 pointer-events-none blur-lg overflow-hidden"
-                level={0.5}
-              >
-                {ToolIconList({
-                  list: ["react"],
-                  size: 64,
-                  noScaleHover: true,
-                })}
-              </ReverseWaveDiv> */
-            }
-            {/* </div> */}
+            <AboutPageIconSquare
+              toolList={["python"]}
+              level={0.9}
+            />
+            <AboutPageIconSquare
+              toolList={["c#", "java"]}
+              level={0.6}
+            />
+            <AboutPageIconSquare
+              toolList={["css"]}
+              level={0.5}
+            />
+            <AboutPageIconSquare
+              toolList={["rust", "c"]}
+              level={0.4}
+            />
+          </div>
+          <div className="text-lg mt-4" style={{ lineHeight: 0.8 }}>
+            Framework
+          </div>
+          <div className="flex gap-2 mt-4 flex-wrap logo-container-color-mix">
+            <AboutPageIconSquare
+              toolList={["react"]}
+              level={0.8}
+            />
+            <AboutPageIconSquare
+              toolList={["tailwind"]}
+              level={0.6}
+            />
+            <AboutPageIconSquare
+              toolList={["nodejs", "express"]}
+              level={0.4}
+            />
+            <AboutPageIconSquare
+              toolList={["pytorch"]}
+              level={0.4}
+            />
           </div>
         </div>
-        {
-          /* <DivWithAnimation
-          scrollYToStartAnimation={pageScrollLocation -
-            (window.innerHeight / 2)}
-          scrollYToEndAnimation={nextPageScrollLocation -
-            (window.innerHeight * (1 / 4))}
-          delaySecond={.2}
-          className="relative w-full"
+        <div
+          className={"about-container p-4 rounded-3xl relative" +
+            (rendered ? " show" : "")}
         >
-
-        </DivWithAnimation> */
-        }
+          <SVGBorder
+            className="drawing-border"
+            borderRadius={24}
+            drawBorder={false}
+          />
+          <div className="text-xl text-center">More info about me?</div>
+        </div>
       </div>
       <p className="my-4">
         But ultimately, everything is learnable with time and programming
@@ -185,16 +167,25 @@ export function AboutPage() {
   );
 }
 
-function Bar({ width }: { width: number }) {
+function AboutPageIconSquare({ toolList, level = 0.5 }: {
+  toolList: string[];
+  level: number;
+}) {
   return (
-    <div className="bar w-full h-2 bg-black/50 rounded-full relative overflow-hidden">
-      <div
-        className="absolute top-0 left-0 h-2 bg-green-500 rounded-full"
-        style={{
-          width: `${width * 100}%`,
-        }}
-      >
-      </div>
-    </div>
+    <IconSquareGenerator
+      toolList={toolList}
+      showWave
+      waveProgress={level}
+      containerStyle={{
+        "--background-color": darken(
+          mix(
+            theme.secondaryColor,
+            theme.accentColor,
+            Math.abs(level - 0.33) * (1 / 0.66),
+          ),
+          0.1,
+        ),
+      } as CSSProperties}
+    />
   );
 }

@@ -1,0 +1,43 @@
+@use "@/theme" as *;
+@use "sass:color";
+
+.about-container {
+  $border-color: color.mix(white, $secondary-color, 33%);
+  background: rgba($secondary-color, 0.1);
+  box-shadow: none;
+  transition: box-shadow 0.5s ease-out, opacity 0.3s ease-out 0.1s,
+    transform 0.5s $ease-out-back;
+
+  // svg border
+  svg.drawing-border {
+    stroke: $border-color;
+    transition: stroke-dashoffset 500ms ease-out;
+    pointer-events: none;
+  }
+
+  @include hidingBeforeShow;
+
+  &.show {
+    box-shadow: 0 0 5px rgba($border-color, 0.33);
+    transition: box-shadow 0.5s ease-out, opacity 0.3s ease-out,
+      transform 0.5s $ease-out-back !important;
+
+    svg.drawing-border {
+      stroke-dashoffset: 0 !important;
+    }
+  }
+}
+
+.logo-container-color-mix {
+  .description {
+    background-color: var(--background-color, red) !important;
+    color: white !important;
+  }
+  .logo-container {
+    background-color: var(--background-color, red) !important;
+
+    .icon {
+      fill: white !important;
+    }
+  }
+}

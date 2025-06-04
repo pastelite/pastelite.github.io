@@ -11,6 +11,8 @@ interface IconSquareProps {
   waveProgress?: number;
   size?: number;
   textColor?: string;
+  containerClassName?: string;
+  containerStyle?: React.CSSProperties;
 }
 
 export default function IconSquare(
@@ -22,10 +24,16 @@ export default function IconSquare(
     waveProgress = 0.5,
     size = 64,
     textColor = "white",
+    containerClassName,
+    containerStyle,
   }: IconSquareProps,
 ) {
   return (
-    <div className="icon-square-container">
+    <div
+      className={"icon-square-container" +
+        (containerClassName ? ` ${containerClassName}` : "")}
+      style={containerStyle}
+    >
       <div
         className="description"
         style={{
@@ -59,7 +67,7 @@ export default function IconSquare(
   );
 }
 
-import ReactLogo from "../assets/logo/React.svg?react";
+import ReactLogo from "../assets/logo/devicon/react-original.svg?react";
 import PythonLogo from "../assets/logo/python.svg?react";
 import JavaScriptLogo from "../assets/logo/js.svg?react";
 import ViteLogo from "../assets/logo/ViteBlack.svg?react";
@@ -72,6 +80,7 @@ import CPPLogo from "../assets/logo/c++.svg?react";
 import CSharpLogo from "../assets/logo/c_sharp.svg?react";
 import RustLogo from "../assets/logo/rust.svg?react";
 import JavaLogo from "../assets/logo/java.svg?react";
+import CSSLogo from "../assets/logo/devicon/css3-plain.svg?react";
 
 interface IconSquareGeneratorProps extends IconSquareProps {
   toolList: string[];
@@ -154,6 +163,15 @@ export function IconSquareGenerator(
           {...props}
         >
           <RustLogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
+      {toolList.includes("css") && (
+        <IconSquare
+          backgroundColor="#264de4"
+          description="CSS"
+          {...props}
+        >
+          <CSSLogo className="icon p-1" fill="white" />
         </IconSquare>
       )}
       {toolList.includes("pytorch") && (

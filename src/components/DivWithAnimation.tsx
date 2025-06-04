@@ -30,7 +30,7 @@ export default function DivWithAnimation(
 ) {
   const [inRange, setInRange] = useState(false);
   const { scrollY } = useScroll();
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout>(null);
   const elementRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
