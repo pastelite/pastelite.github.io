@@ -117,7 +117,6 @@ function MenuItem(
   let selectionDelayTimeout = useRef<number | null>(null);
 
   useMotionValueEvent(scrollY, "change", (scrollY) => {
-    console.log(scrollToLocation);
     let nextScroll = (scrollToLocation.length > pageIndex + 1)
       ? scrollToLocation[pageIndex + 1] - (window.innerHeight / 2) + 1
       : Math.max(
@@ -130,12 +129,12 @@ function MenuItem(
     let currentScroll = (scrollToLocation.length > pageIndex)
       ? scrollToLocation[pageIndex]
       : 0;
-    console.log(
-      pageIndex,
-      scrollY,
-      currentScroll - window.innerHeight / 2,
-      nextScroll,
-    );
+    // console.log(
+    //   pageIndex,
+    //   scrollY,
+    //   currentScroll - window.innerHeight / 2,
+    //   nextScroll,
+    // );
     if (
       scrollY >= (currentScroll - window.innerHeight / 2) &&
       scrollY <= nextScroll

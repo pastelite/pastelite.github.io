@@ -1,8 +1,5 @@
-// @use "@/theme" as *;
-// @use "@/styles/main.scss" as *;
 @use "@/styles/variables" as *;
 @use "@/styles/utils_mixin" as *;
-// @use "@/styles/variables" as *;
 @use "sass:color";
 
 .about-container {
@@ -54,8 +51,7 @@
   grid-template-columns: 1fr 1fr; /* Default for mobile/small screens */
   grid-template-rows: 2fr 1fr 1fr;
   gap: 16px;
-  margin-top: 32px;
-  max-width: 1024px;
+  max-width: $layout-breakpoint-xl;
   margin: 0 auto;
 
   .about-container:first-child {

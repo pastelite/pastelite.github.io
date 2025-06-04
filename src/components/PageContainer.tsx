@@ -50,10 +50,10 @@ export default function PageContainer(
       ref={pageRef}
       className={`page-container ${className}`}
       style={{
-        paddingLeft: choosing(breakpoint, [20, 120, 244]),
-        paddingRight: 20,
-        paddingTop: noPaddingTop ? 0 : choosing(breakpoint, [50, 50]),
-        paddingBottom: 20,
+        // paddingLeft: choosing(breakpoint, [20, 120, 244]),
+        // paddingRight: 20,
+        // paddingTop: noPaddingTop ? 0 : choosing(breakpoint, [50, 50]),
+        // paddingBottom: 20,
         boxSizing: "border-box",
         ...style,
       }}

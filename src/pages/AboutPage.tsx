@@ -1,69 +1,31 @@
-import {
-  Children,
-  type CSSProperties,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import TextHeader from "../components/TextHeader";
-import DivWithAnimation from "../components/DivWithAnimation";
-import useBreakpoint from "../hooks/useBreakpoint";
-import { choosing, mappingNumber } from "../utils/number";
-import usePositionStore from "../store";
-import PageContainer from "../components/PageContainer";
-import Puzzle from "../components/Puzzle";
-import ReverseWaveDiv from "../components/WaveSVG";
-import ToolIcon, { ToolIconList } from "../components/ToolIcon";
-import IconSquare, { IconSquareGenerator } from "../components/IconSquare";
-import SVGBorder from "../components/SVGBorder";
-import "./AboutPage.style.scss";
-import useScrollShown from "../hooks/useScrollShown";
-import TextSVG from "../components/TextSVG";
-import { darken, mix, saturate } from "color2k";
+import ScrollPositionTracker from "@/components/Layouts/ScrollPositionTracker";
+import useShownWhenOnScreen from "@/hooks/useShownWhenOnScreen";
 import theme from "@/styles/theme";
+import { darken, mix, saturate } from "color2k";
+import { type CSSProperties } from "react";
+import { IconSquareGenerator } from "@/components/IconSquare";
+import Puzzle from "@/components/Puzzle";
+import SVGBorder from "@/components/SVGBorder";
+import TextSVG from "@/components/TextSVG";
+import "./AboutPage.style.scss";
 
 export function AboutPage() {
-  const pageIndex = 0;
-  const pageLocation = usePositionStore((state) => state.position);
-  const pageScrollLocation = pageLocation[pageIndex];
-  const nextPageScrollLocation = pageLocation[pageIndex + 1];
-  const rendered = useScrollShown(0);
-  const breakpoint = useBreakpoint([768]);
+  const [textRef, isShowText] = useShownWhenOnScreen<HTMLDivElement>();
 
   return (
-    <PageContainer
-      pageIndex={pageIndex}
-      className="page-container"
-      style={{
-        textAlign: "left",
-        // backgroundColor: "var(--color-second-background)",
-        minHeight: "100vh",
-      }}
-      noPaddingTop={breakpoint == 1}
-    >
-      <div className="flex flex-col md:flex-row items-center justify-between min-h-[75vh]">
+    <ScrollPositionTracker page={0}>
+      <div className="auto-left-padding text-left flex flex-col md:flex-row items-center justify-between min-h-[75vh] py-4">
         <div className="left-side w-full md:max-w-[600px] flex flex-col gap-2">
-          {
-            /* <TextHeader
-            text="About"
-            scrollYToStartAnimation={pageScrollLocation -
-              (window.innerHeight / 2)}
-            scrollYToEndAnimation={pageScrollLocation +
-              (window.innerHeight / 2)}
-            drawingTimeSec={0.3}
-            className="mb-4"
-          /> */
-          }
-          <div className={`text-header mb-4`}>
+          <div className={`mb-4`} ref={textRef}>
             <TextSVG
-              drawedText={rendered}
+              drawedText={isShowText}
               text={"About"}
               fontSize={100}
               drawingTimeSec={0.3}
             />
           </div>
           <div className="text-3xl text-white mb-4">
-            Hello! I'm{" "}
+            Hello! I'm{"  "}
             <span
               className="font-bold"
               style={{ color: "var(--accent-color-1)" }}
@@ -88,95 +50,104 @@ export function AboutPage() {
           <Puzzle className="!h-[200px] !w-[200px] lg:!h-[300px] lg:!w-[300px] my-4" />
         </div>
       </div>
-      <div className="about-summary-grid">
-        <div
-          className={"about-container p-4 rounded-3xl relative" +
-            (rendered ? " show" : "")}
-        >
-          <SVGBorder
-            className="drawing-border"
-            borderRadius={24}
-            drawBorder={false}
-          />
-          <div className="text-xl text-center">How would I rate my skill?</div>
-          <div className="text-center">Higher = Better</div>
-          <div className="text-lg mt-4" style={{ lineHeight: 0.8 }}>
-            Programming Languages <span className="text-sm">(+CSS)</span>
-          </div>
-          <div className="flex gap-2 mt-4 flex-wrap logo-container-color-mix">
-            <AboutPageIconSquare
-              toolList={["typescript", "javascript"]}
-              level={0.9}
+      <div className="about-summary-grid-container bg-[#0003] py-8">
+        <div className="auto-left-padding about-summary-grid">
+          <AboutPageBox style={{ zIndex: 1 }}>
+            <SVGBorder
+              className="drawing-border"
+              borderRadius={24}
+              drawBorder={false}
             />
-            <AboutPageIconSquare
-              toolList={["python"]}
-              level={0.9}
-            />
-            <AboutPageIconSquare
-              toolList={["c#", "java"]}
-              level={0.6}
-            />
-            <AboutPageIconSquare
-              toolList={["css"]}
-              level={0.5}
-            />
-            <AboutPageIconSquare
-              toolList={["rust", "c"]}
-              level={0.4}
-            />
-          </div>
-          <div className="text-lg mt-4" style={{ lineHeight: 0.8 }}>
-            Framework
-          </div>
-          <div className="flex gap-2 mt-4 flex-wrap logo-container-color-mix">
-            <AboutPageIconSquare
-              toolList={["react"]}
-              level={0.8}
-            />
-            <AboutPageIconSquare
-              toolList={["tailwind"]}
-              level={0.6}
-            />
-            <AboutPageIconSquare
-              toolList={["nodejs", "express"]}
-              level={0.4}
-            />
-            <AboutPageIconSquare
-              toolList={["pytorch"]}
-              level={0.4}
-            />
-          </div>
-          <p className="my-4">
-            But ultimately, everything is learnable with time and programming
-            knowledge is transferable.
-          </p>
+            <div className="text-xl text-center">
+              How would I rate my skill?
+            </div>
+            <div className="text-center">Higher = Better</div>
+            <div className="text-lg mt-4" style={{ lineHeight: 0.8 }}>
+              Programming Languages <span className="text-sm">(+CSS)</span>
+            </div>
+            <div className="flex gap-2 mt-4 flex-wrap logo-container-color-mix">
+              <AboutPageIconSquare
+                toolList={["typescript", "javascript"]}
+                level={0.9}
+              />
+              <AboutPageIconSquare
+                toolList={["python"]}
+                level={0.9}
+              />
+              <AboutPageIconSquare
+                toolList={["c#", "java"]}
+                level={0.6}
+              />
+              <AboutPageIconSquare
+                toolList={["css"]}
+                level={0.5}
+              />
+              <AboutPageIconSquare
+                toolList={["rust", "c"]}
+                level={0.4}
+              />
+            </div>
+            <div className="text-lg mt-4" style={{ lineHeight: 0.8 }}>
+              Framework
+            </div>
+            <div className="flex gap-2 mt-4 flex-wrap logo-container-color-mix">
+              <AboutPageIconSquare
+                toolList={["react"]}
+                level={0.8}
+              />
+              <AboutPageIconSquare
+                toolList={["tailwind"]}
+                level={0.6}
+              />
+              <AboutPageIconSquare
+                toolList={["nodejs", "express"]}
+                level={0.4}
+              />
+              <AboutPageIconSquare
+                toolList={["pytorch"]}
+                level={0.4}
+              />
+            </div>
+            <p className="my-4">
+              But ultimately, everything is learnable with time and programming
+              knowledge is transferable.
+            </p>
+          </AboutPageBox>
+          <AboutPageBox className="flex flex-col">
+            <div className="grow text-4xl grid place-content-center text-nowrap">
+              🇹🇭🛕🐘
+            </div>
+            <div className="">
+              I'm from Thailand, somewhere near Bangkok
+            </div>
+          </AboutPageBox>
+          <AboutPageBox className="flex flex-col">
+            <div className="grow text-4xl grid place-content-center text-nowrap">
+              💻🌐🤖
+            </div>
+            <div className="">
+              I think I'm good at full stack and ML
+            </div>
+          </AboutPageBox>
+          <AboutPageBox className="flex flex-col">
+            <div className="grow text-4xl grid place-content-center text-nowrap">
+              🥐🥐🥐
+            </div>
+            <div className="">
+              I love crossant. Is it even possible to not love croissant?
+            </div>
+          </AboutPageBox>
+          <AboutPageBox className="flex flex-col">
+            <div className="grow text-4xl grid place-content-center text-nowrap">
+              {"</>"}⌨️🖱️
+            </div>
+            <div className="">
+              In free time, I code and playing games, especially strategy game
+            </div>
+          </AboutPageBox>
         </div>
-        <AboutPageBox className="flex flex-col" rendered={rendered}>
-          <div className="grow text-4xl grid place-content-center text-nowrap">🇹🇭🛕🐘</div>
-          <div className="">
-            I'm from Thailand, somewhere near Bangkok
-          </div>
-        </AboutPageBox>
-        <AboutPageBox className="flex flex-col" rendered={rendered}>
-          <div className="grow text-4xl grid place-content-center text-nowrap">💻🌐🤖</div>
-          <div className="">
-            I think I'm good at full stack and ML
-          </div>
-        </AboutPageBox>
-        <AboutPageBox className="flex flex-col" rendered={rendered}>
-          <div className="grow text-4xl grid place-content-center text-nowrap">🥐🥐🥐</div>
-          <div className="">
-            I love crossant. Is it even possible to not love croissant?
-          </div>
-        </AboutPageBox>
-        <AboutPageBox className="flex flex-col" rendered={rendered}>
-          <div className="grow text-4xl grid place-content-center text-nowrap">{"</>"}⌨️🖱️</div>
-          <div className="">
-            In free time, I code and playing games, especially strategy game
-          </div>
-        </AboutPageBox>
       </div>
-    </PageContainer>
+    </ScrollPositionTracker>
   );
 }
 
@@ -201,17 +172,19 @@ function AboutPageIconSquare({ toolList, level = 0.5 }: {
 }
 
 function AboutPageBox(
-  { rendered = false, children, style, className }: {
-    rendered?: boolean;
+  { children, style, className }: {
     children?: React.ReactNode;
     style?: CSSProperties;
     className?: string;
   },
 ) {
+  let [ref, isShown] = useShownWhenOnScreen<HTMLDivElement>(0, 100);
+
   return (
     <div
+      ref={ref}
       className={"about-container p-4 rounded-3xl relative" +
-        (rendered ? " show" : "") + (className ? ` ${className}` : "")}
+        (isShown ? " show" : "") + (className ? ` ${className}` : "")}
       style={style}
     >
       <SVGBorder
