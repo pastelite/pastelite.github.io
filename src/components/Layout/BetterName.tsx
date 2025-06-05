@@ -23,10 +23,11 @@ export default function BetterName() {
   let { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
-    // if (disableBackgroundHeightSetting.current != null) {
-    let newBackgroundHeight = Math.max(window.innerHeight - scroll, window.innerHeight / 2);
+    let newBackgroundHeight = Math.max(
+      window.innerHeight - scroll,
+      window.innerHeight / 2,
+    );
     backgroundHeight.set(newBackgroundHeight);
-    // }
 
     setIsCollapsed(scroll > window.innerHeight / 2);
   });
