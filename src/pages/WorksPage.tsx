@@ -2,7 +2,6 @@ import { type ReactNode, useEffect, useState } from "react";
 import TopRightIcon from "../assets/icons/arrow-top-right.svg?react";
 import TextHeader from "../components/UI/TextHeader";
 import useBreakpoint from "../hooks/useBreakpoint";
-import usePositionStore from "../store";
 
 import ScrollPositionTracker from "@/components/UI/ScrollPositionTracker";
 import BrainTrainerImage from "../assets/previousWork/brain_trainer.png";
@@ -29,10 +28,6 @@ function devideArrayByColumn<T>(array: T[], col: number): T[][] {
 }
 
 export function WorksPage() {
-  const pageIndex = 1;
-  const scrollPosition = usePositionStore((state) => state.position);
-  const pageScrollLocation = scrollPosition[pageIndex];
-  const nextScrollLocation = scrollPosition[pageIndex + 1];
   let breakpoint = useBreakpoint([768, 1024]);
 
   return (
@@ -41,9 +36,6 @@ export function WorksPage() {
     }}>
       <TextHeader
         text="Project"
-        scrollYToStartAnimation={pageScrollLocation -
-          (window.innerHeight / 2)}
-        scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
         drawingTimeSec={0.3}
         className="mb-6"
       />

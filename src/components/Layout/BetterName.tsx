@@ -1,5 +1,5 @@
 import TextSVG from "../Atoms/TextSVG";
-import "../Layout/BetterName.style.css";
+import "./BetterName.style.scss";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 // Removed framer-motion imports: motion, useMotionValue, useMotionValueEvent, useScroll, useTransform, animate
 import TextCorouselBackgroundNew from "../Organism/TextCorouselBackgroundNew";
@@ -12,78 +12,34 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import { animate } from "motion";
 
 export default function BetterName() {
-  // State for scroll position is implicitly managed by window.scrollY directly in the event handler
-  let backgroundHeightMv = useMotionValue(window.innerHeight);
-  let backgroundWidthMv = useMotionValue(window.innerWidth);
+  let backgroundHeight = useMotionValue(window.innerHeight);
   let [isCollapsed, setIsCollapsed] = useState(false);
-  let timeoutRef = useRef<NodeJS.Timeout>(null);
   let [pRatio, setPRatio] = useState(0);
   let [drawingAnimation, setDrawingAnimation] = useState(false);
-
-  let heightImmunityTimeout = useRef<number | null>(null);
 
   let breakpoint = useBreakpoint([768]);
   let { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (scroll) => {
-    let willCollapse = scroll > window.innerHeight / 2;
-    let newBackgroundHeight = willCollapse ? 70 : (window.innerHeight - scroll);
-    let newBackgroundWidth = willCollapse ? 70 : window.innerWidth;
+    // if (disableBackgroundHeightSetting.current != null) {
+    let newBackgroundHeight = Math.max(window.innerHeight - scroll, window.innerHeight / 2);
+    backgroundHeight.set(newBackgroundHeight);
+    // }
 
-    // setBackgroundHeight(window.innerHeight - scroll);
-
-    // if thing will change
-    if (
-      isCollapsed !== willCollapse
-    ) {
-      // setIsCollapsed(willCollapse);
-      requestAnimationFrame(() => {
-        setIsCollapsed(willCollapse);
-      });
-      animate(backgroundHeightMv, newBackgroundHeight, {
-        duration: 0.2,
-      });
-      animate(backgroundWidthMv, newBackgroundWidth, {
-        duration: 0.2,
-      });
-      // setIsAnimation(true);
-      timeoutRef.current = setTimeout(() => {
-        // setIsAnimation(false);
-        timeoutRef.current = null;
-      }, 300);
-    }
-
-    // continue animation if there is animation
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => {
-        timeoutRef.current = null;
-      }, 300);
-      animate(backgroundHeightMv, newBackgroundHeight, {
-        duration: 0.2,
-      });
-      animate(backgroundWidthMv, newBackgroundWidth, {
-        duration: 0.2,
-      });
-    } else {
-      backgroundHeightMv.set(newBackgroundHeight);
-      backgroundWidthMv.set(newBackgroundWidth);
-    }
+    setIsCollapsed(scroll > window.innerHeight / 2);
   });
 
   // when resize screen
   useLayoutEffect(() => {
     const handleResize = () => {
-      let newBackgroundHeight = isCollapsed
-        ? 70
-        : (window.innerHeight - window.scrollY);
-      let newBackgroundWidth = isCollapsed ? 70 : window.innerWidth;
+      let newBackgroundHeight = Math.max(
+        window.innerHeight - window.scrollY,
+        window.innerHeight / 2,
+      );
 
-      backgroundHeightMv.set(newBackgroundHeight);
-      backgroundWidthMv.set(newBackgroundWidth);
+      backgroundHeight.set(newBackgroundHeight);
     };
 
     window.addEventListener("resize", handleResize);
@@ -91,9 +47,9 @@ export default function BetterName() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isCollapsed, backgroundHeightMv, backgroundWidthMv]); // Depend on isCollapsed and motion values
+  }, [isCollapsed, backgroundHeight]); // Depend on isCollapsed and motion values
 
-  // delay animation by 0.5 sec only if everything is setted up
+  // delay animation by 0.5 sec after everything is setted up
   useEffect(() => {
     let animationFrameId = requestAnimationFrame(() => { // Renamed to avoid conflict
       setTimeout(() => {
@@ -107,7 +63,7 @@ export default function BetterName() {
   }, []);
 
   let svgRef = useRef<SVGSVGElement | null>(null);
-  let bottom = useTransform(backgroundHeightMv, (bgheight) => {
+  let bottom = useTransform(backgroundHeight, (bgheight) => {
     if (breakpoint == 1) return "auto";
     else {
       return isCollapsed ? 15 + (bgheight - 70) : window.innerHeight - bgheight;
@@ -115,28 +71,12 @@ export default function BetterName() {
   });
 
   const dynamicStyles = {
-    // TODO: fix bottom
-    // height: isCollapsed ? 70 : backgroundHeight,
-    // ...choosing(breakpoint, [
-    //   isCollapsed
-    //     ? { bottom: 15 }
-    //     : { bottom: window.innerHeight - backgroundHeight },
-    //   {
-    //     top: isCollapsed ? 15 : 0,
-    //   },
-    // ]),
-    top: (breakpoint == 1) ? (isCollapsed ? 15 : 0) : "auto",
-    left: isCollapsed ? 15 : 0,
-    // width: isCollapsed ? 70 : "100%",
-    borderRadius: isCollapsed ? 16 : 0,
+    // TODO: fix small screen
+    top: (breakpoint == 1) ? 0 : "auto",
+    left: 0,
+    width: "100%",
     overflow: "hidden",
     cursor: isCollapsed ? "pointer" : "default",
-
-    // CSS transition properties
-    // transitionProperty: "height, top, bottom, left, width, border-radius",
-    // transitionDuration: isAnimation ? "0.3s" : "0s",
-    // transitionTimingFunction: "ease-out",
-    // transitionTimingFunction: "ease-out",
     color: "white",
   };
 
@@ -146,14 +86,17 @@ export default function BetterName() {
         className={`name-background ${isCollapsed ? "collapsed" : ""}`}
         animate={dynamicStyles}
         style={{
-          height: backgroundHeightMv,
-          width: backgroundWidthMv,
+          height: backgroundHeight,
           bottom: bottom,
         }}
         transition={{ duration: 0.2, ease: "easeOut" }}
         onClick={isCollapsed
           ? () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
+            // disableBackgroundHeightSetting.current = setTimeout(() => {
+            //   backgroundHeight.set(window.innerHeight);
+            // })
+            // animate(backgroundHeight, 85, { duration: 0.2, ease: "easeOut" });
           }
           : undefined}
       >
@@ -171,25 +114,26 @@ export default function BetterName() {
             fontSize={160}
             drawingTimeSec={1}
             pathDataCallback={(pathData) => {
-              if (pathData.length > 0 && svgRef.current) {
-                const pBoundingBox = pathData[0].getBoundingBox();
-                const [minLeft, maxRight] = pathData.reduce(
-                  ([currentMinLeft, currentMaxRight], path) => {
-                    const rect = path.getBoundingBox();
-                    return [
-                      Math.min(currentMinLeft, rect.x1),
-                      Math.max(currentMaxRight, rect.x2),
-                    ];
-                  },
-                  [Infinity, -Infinity],
-                );
-                const svgWidth = maxRight - minLeft;
-                if (svgWidth > 0) { // Avoid division by zero
-                  const pWidth = pBoundingBox.x2 - pBoundingBox.x1;
-                  setPRatio(pWidth / svgWidth);
-                } else {
-                  setPRatio(0);
-                }
+              // calculate p ratio
+              if (!(pathData.length > 0 && svgRef.current)) return;
+
+              const pBoundingBox = pathData[0].getBoundingBox();
+              const [minLeft, maxRight] = pathData.reduce(
+                ([currentMinLeft, currentMaxRight], path) => {
+                  const rect = path.getBoundingBox();
+                  return [
+                    Math.min(currentMinLeft, rect.x1),
+                    Math.max(currentMaxRight, rect.x2),
+                  ];
+                },
+                [Infinity, -Infinity],
+              );
+              const svgWidth = maxRight - minLeft;
+              if (svgWidth > 0) { // Avoid division by zero
+                const pWidth = pBoundingBox.x2 - pBoundingBox.x1;
+                setPRatio(pWidth / svgWidth);
+              } else {
+                setPRatio(0);
               }
             }}
           />

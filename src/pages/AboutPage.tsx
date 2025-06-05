@@ -52,7 +52,7 @@ export function AboutPage() {
       </div>
       <div className="about-summary-grid-container bg-[#0003] py-8">
         <div className="auto-left-padding about-summary-grid">
-          <AboutPageBox style={{ zIndex: 1 }}>
+          <AboutPageBox style={{ zIndex: 1 }} className="text-left">
             <SVGBorder
               className="drawing-border"
               borderRadius={24}

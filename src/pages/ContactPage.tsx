@@ -11,24 +11,18 @@ import RedditIcon from "../assets/logo/reddit.svg?react";
 import SteamIcon from "../assets/logo/steam.svg?react";
 import ContactListItem from "../components/UI/ContactListItem";
 import TextHeader from "../components/UI/TextHeader";
-import usePositionStore from "../store";
-// import ContactListItem
 
 export function ContactPage() {
-  const pageIndex = 2;
-  const pageScrollLocation = usePositionStore((state) =>
-    state.position[pageIndex]
-  );
-
   return (
-    <ScrollPositionTracker className="auto-left-padding auto-top-padding" page={pageIndex} style={{
-      minHeight: "100vh"
-    }}>
+    <ScrollPositionTracker
+      className="auto-left-padding auto-top-padding text-left"
+      page={2}
+      style={{
+        minHeight: "100vh",
+      }}
+    >
       <TextHeader
         text="Link"
-        scrollYToStartAnimation={pageScrollLocation -
-          (window.innerHeight / 2)}
-        scrollYToEndAnimation={pageScrollLocation + (window.innerHeight / 2)}
         drawingTimeSec={0.3}
       />
       <div>
