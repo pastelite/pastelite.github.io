@@ -27,6 +27,7 @@ import GithubIcon from "@/assets/logo/github-icon.svg?react";
 import { IconSquareGenerator } from "../UI/IconSquare";
 import SmallLink from "../Atoms/SmallLink";
 import ProjectListPageSummary from "./ProjectListPageSummary";
+import useShownWhenOnScreen from "@/hooks/useShownWhenOnScreen";
 
 const ProjectListContext = createContext<
   { selected: number; setSelected: Function }
@@ -113,7 +114,7 @@ export default function ProjectListPage() {
               A bot/script for creating pages in Wiktionary
             </div>
           </ProjectListItem>
-          <div className="flex flex-col items-center justify-center">
+          <div className="other-links flex flex-col items-center justify-center">
             <div className="grow"></div>
             <div>And of course, this website.</div>
             <div className="grow"></div>
@@ -167,6 +168,7 @@ function ProjectListItem(
   let pagePosition = usePositionStore((state) => state.position);
   let [hovered, setHovered] = useState(false);
   let breakpoint = useBreakpoint([768]);
+  let [ref, inRange] = useShownWhenOnScreen<HTMLDivElement>(0, 0);
 
   function handleSelection(index: number) {
     if (index === selected) {
@@ -184,9 +186,10 @@ function ProjectListItem(
 
   return (
     <div
-      className={`project-list-item ${selected === index ? "selected" : ""}`}
+      className={`project-list-item ${selected === index ? "selected" : ""} ${inRange ? "show" : ""}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      ref={ref}
     >
       <img src={image} onClick={() => handleSelection(index)}></img>
       <div className="project-name">

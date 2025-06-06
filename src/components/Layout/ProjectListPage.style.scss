@@ -1,4 +1,5 @@
 @use "@/styles/variables" as *;
+@use "@/styles/utils_mixin" as *;
 @use "sass:math";
 @use "sass:color";
 
@@ -12,18 +13,22 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
 
 .projects-list-container {
   min-height: 70vh;
-  transition: scale 0.3s ease-in-out;
+  transition: scale 0.3s $ease-out-back;
+  overflow: hidden;
   scale: 1;
 
   .project-list-item {
     scale: 1;
-    transition: scale 0.3s $ease-out-back, top 0.3s ease-out, left 0.3s ease-out,
-      opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transition: scale 0.3s $ease-out-back, top 0.4s $ease-out-back,
+      left 0.4s $ease-out-back, opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     // border: 1px solid red;
     border-radius: 16px 16px 0 0;
     overflow: hidden;
+
+    @include hidingBeforeShow;
 
     img {
       flex-grow: 1;
@@ -40,7 +45,7 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
       overflow: hidden;
       transition: all 0.2s $ease-out-back;
       cursor: pointer;
-      
+
       > div {
         font-size: 1em;
         background-color: $secondary-color;
@@ -54,7 +59,7 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
     .hover-description {
       box-sizing: border-box;
       height: 0;
-      
+
       position: absolute;
       bottom: 40px;
       left: 0;
@@ -89,12 +94,21 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
     }
   }
 
+  .other-links {
+    transition: scale 0.3s $ease-out-back, top 0.4s $ease-out-back,
+      left 0.4s $ease-out-back, opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
+  }
+
   &.show-description {
     scale: 0.95;
 
-    .project-list-item {
+    .project-list-item,
+    .other-links {
       scale: 0.95;
       opacity: 0.5;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .project-list-item.selected {
@@ -104,6 +118,7 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
       opacity: 1;
       z-index: 10;
       border-radius: 16px;
+      pointer-events: auto;
 
       @media (min-width: $layout-breakpoint-md) {
         left: 0;
@@ -182,7 +197,7 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
   // top: -64px;
   right: 16px;
   background-color: color.adjust($primary-color, $blackness: 20%);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out,
+  transition: opacity 0.1s ease-in-out, transform 0.4s $ease-out-back,
     border-width 0.3s ease-in-out;
   opacity: 0;
   z-index: 10;

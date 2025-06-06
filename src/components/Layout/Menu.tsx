@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import AboutIcon from "@/assets/material_icons/person.svg?react";
 import ContactIcon from "../../assets/material_icons/contact_page.svg?react";
 import WorksIcon from "../../assets/material_icons/work.svg?react";
@@ -7,6 +7,14 @@ import { useMotionValueEvent, useScroll } from "motion/react";
 import usePositionStore from "../../store";
 import { choosing } from "../../utils/number";
 import useBreakpointNew from "../../hooks/useBreakpointNew";
+import theme from "@/styles/theme";
+import "./Menu.style.scss";
+import CollapsibleAutoWidthDiv from "../Atoms/CollapsibleAutoWidthDiv";
+
+let MenuContext = createContext({
+  isScrolling: false,
+  setIsScrolling: (inp: boolean) => {},
+});
 
 interface MenuProps {
   menuBarWidth?: number;
@@ -21,6 +29,8 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
   const { scrollY } = useScroll();
 
   const scrollToLocation = usePositionStore((state) => state.position);
+
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (scrollY) => {
     setShowLine(scrollY > window.innerHeight / 2);
@@ -37,61 +47,80 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
   const growMenu = (breakpoint === 2) && showLine;
 
   return (
-    <div
-      className="menu-bar"
-      style={{
-        display: "flex",
-        flexDirection: choosing(breakpoint, ["row", "column"]),
-        justifyContent: "center",
-        alignItems: choosing(breakpoint, ["center", "stretch"]),
-        padding: 15,
-        gap: 15,
-        transition: "all .3s cubic-bezier(0.5, 1, 0.89, 1)",
-        ...choosing(breakpoint, [{
-          left: showLine ? menuBarWidth : 0, // account for the home icon
-          right: 0,
-          bottom: 0,
-          height: menuBarWidth,
-        }, {
-          width: growMenu ? 224 : menuBarWidth,
-          left: 0,
-          top: showLine ? menuBarWidth : 0,
-          bottom: 0,
-        }]),
-      }}
-    >
-      {/* <div
+    <MenuContext.Provider value={{ isScrolling, setIsScrolling }}>
+      <div
+        className="menu-bar"
+        style={{
+          display: "flex",
+          flexDirection: choosing(breakpoint, ["row", "column"]),
+          justifyContent: "center",
+          alignItems: choosing(breakpoint, ["center", "stretch"]),
+          padding: 15,
+          gap: 15,
+          transition: "all .3s cubic-bezier(0.5, 1, 0.89, 1)",
+          ...choosing(breakpoint, [{
+            left: showLine ? menuBarWidth : 0, // account for the home icon
+            right: 0,
+            bottom: 0,
+            height: menuBarWidth,
+          }, {
+            width: growMenu ? 224 : menuBarWidth,
+            left: 0,
+            top: showLine ? menuBarWidth : 0,
+            bottom: 0,
+          }]),
+        }}
+      >
+        {
+          /* <div
         className="absolute bottom-0 -right-[1px] w-[1px] bg-white transition-all duration-300"
         style={{
           height: showLine ? "100vh" : "0",
         }}
       >
-      </div> */}
-      <MenuItem pageIndex={0} SvgItem={AboutIcon} isExpanded={growMenu} text="About">
-        {
-          /* <AboutIcon
+      </div> */
+        }
+        <MenuItem
+          pageIndex={0}
+          SvgItem={AboutIcon}
+          isExpanded={growMenu}
+          text="About"
+        >
+          {
+            /* <AboutIcon
           fill="white"
           style={{ height: "40px", width: "max-content" }}
         /> */
-        }
-      </MenuItem>
-      <MenuItem pageIndex={1} SvgItem={WorksIcon} isExpanded={growMenu} text="Project">
-        {
-          /* <WorksIcon
+          }
+        </MenuItem>
+        <MenuItem
+          pageIndex={1}
+          SvgItem={WorksIcon}
+          isExpanded={growMenu}
+          text="Project"
+        >
+          {
+            /* <WorksIcon
           fill="white"
           style={{ height: "40px", width: "max-content" }}
         /> */
-        }
-      </MenuItem>
-      <MenuItem pageIndex={2} SvgItem={ContactIcon} isExpanded={growMenu} text="Contact">
-        {
-          /* <ContactIcon
+          }
+        </MenuItem>
+        <MenuItem
+          pageIndex={2}
+          SvgItem={ContactIcon}
+          isExpanded={growMenu}
+          text="Contact"
+        >
+          {
+            /* <ContactIcon
           fill="white"
           style={{ height: "40px", width: "max-content" }}
         /> */
-        }
-      </MenuItem>
-    </div>
+          }
+        </MenuItem>
+      </div>
+    </MenuContext.Provider>
   );
 };
 
@@ -109,12 +138,19 @@ function MenuItem(
   const scrollToLocation = usePositionStore((state) => state.position);
   const { scrollY } = useScroll();
   const [selected, setSelected] = useState(false);
-  // let breakpoint = useBreakpoint([768]);
-  let breakpoint = useBreakpointNew([768]);
+  let breakpoint = useBreakpoint([768]);
+  // let breakpoint = useBreakpointNew([768]);
   // when I select something, it shouldn't unselect during scrolling
-  let selectionImmunityTimeout = useRef<number | null>(null);
+  let selectionImmunityTimeout = useRef<NodeJS.Timeout>(null);
   // If I scrolling pass something briefly, it shouldn't show as selected
-  let selectionDelayTimeout = useRef<number | null>(null);
+  let selectionDelayTimeout = useRef<NodeJS.Timeout>(null);
+
+  // When user in mobile, it should be expanded if selected
+  if (breakpoint === 0) {
+    isExpanded = selected;
+  }
+
+  // let { isScrolling, setIsScrolling } = useContext(MenuContext);
 
   useMotionValueEvent(scrollY, "change", (scrollY) => {
     let nextScroll = (scrollToLocation.length > pageIndex + 1)
@@ -139,6 +175,7 @@ function MenuItem(
       scrollY >= (currentScroll - window.innerHeight / 2) &&
       scrollY <= nextScroll
     ) {
+      // if (!isScrolling) setSelected(true);
       if (selectionDelayTimeout.current) {
         clearTimeout(selectionDelayTimeout.current);
       }
@@ -150,6 +187,7 @@ function MenuItem(
       if (selectionDelayTimeout.current) {
         clearTimeout(selectionDelayTimeout.current);
       }
+
       if (selectionImmunityTimeout.current == null) {
         setSelected(false);
       }
@@ -169,16 +207,19 @@ function MenuItem(
           });
           setSelected(true);
           selectionImmunityTimeout.current = setTimeout(() => {
-            // setSelected(false);
             selectionImmunityTimeout.current = null;
-          }, 500);
+          }, 800);
         }
       }}
       style={{
-        ...breakpoint({ width: selected ? 100 : 70 }, {
-          height: selected ? 70 : 48,
-        }),
-        ...{ "--pill-color": "#00c5fc" } as React.CSSProperties,
+        // ...breakpoint({ width: selected ? 100 : 70 }, {
+        //   height: selected ? 70 : 48,
+        // }),
+        ...choosing(breakpoint, [
+          { width: selected ? 150 : 70 },
+          { height: selected ? 70 : 48 },
+        ]),
+        ...{ "--pill-color": theme.accentColor } as React.CSSProperties,
       }}
     >
       <div
@@ -195,15 +236,21 @@ function MenuItem(
         />
       </div>
 
-      <div
-        className="text-nowrap overflow-hidden transition-all duration-300 text-left"
+      <CollapsibleAutoWidthDiv className="relative overflow-hidden" collapsed={!isExpanded}>
+        {text}
+      </CollapsibleAutoWidthDiv>
+
+      {
+        /* <div
+        className="text-nowrap overflow-hidden transition-all duration-300 text-left box-border"
         style={{
           flexGrow: isExpanded ? 1 : 0,
           width: 0,
         }}
       >
         {text}
-      </div>
+      </div> */
+      }
     </div>
   );
 }
