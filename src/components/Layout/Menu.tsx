@@ -137,7 +137,7 @@ function MenuItem(
   const scrollToLocation = usePositionStore((state) => state.position);
   const { scrollY } = useScroll();
   const [selected, setSelected] = useState(false);
-  let breakpoint = useBreakpoint([768]);
+  let breakpoint = useBreakpoint([640, 768]);
   // let breakpoint = useBreakpointNew([768]);
   // when I select something, it shouldn't unselect during scrolling
   let selectionImmunityTimeout = useRef<NodeJS.Timeout>(null);
@@ -145,7 +145,7 @@ function MenuItem(
   let selectionDelayTimeout = useRef<NodeJS.Timeout>(null);
 
   // When user in mobile, it should be expanded if selected
-  if (breakpoint === 0) {
+  if (breakpoint === 1) {
     isExpanded = selected;
   }
 
@@ -215,6 +215,7 @@ function MenuItem(
         //   height: selected ? 70 : 48,
         // }),
         ...choosing(breakpoint, [
+          { width: selected ? 100 : 70 },
           { width: selected ? 150 : 70 },
           { height: selected ? 70 : 48 },
         ]),
@@ -225,7 +226,7 @@ function MenuItem(
         className="flex items-center justify-center"
         style={{
           height: 70,
-          width: 70,
+          width: choosing(breakpoint, ["100%", 70, 70]), //70,
         }}
       >
         <SvgItem
@@ -235,7 +236,10 @@ function MenuItem(
         />
       </div>
 
-      <CollapsibleAutoWidthDiv className="relative overflow-hidden" collapsed={!isExpanded}>
+      <CollapsibleAutoWidthDiv
+        className="relative overflow-hidden"
+        collapsed={!isExpanded}
+      >
         {text}
       </CollapsibleAutoWidthDiv>
 

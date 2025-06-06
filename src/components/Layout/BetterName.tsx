@@ -70,13 +70,13 @@ export default function BetterName() {
   let bottom = useTransform(backgroundHeight, (bgheight) => {
     if (breakpoint == 1) return "auto";
     else {
-      return isCollapsed ? 15 + (bgheight - 70) : window.innerHeight - bgheight;
+      return isCollapsed ? 0 : window.innerHeight - bgheight;
     }
   });
 
   const dynamicStyles = {
     // TODO: fix small screen
-    top: (breakpoint == 0 && isCollapsed) ? "50vh" : "0",
+    // top: (breakpoint == 0 && isCollapsed) ? "50vh" : "0",
     // top: (breakpoint == 1) ? 0 : "auto",
     // top: 0,
     left: 0,
