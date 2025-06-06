@@ -1,4 +1,4 @@
-import { act, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import LinkIcon from "@/assets/icons/arrow-top-right.svg?react";
 import ClipboardIcon from "@/assets/material_icons/assignment_turned_in.svg?react";
 

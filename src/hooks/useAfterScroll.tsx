@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 export default function useAfterScroll(callback: () => void, delay: number = 100) {
-  const timeout = useRef<number | null>(null);
+  const timeout = useRef<NodeJS.Timeout>(null);
 
   useEffect(() => {
     const handleScroll = () => {

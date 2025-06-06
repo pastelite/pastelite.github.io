@@ -1,33 +1,29 @@
+import TopRightIcon from "@/assets/icons/arrow-top-right.svg?react";
+import useBreakpoint from "@/hooks/useBreakpoint";
+import { choosing } from "@/utils/number";
 import {
   createContext,
   type HTMLAttributes,
   type ReactNode,
-  use,
   useContext,
-  useRef,
-  useState,
+  useState
 } from "react";
-import "./ProjectListPage.style.scss";
-import AbsoluteGrid from "../UI/AbsoluteGrid";
-import useBreakpoint from "@/hooks/useBreakpoint";
-import { choosing } from "@/utils/number";
-import TopRightIcon from "@/assets/icons/arrow-top-right.svg?react";
 import CollapsibleAutoWidthDiv from "../Atoms/CollapsibleAutoWidthDiv";
+import AbsoluteGrid from "../UI/AbsoluteGrid";
+import "./ProjectListPage.style.scss";
 
 // Images
-import PrevWebImage from "@/assets/previousWork/old_website.png";
-import GameAiImage from "@/assets/previousWork/game_ai.png";
-import PastelbinImage from "@/assets/previousWork/pastelbin.png";
 import BrainTrainerImage from "@/assets/previousWork/brain_trainer.png";
+import GameAiImage from "@/assets/previousWork/game_ai.png";
+import PrevWebImage from "@/assets/previousWork/old_website.png";
+import PastelbinImage from "@/assets/previousWork/pastelbin.png";
 import ZilentBotImage from "@/assets/previousWork/zilentbot.png";
 import usePositionStore from "@/store";
 
 // Icon
-import GithubIcon from "@/assets/logo/github-icon.svg?react";
-import { IconSquareGenerator } from "../UI/IconSquare";
+import useShownWhenOnScreen from "@/hooks/useShownWhenOnScreen";
 import SmallLink from "../Atoms/SmallLink";
 import ProjectListPageSummary from "./ProjectListPageSummary";
-import useShownWhenOnScreen from "@/hooks/useShownWhenOnScreen";
 
 const ProjectListContext = createContext<
   { selected: number; setSelected: Function }

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 
 // export default function useSnappyScroll(stickyness = 0.01) {
 //   let scrollTimeout = useRef<any>(null);

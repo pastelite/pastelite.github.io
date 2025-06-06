@@ -1,7 +1,9 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export default function useBreakpoint(breakpoints: number[]) {
-  let [currentBreakpoint, setCurrentBreakpoint] = useState(getBreakpointIndex());
+  let [currentBreakpoint, setCurrentBreakpoint] = useState(
+    getBreakpointIndex(),
+  );
 
   function getBreakpointIndex() {
     const width = window.innerWidth;

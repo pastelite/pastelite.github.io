@@ -1,8 +1,8 @@
 import CheckIcon from "@/assets/material_icons/assignment_turned_in.svg?react";
-import { type CSSProperties, useState } from "react";
-import "./ContactListItem.style.css";
 import theme from "@/styles/theme";
 import { transparentize } from "color2k";
+import { type CSSProperties, useState } from "react";
+import "./ContactListItem.style.css";
 
 interface ContactListItemProps {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;

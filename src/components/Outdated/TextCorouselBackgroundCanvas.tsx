@@ -1,4 +1,4 @@
-import { use, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import CustomTextCorouselItemGenerator from "../../utils/itemGenerator";
 import type { TextCorouselItemData } from "../Organism/TextCorouselNew";
 

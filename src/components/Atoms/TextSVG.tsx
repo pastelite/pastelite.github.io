@@ -1,7 +1,6 @@
-import { BoundingBox, Font, load, Path as OpentypePath } from "opentype.js";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import RobotoSlabMedium from "@/assets/fonts/RobotoSlab-Medium.ttf";
-import { motion } from "motion/react";
+import { Font, load, Path as OpentypePath } from "opentype.js";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 interface TextSVGProps extends React.SVGProps<SVGSVGElement> {
   text: string;

@@ -3,16 +3,8 @@ import TopRightIcon from "../assets/icons/arrow-top-right.svg?react";
 import TextHeader from "../components/UI/TextHeader";
 import useBreakpoint from "../hooks/useBreakpoint";
 
-import ScrollPositionTracker from "@/components/UI/ScrollPositionTracker";
-import BrainTrainerImage from "../assets/previousWork/brain_trainer.png";
-import GameAiImage from "../assets/previousWork/game_ai.png";
-import OldWebsiteImage from "../assets/previousWork/old_website.png";
-import PastelbinImage from "../assets/previousWork/pastelbin.png";
-import ZilentBotImage from "../assets/previousWork/zilentbot.png";
-import { ToolIconList } from "../components/Outdated/ToolIcon";
-import { choosing } from "../utils/number";
 import ProjectListPage from "@/components/Layout/ProjectListPage";
-import AbsoluteGrid from "@/components/UI/AbsoluteGrid";
+import ScrollPositionTracker from "@/components/UI/ScrollPositionTracker";
 
 function devideArrayByColumn<T>(array: T[], col: number): T[][] {
   let arrays: T[][] = [];

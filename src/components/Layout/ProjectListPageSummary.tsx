@@ -1,12 +1,12 @@
 // It's getting way to long. Imma move here i guess
 
+import DockerIcon from "@/assets/logo/devicon/docker-plain.svg?react";
+import GithubIcon from "@/assets/logo/github-icon.svg?react";
+import GoogleDriveIcon from "@/assets/logo/google-drive.svg?react";
+import HuggingfaceIcon from "@/assets/logo/hf-logo-pirate-black-white.svg?react";
+import WiktionaryIcon from "@/assets/logo/Wiktionary_small_optimized.svg?react";
 import SmallLink from "@/components/Atoms/SmallLink";
 import { IconSquareGenerator } from "@/components/UI/IconSquare";
-import GithubIcon from "@/assets/logo/github-icon.svg?react";
-import HuggingfaceIcon from "@/assets/logo/hf-logo-pirate-black-white.svg?react";
-import DockerIcon from "@/assets/logo/devicon/docker-plain.svg?react";
-import GoogleDriveIcon from "@/assets/logo/google-drive.svg?react";
-import WiktionaryIcon from "@/assets/logo/Wiktionary_small_optimized.svg?react";
 import { useEffect, useState } from "react";
 
 function ToolSummaryBox(

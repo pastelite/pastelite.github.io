@@ -1,10 +1,7 @@
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import TextSVG from "../Atoms/TextSVG";
 import "./BetterName.style.scss";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
 // Removed framer-motion imports: motion, useMotionValue, useMotionValueEvent, useScroll, useTransform, animate
-import TextCorouselBackgroundNew from "../Organism/TextCorouselBackgroundNew";
-import useBreakpoint from "../../hooks/useBreakpoint";
-import { choosing } from "../../utils/number";
 import {
   motion,
   useMotionValue,
@@ -12,6 +9,8 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
+import useBreakpoint from "../../hooks/useBreakpoint";
+import TextCorouselBackgroundNew from "../Organism/TextCorouselBackgroundNew";
 
 export default function BetterName() {
   let backgroundHeight = useMotionValue(window.innerHeight);

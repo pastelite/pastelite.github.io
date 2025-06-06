@@ -1,9 +1,8 @@
-import "../components/Layout/Layout.style.css";
-import BetterName from "../components/Layout/BetterName";
-import useBreakpoint from "../hooks/useBreakpoint";
-import ContactList from "../components/Layout/ContactList";
-import Menu from "../components/Layout/Menu";
 import { motion, useScroll, useTransform } from "motion/react";
+import BetterName from "../components/Layout/BetterName";
+import ContactList from "../components/Layout/ContactList";
+import "../components/Layout/Layout.style.css";
+import Menu from "../components/Layout/Menu";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const topBarHeight = 100;

@@ -4,8 +4,8 @@
 // 2. grid absolute did not bring thing to the place as i expected, and i need to add row: and column:
 
 import type { CSSProperties } from "react";
-import "./AbsoluteGrid.style.scss";
 import React from "react";
+import "./AbsoluteGrid.style.scss";
 
 interface AbsoluteGridProps extends React.HTMLAttributes<HTMLDivElement> {
   gap?: number;

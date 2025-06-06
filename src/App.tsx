@@ -1,11 +1,8 @@
 import "./App.css";
-import TextSVG from "./components/Atoms/TextSVG";
-import Layout from "./pages/Layout";
-import TextCorouselBackgroundNew from "./components/Organism/TextCorouselBackgroundNew";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
+import Layout from "./pages/Layout";
 import { WorksPage } from "./pages/WorksPage";
-import { useMotionValue } from "motion/react";
 
 function App() {
   return (

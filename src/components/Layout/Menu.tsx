@@ -1,15 +1,14 @@
-import { createContext, useContext, useRef, useState } from "react";
 import AboutIcon from "@/assets/material_icons/person.svg?react";
+import theme from "@/styles/theme";
+import { useMotionValueEvent, useScroll } from "motion/react";
+import { createContext, useRef, useState } from "react";
 import ContactIcon from "../../assets/material_icons/contact_page.svg?react";
 import WorksIcon from "../../assets/material_icons/work.svg?react";
 import useBreakpoint from "../../hooks/useBreakpoint";
-import { useMotionValueEvent, useScroll } from "motion/react";
 import usePositionStore from "../../store";
 import { choosing } from "../../utils/number";
-import useBreakpointNew from "../../hooks/useBreakpointNew";
-import theme from "@/styles/theme";
-import "./Menu.style.scss";
 import CollapsibleAutoWidthDiv from "../Atoms/CollapsibleAutoWidthDiv";
+import "./Menu.style.scss";
 
 let MenuContext = createContext({
   isScrolling: false,

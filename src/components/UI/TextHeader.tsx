@@ -1,7 +1,5 @@
-import { useState } from "react";
-import TextSVG from "../Atoms/TextSVG";
-import { useMotionValueEvent, useScroll } from "motion/react";
 import useShownWhenOnScreen from "@/hooks/useShownWhenOnScreen";
+import TextSVG from "../Atoms/TextSVG";
 
 interface TextHeaderProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
