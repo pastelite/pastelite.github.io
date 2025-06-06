@@ -11,8 +11,8 @@ import PastelbinImage from "../assets/previousWork/pastelbin.png";
 import ZilentBotImage from "../assets/previousWork/zilentbot.png";
 import { ToolIconList } from "../components/Outdated/ToolIcon";
 import { choosing } from "../utils/number";
-import ProjectList from "@/components/Layout/ProjectList";
 import ProjectListPage from "@/components/Layout/ProjectListPage";
+import AbsoluteGrid from "@/components/UI/AbsoluteGrid";
 
 function devideArrayByColumn<T>(array: T[], col: number): T[][] {
   let arrays: T[][] = [];
@@ -41,21 +41,25 @@ export function WorksPage() {
         drawingTimeSec={0.3}
         className="mb-6"
       />
-      {/* <ProjectList style={{
-        height: "1000px"
-      }}>
+      <div className="text-left">
+        You can click on each image to see more information
+      </div>
+      {/* <AbsoluteGrid style={{
+        height: "500px"
+      }} numColumns={5}>
         <div className="project-list-item">Test1</div>
         <div className="project-list-item">Test2</div>
         <div className="project-list-item">Test3</div>
         <div className="project-list-item">Test4</div>
-        <div className="project-list-item">Test5</div>
-        <div className="project-list-item">Test6</div>
-        <div className="project-list-item">Test7</div>
-        <div className="project-list-item">Test8</div>
-        <div className="project-list-item">Test9</div>
-      </ProjectList> */}
+        <div className="project-list-item">Test2</div>
+        <div className="project-list-item">Test3</div>
+        <div className="project-list-item">Test4</div>
+        <div className="project-list-item">Test2</div>
+        <div className="project-list-item">Test3</div>
+        <div className="project-list-item">Test4</div>
+      </AbsoluteGrid> */}
       <ProjectListPage/>
-      <GrowingGrid
+      {/* <GrowingGrid
         style={{
           height: choosing(breakpoint, [
             "calc(300px * 6)",
@@ -144,8 +148,8 @@ export function WorksPage() {
         </WorkListItem>
         <div className="flex flex-col justify-center items-center w-full h-full text-xl text-center">
           This Website! <br />(Because of course it is)
-        </div>
-      </GrowingGrid>
+        </div> */}
+      {/* </GrowingGrid> */}
     </ScrollPositionTracker>
   );
 }

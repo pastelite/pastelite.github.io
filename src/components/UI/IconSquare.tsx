@@ -82,6 +82,10 @@ import CSharpLogo from "../../assets/logo/c_sharp.svg?react";
 import RustLogo from "../../assets/logo/rust.svg?react";
 import JavaLogo from "../../assets/logo/java.svg?react";
 import CSSLogo from "../../assets/logo/devicon/css3-plain.svg?react";
+import DockerLogo from "@/assets/logo/devicon/docker-plain.svg?react";
+import FastAPILogo from "@/assets/logo/devicon/fastapi-original.svg?react";
+import GradioLogo from "@/assets/logo/gradio.svg?react";
+import MediawikiLogo from "@/assets/logo/mediawiki.svg?react";
 
 interface IconSquareGeneratorProps extends IconSquareProps {
   toolList: string[];
@@ -126,7 +130,7 @@ export function IconSquareGenerator(
           description="React"
           {...props}
         >
-          <ReactLogo className="icon" />
+          <ReactLogo className="icon" fill="white" />
         </IconSquare>
       )}
       {toolList.includes("c") && (
@@ -219,6 +223,42 @@ export function IconSquareGenerator(
           {...props}
         >
           <NodeJSLogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
+      {toolList.includes("fastapi") && (
+        <IconSquare
+          backgroundColor="#049688"
+          description="FastAPI"
+          {...props}
+        >
+          <FastAPILogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
+      {toolList.includes("docker") && (
+        <IconSquare
+          backgroundColor="#019BC6"
+          description="Docker"
+          {...props}
+        >
+          <DockerLogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
+      {toolList.includes("gradio") && (
+        <IconSquare
+          backgroundColor="#ff8008"
+          description="Gradio"
+          {...props}
+        >
+          <GradioLogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
+      {toolList.includes("mediawiki") && (
+        <IconSquare
+          backgroundColor="#fb5959"
+          description="Mediawiki"
+          {...props}
+        >
+          <MediawikiLogo className="icon p-1" fill="white" />
         </IconSquare>
       )}
     </>

@@ -1,0 +1,43 @@
+@use "sass:math";
+
+$max-supported-items: 10;
+$max-supported-columns: 5;
+
+$gap: var(--gap, 10px);
+$num-rows: var(--num-rows, 1);
+
+@for $col from 1 through $max-supported-columns {
+  .absolute-grid-#{$col} {
+    $item-width: calc((100% - ($gap * ($col - 1))) / $col);
+    $item-height: calc((100% - ($gap * ($num-rows - 1))) / $num-rows);
+    --col: #{$col};
+
+    position: relative;
+
+    > div {
+      position: absolute;
+      width: $item-width;
+      height: $item-height;
+      // border: 1px solid red;
+    }
+
+    // column
+    @for $i from 1 through $col {
+      > div:nth-child(#{$col}n + #{$i}) {
+        left: calc(($i - 1) * ($item-width + $gap));
+      }
+    }
+
+    // row
+    @for $i from 1 through math.ceil(math.div($max-supported-items, $col)) {
+      $start-index-in-row: ($i - 1) * $col + 1;
+      $end-index-in-row: $i * $col;
+
+      > div:nth-child(n + #{$start-index-in-row}):nth-child(
+          -n + #{$end-index-in-row}
+        ) {
+        top: calc(($i - 1) * ($item-height + $gap));
+      }
+    }
+  }
+}
