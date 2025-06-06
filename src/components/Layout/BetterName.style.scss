@@ -1,3 +1,5 @@
+@use "@/styles/variables" as *;
+
 .name-background {
   position: fixed;
   width: 100%;
@@ -10,13 +12,24 @@
   transition: clip-path 0.3s ease-in-out;
 
   &.collapsed {
-    clip-path: inset(15px calc(100% - 85px) calc(100% - 85px) 15px round 15px);
+    clip-path: inset(calc(100% - 85px) calc(100% - 85px) 15px 15px round 15px);
+
+    @media (min-width: $layout-breakpoint-md) {
+      clip-path: inset(
+        15px calc(100% - 85px) calc(100% - 85px) 15px round 15px
+      );
+    }
 
     .title-box {
-      top: 15px;
-      left: 50px;
       height: 50px;
       transform: translate(0, 0);
+      top: calc(50vh - 85px);
+      left: 50px;
+
+      @media (min-width: $layout-breakpoint-md) {
+        top: 15px;
+        left: 50px;
+      }
     }
   }
 }

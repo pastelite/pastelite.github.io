@@ -29,6 +29,10 @@ export default function BetterName() {
     );
     backgroundHeight.set(newBackgroundHeight);
 
+    // if (scroll > window.innerHeight / 2) {
+    //   if (breakpoint == 0) backgroundHeight.set(window.innerHeight);
+    // }
+
     setIsCollapsed(scroll > window.innerHeight / 2);
   });
 
@@ -48,7 +52,7 @@ export default function BetterName() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [isCollapsed, backgroundHeight]); // Depend on isCollapsed and motion values
+  }, [isCollapsed, backgroundHeight, breakpoint]); // Depend on isCollapsed and motion values
 
   // delay animation by 0.5 sec after everything is setted up
   useEffect(() => {
@@ -73,7 +77,9 @@ export default function BetterName() {
 
   const dynamicStyles = {
     // TODO: fix small screen
-    top: (breakpoint == 1) ? 0 : "auto",
+    top: (breakpoint == 0 && isCollapsed) ? "50vh" : "0",
+    // top: (breakpoint == 1) ? 0 : "auto",
+    // top: 0,
     left: 0,
     width: "100%",
     overflow: "hidden",
