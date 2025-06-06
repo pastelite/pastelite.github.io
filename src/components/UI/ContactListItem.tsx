@@ -1,6 +1,8 @@
 import CheckIcon from "@/assets/material_icons/assignment_turned_in.svg?react";
 import { type CSSProperties, useState } from "react";
 import "./ContactListItem.style.css";
+import theme from "@/styles/theme";
+import { transparentize } from "color2k";
 
 interface ContactListItemProps {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -51,7 +53,7 @@ export default function ContactListItem(
           height: small ? 45 : 70,
           opacity: inactive? 0.5 : 1,
           ...{
-            "--hover-bg-color": "red",
+            "--hover-bg-color": transparentize(theme.secondaryColor,0.5),
             "--hover-height": small ? "55px" : "80px",
           } as CSSProperties,
         }}

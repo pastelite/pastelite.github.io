@@ -15,7 +15,7 @@ import TextHeader from "../components/UI/TextHeader";
 export function ContactPage() {
   return (
     <ScrollPositionTracker
-      className="auto-left-padding auto-top-padding text-left"
+      className="auto-left-padding auto-top-padding text-left bg-[#0004]"
       page={2}
       style={{
         minHeight: "100vh",
