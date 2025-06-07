@@ -21,29 +21,13 @@ interface MenuProps {
 
 const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
   let breakpoint = useBreakpoint([768, 1024]);
-  // let breakpoint = useBreakpointNew([768, 1024]);
-
-  const [showLine, setShowLine] = useState(false);
-
-  const { scrollY } = useScroll();
-
-  const scrollToLocation = usePositionStore((state) => state.position);
-
   const [isScrolling, setIsScrolling] = useState(false);
 
-  useMotionValueEvent(scrollY, "change", (scrollY) => {
-    setShowLine(scrollY > window.innerHeight / 2);
-  });
+  console.log("rerender!")
 
-  // const [growMenu, setGrowMenu] = useState(false);
+  let {titleButtonShow} = usePositionStore();
 
-  // if (breakpoint === 2 && growMenu === false) {
-  //   setGrowMenu(true);
-  // } else if ((breakpoint === 0 || breakpoint === 1) && growMenu === true) {
-  //   setGrowMenu(false);
-  // }
-
-  const growMenu = (breakpoint === 2) && showLine;
+  const growMenu = (breakpoint === 2) && titleButtonShow;
 
   return (
     <MenuContext.Provider value={{ isScrolling, setIsScrolling }}>
@@ -58,14 +42,14 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
           gap: 15,
           transition: "all .3s cubic-bezier(0.5, 1, 0.89, 1)",
           ...choosing(breakpoint, [{
-            left: showLine ? menuBarWidth : 0, // account for the home icon
+            left: titleButtonShow ? menuBarWidth : 0, // account for the home icon
             right: 0,
             bottom: 0,
             height: menuBarWidth,
           }, {
             width: growMenu ? 224 : menuBarWidth,
             left: 0,
-            top: showLine ? menuBarWidth : 0,
+            top: titleButtonShow ? menuBarWidth : 0,
             bottom: 0,
           }]),
         }}

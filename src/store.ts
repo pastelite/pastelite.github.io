@@ -2,11 +2,15 @@ import { create } from "zustand";
 
 interface PositionState {
   position: number[];
+  titleButtonShow: boolean;
   setPosition: (index: number, value: number) => void;
+  setTitleButtonShow: (value: boolean) => void;
 }
 
 const usePositionStore = create<PositionState>((set) => ({
   position: [],
+  titleButtonShow: false,
+  setTitleButtonShow: (value) => set({ titleButtonShow: value }),
   setPosition: (index, value) =>
     set((state) => {
       const current = state.position;

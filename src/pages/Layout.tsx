@@ -3,6 +3,7 @@ import BetterName from "../components/Layout/BetterName";
 import ContactList from "../components/Layout/ContactList";
 import "../components/Layout/Layout.style.css";
 import Menu from "../components/Layout/Menu";
+import EasierName from "@/components/Layout/EasierName";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const topBarHeight = 100;
@@ -26,7 +27,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="content" style={{ left: 0, top: `100vh` }}>
         {children}
       </div>
-      <BetterName />
+      {/* <BetterName /> */}
+      <EasierName/>
       <motion.div
         className="-z-10 top-0 left-0 fixed right-0 bottom-0"
         style={{

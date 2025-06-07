@@ -7,23 +7,25 @@
   background-color: var(--color-first-background);
   z-index: 10;
 
-  bottom: 0;
+  
 
   // collapse animation:
   clip-path: inset(0);
   transition: clip-path 0.3s ease-in-out;
 
-  @media (min-width: $layout-breakpoint-md) {
+  &:not(.collapsed) {
     top: 0;
   }
 
   &.collapsed {
     clip-path: inset(calc(100% - 85px) calc(100% - 85px) 15px 15px round 15px);
+    bottom: 0;
 
     @media (min-width: $layout-breakpoint-md) {
       clip-path: inset(
         15px calc(100% - 85px) calc(100% - 85px) 15px round 15px
       );
+      top: 0;
     }
 
     .title-box {
@@ -34,7 +36,7 @@
       left: 50px;
 
       @media (min-width: $layout-breakpoint-md) {
-        top: 15px;
+        bottom: 15px;
         left: 50px;
       }
     }

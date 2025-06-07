@@ -93,7 +93,7 @@ export default function BetterName() {
         animate={dynamicStyles}
         style={{
           height: backgroundHeight,
-          bottom: bottom,
+          // bottom: bottom,
         }}
         transition={{ duration: 0.2, ease: "easeOut" }}
         onClick={isCollapsed
