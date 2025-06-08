@@ -23,9 +23,9 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
   let breakpoint = useBreakpoint([768, 1024]);
   const [isScrolling, setIsScrolling] = useState(false);
 
-  console.log("rerender!")
+  console.log("rerender!");
 
-  let {titleButtonShow} = usePositionStore();
+  let { titleButtonShow } = usePositionStore();
 
   const growMenu = (breakpoint === 2) && titleButtonShow;
 
@@ -54,27 +54,12 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
           }]),
         }}
       >
-        {
-          /* <div
-        className="absolute bottom-0 -right-[1px] w-[1px] bg-white transition-all duration-300"
-        style={{
-          height: showLine ? "100vh" : "0",
-        }}
-      >
-      </div> */
-        }
         <MenuItem
           pageIndex={0}
           SvgItem={AboutIcon}
           isExpanded={growMenu}
           text="About"
         >
-          {
-            /* <AboutIcon
-          fill="white"
-          style={{ height: "40px", width: "max-content" }}
-        /> */
-          }
         </MenuItem>
         <MenuItem
           pageIndex={1}
@@ -82,12 +67,6 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
           isExpanded={growMenu}
           text="Project"
         >
-          {
-            /* <WorksIcon
-          fill="white"
-          style={{ height: "40px", width: "max-content" }}
-        /> */
-          }
         </MenuItem>
         <MenuItem
           pageIndex={2}
@@ -95,12 +74,6 @@ const Menu = ({ menuBarWidth = 100 }: MenuProps) => {
           isExpanded={growMenu}
           text="Contact"
         >
-          {
-            /* <ContactIcon
-          fill="white"
-          style={{ height: "40px", width: "max-content" }}
-        /> */
-          }
         </MenuItem>
       </div>
     </MenuContext.Provider>
@@ -121,19 +94,22 @@ function MenuItem(
   const scrollToLocation = usePositionStore((state) => state.position);
   const { scrollY } = useScroll();
   const [selected, setSelected] = useState(false);
-  let breakpoint = useBreakpoint([640, 768]);
-  // let breakpoint = useBreakpointNew([768]);
+  let breakpoint = useBreakpoint([640, 768, 1024]);
+
   // when I select something, it shouldn't unselect during scrolling
   let selectionImmunityTimeout = useRef<NodeJS.Timeout>(null);
   // If I scrolling pass something briefly, it shouldn't show as selected
   let selectionDelayTimeout = useRef<NodeJS.Timeout>(null);
 
   // When user in mobile, it should be expanded if selected
-  if (breakpoint === 1) {
-    isExpanded = selected;
-  }
+  // if (breakpoint === 1) {
+  //   isExpanded = selected;
+  // }
 
   // let { isScrolling, setIsScrolling } = useContext(MenuContext);
+
+  let { titleButtonShow } = usePositionStore();
+  let showText = ((breakpoint === 3) && titleButtonShow) || (breakpoint === 1) && selected;
 
   useMotionValueEvent(scrollY, "change", (scrollY) => {
     let nextScroll = (scrollToLocation.length > pageIndex + 1)
@@ -195,9 +171,6 @@ function MenuItem(
         }
       }}
       style={{
-        // ...breakpoint({ width: selected ? 100 : 70 }, {
-        //   height: selected ? 70 : 48,
-        // }),
         ...choosing(breakpoint, [
           { width: selected ? 100 : 70 },
           { width: selected ? 150 : 70 },
@@ -219,24 +192,22 @@ function MenuItem(
           style={{ height: "40px", width: "40px" }}
         />
       </div>
+      <div
+        className="menu-text"
+        style={{
+          opacity: showText ? 1 : 0,
+        }}
+      >
+        {text}
+      </div>
 
-      <CollapsibleAutoWidthDiv
+      {
+        /* <CollapsibleAutoWidthDiv
         className="relative overflow-hidden"
         collapsed={!isExpanded}
       >
         {text}
-      </CollapsibleAutoWidthDiv>
-
-      {
-        /* <div
-        className="text-nowrap overflow-hidden transition-all duration-300 text-left box-border"
-        style={{
-          flexGrow: isExpanded ? 1 : 0,
-          width: 0,
-        }}
-      >
-        {text}
-      </div> */
+      </CollapsibleAutoWidthDiv> */
       }
     </div>
   );

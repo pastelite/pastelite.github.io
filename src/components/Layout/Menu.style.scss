@@ -43,6 +43,14 @@
   }
 }
 
+.menu-text {
+  // color: white;
+  position: absolute;
+  left: 70px;
+  transition: opacity 0.3s ease-out;
+  // width: 0;
+}
+
 /* .menu-item.pressed {
   height: 70px;
 } */
