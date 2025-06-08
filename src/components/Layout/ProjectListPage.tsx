@@ -34,13 +34,13 @@ const ProjectListContext = createContext<
 
 export default function ProjectListPage() {
   const [selected, setSelected] = useState(-1);
-  const breakpoint = useBreakpoint([1024]);
+  const breakpoint = useBreakpoint([640, 1024]);
 
   return (
     <div className="relative project-list-page py-6">
       <ProjectListContext.Provider value={{ selected, setSelected }}>
         <AbsoluteGrid
-          numColumns={choosing(breakpoint, [2, 3])}
+          numColumns={choosing(breakpoint, [1, 2, 3])}
           className={`projects-list-container ${
             (selected > -1) ? "show-description" : ""
           }`}
@@ -50,7 +50,7 @@ export default function ProjectListPage() {
             }
           }}
           style={{
-            height: choosing(breakpoint, ["750px", "500px"]),
+            height: choosing(breakpoint, ["1200px", "750px", "500px"]),
           }}
         >
           <ProjectListItem
@@ -171,7 +171,7 @@ function ProjectListItem(
       setSelected(-1);
     } else if (selected === -1) {
       setSelected(index);
-      if (breakpoint < 1) {
+      if (breakpoint < 2) {
         window.scrollTo({
           top: pagePosition[1],
           behavior: "smooth",

@@ -3,7 +3,12 @@ import TextSVG from "../Atoms/TextSVG";
 import TextCorouselBackgroundNew from "../Organism/TextCorouselBackgroundNew";
 import "./EasierName.style.scss";
 import usePositionStore from "@/store";
-import { useMotionValueEvent, useScroll } from "motion/react";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "motion/react";
 
 export default function EasierName() {
   let svgRef = useRef<SVGSVGElement>(null);
@@ -11,6 +16,7 @@ export default function EasierName() {
   let [textBoxTop, setTextBoxTop] = useState(0);
   let [drawingAnimation, setDrawingAnimation] = useState(false);
   let { titleButtonShow, setTitleButtonShow } = usePositionStore();
+  let [innerHeight, setInnerHeight] = useState(window.innerHeight);
 
   // let [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -23,6 +29,8 @@ export default function EasierName() {
           setTextBoxTop(rect.top);
         }
       }
+
+      setInnerHeight(window.innerHeight);
     });
     if (textboxRef.current) {
       observer.observe(textboxRef.current);
@@ -43,18 +51,8 @@ export default function EasierName() {
     }
   });
 
-  // checking while scrolling
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY > window.innerHeight - textBoxTop) {
-  //       if (titleButtonShow === false) setTitleButtonShow(true);
-  //     } else {
-  //       if (titleButtonShow === true) setTitleButtonShow(false);
-  //     }
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, [textBoxTop, titleButtonShow]);
+  let scale = useTransform(scrollY, [0, innerHeight], [1, 0.75]);
+  let borderRadius = useTransform(scrollY, [0, innerHeight], [0, 24]);
 
   // delay animation by 0.1 sec after everything is setted up
   useEffect(() => {
@@ -73,7 +71,16 @@ export default function EasierName() {
     <>
       <div className="easier-name">
         <TextCorouselBackgroundNew />
-        <div className={`title-box`} ref={textboxRef}>
+        <motion.div
+          className={`title-box`}
+          ref={textboxRef}
+          style={{
+            scale,
+            borderRadius,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+        >
           <TextSVG
             text="pastelite"
             fontSize={160}
@@ -81,7 +88,7 @@ export default function EasierName() {
             ref={svgRef}
             drawedText={drawingAnimation}
           />
-        </div>
+        </motion.div>
       </div>
       <div
         className={`back-to-title-box ${titleButtonShow ? "collapsed" : ""}`}

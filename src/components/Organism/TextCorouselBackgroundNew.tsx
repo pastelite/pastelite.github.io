@@ -1,6 +1,6 @@
 import { motion, useAnimate, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { mappingNumberPoint } from "../../utils/number";
+import { mappingNumber, mappingNumberPoint } from "../../utils/number";
 import TextCorouselNew from "./TextCorouselNew";
 
 export default function TextCorouselBackground() {
@@ -38,14 +38,14 @@ export default function TextCorouselBackground() {
 
     setDisableAnimation(false);
 
-    // let scale = mappingNumber(1 - window.screenY / window.innerHeight, 0.5, 1);
+    let scale = mappingNumber(1 - window.screenY / window.innerHeight, 0.5, 1);
     let opacity = mappingNumberPoint(window.screenY / window.innerHeight, [0.2,1],[0.5,0]);
     // let blur = mappingNumber(1 - window.screenY / window.innerHeight, 5, 0);
 
-    // animate(scaleValue, scale, {
-    //   duration: 0.2,
-    //   ease: "easeOut",
-    // })
+    animate(scaleValue, scale, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
     animate(opacityValue, opacity, {
       duration: 0.2,
       ease: "easeOut",
@@ -57,21 +57,21 @@ export default function TextCorouselBackground() {
   }, []);
 
   useMotionValueEvent(scrollY, "change", (value) => {
-    if (value > window.innerWidth) {
+    if (value > window.innerHeight) {
       setDisableAnimation(true);
       return;
     }
 
     setDisableAnimation(false);
 
-    // let scale = mappingNumber(1 - value / window.innerHeight, 0.5, 1);
+    let scale = mappingNumber(1 - value / window.innerHeight, 0.5, 1);
     let opacity = mappingNumberPoint(value / window.innerHeight, [0.2,1],[0.5,0]);
     // let blur = mappingNumber(1 - value / window.innerHeight, 5, 0);
 
-    // animate(scaleValue, scale, {
-    //   duration: 0.2,
-    //   ease: "easeOut",
-    // })
+    animate(scaleValue, scale, {
+      duration: 0.2,
+      ease: "easeOut",
+    })
     animate(opacityValue, opacity, {
       duration: 0.2,
       ease: "easeOut",
@@ -146,7 +146,7 @@ export default function TextCorouselBackground() {
     <motion.div
       className="text-corousel-background"
       style={{
-        // scale: scaleValue,
+        scale: scaleValue,
         opacity: opacityValue,
         // filter: blurFilter,
       }}

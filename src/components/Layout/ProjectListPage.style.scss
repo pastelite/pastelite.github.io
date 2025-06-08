@@ -14,7 +14,7 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
 .projects-list-container {
   min-height: 70vh;
   transition: scale 0.3s $ease-out-back;
-  overflow: hidden;
+  // overflow: hidden;
   scale: 1;
 
   .project-list-item {
@@ -112,13 +112,20 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
     }
 
     .project-list-item.selected {
-      scale: 1.2;
-      left: 25%;
-      top: 0;
       opacity: 1;
       z-index: 10;
       border-radius: 16px;
       pointer-events: auto;
+
+      scale: 0.95;
+      left: 0;
+      top: 0;
+      
+      @media (min-width: $layout-breakpoint-sm) {
+        top: 0;
+        left: 25%;
+        scale: 1.2;
+      }
 
       @media (min-width: $layout-breakpoint-md) {
         left: 0;
@@ -149,6 +156,16 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
       }
     }
   }
+
+  // @for $i from 1 through 20 {
+  //   > div:nth-child(#{$i}) {
+  //     transition-delay: calc(0.05s * $i);
+  //   }
+  // }
+
+  // div:nth-child(1) {
+  //   transition-delay: 0.1s;
+  // }
 }
 
 .project-name {
@@ -210,9 +227,15 @@ $combine-width: calc($item-width + 20px + 1.5 * $item-width);
   text-align: left;
 
   left: 0;
-  top: 300px;
+  top: 250px;
   width: 100%;
   // height: calc(100% - 290px);
+
+  @media (min-width: $layout-breakpoint-sm) {
+    left: 0;
+    top: 300px;
+    width: 100%;
+  }
 
   @media (min-width: $layout-breakpoint-md) {
     left: calc(50% + 20px);

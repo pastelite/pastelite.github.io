@@ -14,7 +14,7 @@ export function AboutPage() {
 
   return (
     <ScrollPositionTracker page={0}>
-      <div className="auto-left-padding text-left flex flex-col md:flex-row items-center justify-between min-h-[75vh] py-4">
+      <div className="auto-left-padding text-left flex flex-col md:flex-row items-center justify-between min-h-[75vh] py-4 mt-[50px]">
         <div className="left-side w-full md:max-w-[600px] flex flex-col gap-2">
           <div className={`mb-4`} ref={textRef}>
             <TextSVG

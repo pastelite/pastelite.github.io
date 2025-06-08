@@ -25,7 +25,7 @@ export function WorksPage() {
   let breakpoint = useBreakpoint([768, 1024]);
 
   return (
-    <ScrollPositionTracker className="auto-left-padding auto-top-padding mb-8" page={1} style={{
+    <ScrollPositionTracker className="auto-left-padding auto-top-padding mb-8 overflow-hidden" page={1} style={{
       minHeight: "100vh"
     }}>
       <TextHeader
