@@ -8,9 +8,11 @@ import theme from "@/styles/theme";
 import { darken, mix, saturate } from "color2k";
 import { type CSSProperties } from "react";
 import "./AboutPage.style.scss";
+import useBreakpoint from "@/hooks/useBreakpoint";
 
 export function AboutPage() {
   const [textRef, isShowText] = useShownWhenOnScreen<HTMLDivElement>();
+  let breakpoint = useBreakpoint([768]);
 
   return (
     <ScrollPositionTracker page={0}>
@@ -34,16 +36,16 @@ export function AboutPage() {
             </span>,<br /> Just a normal guy who like to code!
           </div>
           <p>
-            I've been coding since I was in highschool and I have been coding
-            ever since.
+            I've been coding since high school, and I haven't stopped since
           </p>
           <p>
-            I did it because it's fun I guess? Coding is like solving the puzzle
-            where the answer is the result you desired, kinda like a sandbox
-            game where you can built whatever you want.
+            I do it because it's fun! Coding is like playing a sandbox game
+            where you can build whatever you want. It's also like solving a
+            puzzle where the answer is the result you desired.
           </p>
           <p>
-            By the way, the puzzle is playable.
+            By the way, the puzzle on the{" "}
+            {breakpoint === 0 ? "bottom" : "right"} is playable.
           </p>
         </div>
         <div className="right-side grow flex justify-center items-center">
@@ -109,8 +111,8 @@ export function AboutPage() {
               />
             </div>
             <p className="my-4">
-              But ultimately, everything is learnable with time and programming
-              knowledge is transferable.
+              But ultimately, programming knowledge is transferable, and
+              everything is learnable with time and practice.
             </p>
           </AboutPageBox>
           <AboutPageBox className="flex flex-col">
@@ -126,7 +128,7 @@ export function AboutPage() {
               💻🌐🤖
             </div>
             <div className="">
-              I think I'm good at full stack and ML
+              I think I'm interested in full-stack and machine learning
             </div>
           </AboutPageBox>
           <AboutPageBox className="flex flex-col">
@@ -134,7 +136,7 @@ export function AboutPage() {
               🥐🥐🥐
             </div>
             <div className="">
-              I love crossant. Is it even possible to not love croissant?
+              I love croissants. Is it even possible not to love croissants?
             </div>
           </AboutPageBox>
           <AboutPageBox className="flex flex-col">
@@ -142,7 +144,7 @@ export function AboutPage() {
               {"</>"}⌨️🖱️
             </div>
             <div className="">
-              In free time, I code and playing games, especially strategy game
+              In my free time, I code and play games, especially strategy games.
             </div>
           </AboutPageBox>
         </div>
