@@ -81,7 +81,7 @@ export function AboutPage() {
                 level={0.6}
               />
               <AboutPageIconSquare
-                toolList={["css"]}
+                toolList={["css","lua"]}
                 level={0.5}
               />
               <AboutPageIconSquare
@@ -105,8 +105,9 @@ export function AboutPage() {
                 toolList={["nodejs", "express"]}
                 level={0.4}
               />
+              
               <AboutPageIconSquare
-                toolList={["pytorch"]}
+                toolList={["flutter"]}
                 level={0.4}
               />
             </div>
@@ -164,8 +165,8 @@ function AboutPageIconSquare({ toolList, level = 0.5 }: {
       waveProgress={level}
       containerStyle={{
         "--background-color": mix(
-          theme.secondaryColor,
-          saturate(darken(theme.accentColor, 0.2), 0.2),
+          saturate(darken(theme.secondaryColor, 0.25), 0.2),
+          saturate(darken(theme.accentColor, 0.1), 0.1),
           Math.abs(level - 0.33) * (1 / 0.66),
         ),
       } as CSSProperties}

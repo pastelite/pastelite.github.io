@@ -33,7 +33,7 @@
 }
 
 .content {
-  @apply pb-[100px] md:pb-0;
+  /* @apply pb-[100px] md:pb-0; */
   position: absolute;
   top: 100vh; /* for the first page */
   /* top: 50px; */

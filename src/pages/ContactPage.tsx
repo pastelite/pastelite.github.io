@@ -24,11 +24,12 @@ export function ContactPage() {
       <TextHeader
         text="Link"
         drawingTimeSec={0.3}
+        className="flex justify-center"
       />
-      <div>
-        Some route you can use to contact me
+      <div className="text-center mt-2">
+        Some route you can use to contact me {":)"}
       </div>
-      <div className="flex flex-col md:flex-row relative gap-16 mt-4">
+      <div className="flex flex-col md:flex-row relative gap-8 md:gap-32 mt-4 md:w-max m-auto pb-[100px] md:pb-0">
         <div className="w-full md:max-w-[360px]">
           <h2 className="text-3xl mb-4">Main</h2>
           <ContactListItem
@@ -59,7 +60,7 @@ export function ContactPage() {
           />
         </div>
         <div>
-          <h2 className="text-3xl mb-4">Other</h2>
+          <h2 className="text-3xl mb-4 md:min-w-[250px]">Other</h2>
           <ContactListItem
             icon={WikipediaIcon}
             linkTitle="ZilentFyld"
