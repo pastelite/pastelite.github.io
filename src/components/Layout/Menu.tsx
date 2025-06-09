@@ -7,7 +7,7 @@ import WorksIcon from "../../assets/material_icons/work.svg?react";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import usePositionStore from "../../store";
 import { choosing } from "../../utils/number";
-import CollapsibleAutoWidthDiv from "../Atoms/CollapsibleAutoWidthDiv";
+import CollapsibleAutoWidthDiv from "../UI/CollapsibleAutoWidthDiv";
 import "./Menu.style.scss";
 
 let MenuContext = createContext({
