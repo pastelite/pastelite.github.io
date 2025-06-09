@@ -85,6 +85,8 @@ import PytorchLogo from "../../assets/logo/pytorch.svg?react";
 import RustLogo from "../../assets/logo/rust.svg?react";
 import TailwindLogo from "../../assets/logo/Tailwind.svg?react";
 import ViteLogo from "../../assets/logo/ViteBlack.svg?react";
+import FlutterLogo from "@/assets/logo/devicon/flutter-plain.svg?react";
+import LuaLogo from "@/assets/logo/devicon/lua-plain.svg?react";
 
 interface IconSquareGeneratorProps extends IconSquareProps {
   toolList: string[];
@@ -178,6 +180,15 @@ export function IconSquareGenerator(
           <CSSLogo className="icon p-1" fill="white" />
         </IconSquare>
       )}
+      {toolList.includes("lua") && (
+        <IconSquare
+          backgroundColor="#000080"
+          description="Lua"
+          {...props}
+        >
+          <LuaLogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
       {toolList.includes("pytorch") && (
         <IconSquare
           backgroundColor="#ee4c2c"
@@ -258,6 +269,15 @@ export function IconSquareGenerator(
           {...props}
         >
           <MediawikiLogo className="icon p-1" fill="white" />
+        </IconSquare>
+      )}
+      {toolList.includes("flutter") && (
+        <IconSquare
+          backgroundColor="#3FB6D3"
+          description="Flutter"
+          {...props}
+        >
+          <FlutterLogo className="icon p-1" fill="white" />
         </IconSquare>
       )}
     </>
